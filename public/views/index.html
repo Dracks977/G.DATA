@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" class="uk-height-1-1">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>G.DATA</title>
+    <link rel="icon" href="img/favicon.ico">
+    <!-- CSS FILES -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.6/css/uikit.min.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+</head>
+<body class="uk-height-1-1">
+    <div class="uk-flex uk-flex-center uk-flex-middle uk-background-secondary uk-height-viewport uk-light">
+        <div class="uk-width-large uk-padding-medium ">
+            <form>
+                <fieldset class="uk-fieldset">
+                    <legend class="uk-text-center uk-legend">G.DATA</legend>
+                    <div class="uk-margin uk-grid-small uk-child-width-auto uk-width-1-1">
+                       <label><input class="uk-radio" type="radio" name="radio2" checked> Simple Search</label>
+                       <label><input class="uk-radio" type="radio" name="radio2"> Query Search</label>
+                       <label><input class="uk-checkbox" type="checkbox" checked> Character</label>
+                       <label><input class="uk-checkbox" type="checkbox"> Corp</label>
+                   </div>
+                   <div class="uk-margin">
+                    <div class="uk-inline uk-width-1-1">
+                        <span class="uk-form-icon uk-form-icon-flip" data-uk-icon="icon: search"></span>
+                        <input id="auto" class="uk-input uk-form-large"  placeholder="Characters" type="search">
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+
+<!-- JS FILES -->
+<script
+src="https://code.jquery.com/jquery-3.3.1.js"
+integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+crossorigin="anonymous"></script>
+<script
+src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.6/js/uikit.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.6/js/uikit-icons.min.js"></script>
+
+</body>
+</html>
+<script>
+   $( function() {
+    $( "#auto" ).autocomplete({
+       source: function( request, response ) {
+        $.ajax({
+            url: "https://zkillboard.com/autocomplete/" + $( "#auto" ).val(),
+            dataType: "json",
+            data: {
+                searchText: request
+            },
+
+            success: function( data ) {
+                response($.map(data, function (item) {
+                    if (item.type == "character") {
+                        return {
+                            label: item.name,
+                            value: item.name
+                        };
+                    }
+                }));
+            }
+        });
+    },
+    minLength: 4,
+});
+} );
+</script>

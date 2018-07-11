@@ -1,0 +1,26 @@
+{
+  "name": "g.data",
+  "version": "1.0.0",
+  "description": "intel tool",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dracks977/G.DATA.git"
+  },
+  "author": "Dracks",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dracks977/G.DATA/issues"
+  },
+  "homepage": "https://github.com/Dracks977/G.DATA#readme",
+  "dependencies": {
+    "ejs": "^2.6.1",
+    "eve-sso-simple": "^2.0.1",
+    "express": "^4.16.3",
+    "express-session": "^1.15.6",
+    "cypher-stream": "^2.0.0-RC2"
+  }
+}
