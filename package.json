@@ -17,10 +17,11 @@
   },
   "homepage": "https://github.com/Dracks977/G.DATA#readme",
   "dependencies": {
+    "cypher-stream": "^1.1.0",
     "ejs": "^2.6.1",
     "eve-sso-simple": "^2.0.1",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
-    "cypher-stream": "^2.0.0-RC2"
+    "request-promise": "^4.2.2"
   }
 }
