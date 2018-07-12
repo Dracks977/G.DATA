@@ -12,12 +12,12 @@
 <body class="uk-height-1-1">
     <div class="uk-flex uk-flex-center uk-flex-middle uk-background-secondary uk-height-viewport uk-light">
         <div class="uk-width-large uk-padding-medium ">
-            <form>
+            <form action="/character" method="get">
                 <fieldset class="uk-fieldset">
                     <legend class="uk-text-center uk-legend">G.DATA</legend>
                     <div class="uk-margin uk-grid-small uk-child-width-auto uk-width-1-1">
-                       <label><input class="uk-radio" type="radio" name="radio2" checked> Simple Search</label>
-                       <label><input class="uk-radio" type="radio" name="radio2"> Query Search</label>
+                       <label><input class="uk-radio" type="radio"  checked> Simple Search</label>
+                       <label><input class="uk-radio" type="radio"> Query Search</label>
                        <label><input class="uk-checkbox" type="checkbox" checked> Character</label>
                        <label><input class="uk-checkbox" type="checkbox"> Corp</label>
                    </div>
@@ -28,6 +28,8 @@
                     </div>
                 </div>
             </fieldset>
+            <input id="cid" style=" display: none;" type=" text" name="id">
+            <input type="submit" style="display:none"/>
         </form>
     </div>
 </div>
@@ -56,20 +58,33 @@ crossorigin="anonymous"></script>
             data: {
                 searchText: request
             },
-
             success: function( data ) {
                 response($.map(data, function (item) {
                     if (item.type == "character") {
                         return {
                             label: item.name,
-                            value: item.name
+                            value: item.name,
+                            id: item.id
                         };
                     }
                 }));
-            }
+            },
+
         });
     },
-    minLength: 4,
-});
+    select: function(event, ui) {
+     if(ui.item){
+        $(event.target).val(ui.item.value);
+        $('#cid').val(ui.item.id)
+        console.log(ui.item.id)
+    }
+},
+minLength: 4,
+
+}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+        return $( "<li>" )
+        .append( '<div class="ui-menu-item-wrapper" cid='+item.id+'>'+item.label+'</div>' )
+        .appendTo( ul );
+    };
 } );
 </script>
