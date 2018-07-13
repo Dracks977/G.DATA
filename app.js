@@ -10,7 +10,6 @@ const path = require('path');
 const session = require('express-session');
 const esso = require('eve-sso-simple');
 var cypher = require('cypher-stream')('bolt://localhost', 'GOTG', 'GOTG');
-const rp = require('request-promise');
 /*======================================================*/
 
 // Middleware session
@@ -33,8 +32,8 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 /*======================routes==========================*/ 
 
 	/*------include fichier------*/
-	require('./src/main.js')(app, path, ejs, fs, esso, cypher);
-	require('./src/character.js')(app, path, ejs, fs, esso, cypher, rp);
+	require('./src/main.js')(app, path, ejs, fs, esso);
+	require('./src/character.js')(app, path, ejs, fs, esso, cypher);
 
 
 /*======================route fichier static (public)====================*/
