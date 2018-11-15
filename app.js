@@ -9,8 +9,20 @@ const ejs = require('ejs');
 const path = require('path');
 const session = require('express-session');
 const esso = require('eve-sso-simple');
-var cypher = require('cypher-stream')('bolt://localhost', 'GOTG', 'GOTG');
 /*======================================================*/
+
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/GData');
+let db = mongoose.connection;
+db.on('error', function(err){
+  process.exit(1)
+});
+db.once('open', function() {
+  console.log('Connected')
+});
+
+//define model
+require('./models/model.js')(mongoose);
 
 // Middleware session
 app.engine('html', require('ejs').renderFile);
@@ -33,7 +45,7 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 
 	/*------include fichier------*/
 	require('./src/main.js')(app, path, ejs, fs, esso);
-	require('./src/character.js')(app, path, ejs, fs, esso, cypher);
+	require('./src/character.js')(app, path, ejs, fs, esso);
 
 
 /*======================route fichier static (public)====================*/
@@ -43,6 +55,6 @@ app.use("/js", express.static(__dirname + '/public/js'));
 
 
 /*==================start serv==================*/
-http.listen(80, function(){
-	console.log('listening on *:80');
+http.listen(8080, function(){
+	console.log('listening on *:8080');
 });

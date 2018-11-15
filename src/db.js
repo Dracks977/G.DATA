@@ -1,29 +1,38 @@
 const rp = require('request-promise');
 
 
-function corp(info, cypher, data, callback) {
-
-
-
-
-	if (!info.corp.date_founded)
-		info.corp.date_founded = ''
-	if (!info.corp.url)
-		info.corp.url = ''
-	var c = {
-		i: info.cid,
-		n: info.corp.name.replace(/"/g, "\\\""),
-		t: info.corp.tax_rate,
-		d: info.corp.description.replace(/"/g, "\\\""),
-		df: info.corp.date_founded.replace(/"/g, "\\\""),
-		tg : info.corp.ticker.replace(/"/g, "\\\""),
-		url : info.corp.url.replace(/"/g, "\\\"")
+function corplist (char, info, callback) {
+	var x= info.length;
+	console.log(x);
+	for (var i = info.length - 1; i >= 0; i--) {
+		var cid = info[i].corporation_id
+		rp('https://esi.evetech.net/latest/corporations/'+cid+'/?datasource=tranquility').then(function (htmlString) {
+			let c = JSON.parse(htmlString)
+			corp = {
+				id: cid,
+				name: c.name,
+				tax_rate: c.tax_rate,
+				ticker: c.ticker,
+				url: c.url,
+				member_count: c.member_count,
+				description: c.description,
+				date_founded: c.date_founded,
+				alliance: null
+			}
+			CORP.findOneAndUpdate({id: cid}, corp, {upsert: true, new: true}, function(err, cc) {
+				char.corpHistory.push(cc._id);
+				if(x == 1) {
+					callback(char)
+				}
+				x--;
+			})
+		})
 	}
-	
-
 }
 
+
 module.exports =  {
+	//recupere tout les info
 	api: (id, callback) => {
 		var info = new Object();
 		info.id = id;
@@ -43,15 +52,12 @@ module.exports =  {
 							}).catch(function (err) {
 								console.log(err)
 							});
-
 						} else {
 							callback(info);
 						}
 					}).catch(function (err) {
 						console.log(err)
 					});
-
-
 				}).catch(function (err) {
 					console.log(err)
 				});
@@ -62,55 +68,74 @@ module.exports =  {
 			console.log(err)
 		});
 	},
-	charNode : (info, cypher, callback) => {
-		var n = {
-			i: info.id.replace(/"/g, "\\\""),
-			n: info.basic.name.replace(/"/g, "\\\""),
-			d: info.basic.description
-			.replace(/\\/g, "\\\\")
-			.replace(/\$/g, "\\$")
-			.replace(/'/g, "\\'")
-			.replace(/"/g, "\\\""),
-			s: info.basic.security_status,
-			b: info.basic.birthday.replace(/"/g, "\\\"")
-		};
-		if (!info.corp.date_founded)
-			info.corp.date_founded = ''
-		if (!info.corp.url)
-			info.corp.url = ''
-		// node ceo et node creator et node alliance
-		var c = {
-			i: info.cid,
-			n: info.corp.name.replace(/"/g, "\\\""),
-			t: info.corp.tax_rate,
-			d: info.corp.description
-			.replace(/\\/g, "\\\\")
-			.replace(/\$/g, "\\$")
-			.replace(/'/g, "\\'")
-			.replace(/"/g, "\\\""),
-			df: info.corp.date_founded.replace(/"/g, "\\\""),
-			tg : info.corp.ticker.replace(/"/g, "\\\""),
-			url : info.corp.url.replace(/"/g, "\\\"")
-		}
-		var cyp;
-		if (info.alliance) {
-			var a = {
-				i: info.corp.alliance_id,
-				df: info.alliance.date_founded.replace(/"/g, "\\\""),
-				n: info.alliance.name.replace(/"/g, "\\\""),
-				tg : info.alliance.ticker.replace(/"/g, "\\\"")
+	// remplacer par mongodb
+	charNode : (info, callback) => {
+		let all;
+		let corp;
+		if(info.corp.alliance_id){
+			all = {
+				id: info.corp.alliance_id,
+				name: info.alliance.name,
+				ticker: info.alliance.ticker
 			}
-			cyp = 'MERGE (n:character {id: "'+n.i+'", name: "'+n.n+'", desc: "'+n.d+'", ss: "'+n.s+'", birthday: "'+n.b+'"}) MERGE (c:corp {id: "'+c.i+'", name: "'+c.n+'", desc: "'+c.d+'", tax_rate: "'+c.t+'", date_founded: "'+c.df+'", ticker: "'+c.tg+'", url: "'+c.url+'"}) MERGE (n)-[r:Be_Part_Of  {name: "Be_Part_Of", old: "false"}]->(c) MERGE (a:alliance {id: "'+a.i+'", name: "'+a.n+'", date_founded: "'+a.df+'", ticker: "'+a.tg+'"}) MERGE (c)-[r2:Be_Part_Of  {name: "Be_Part_Of", old: "false"}]->(a) return n, c, a';
-		} else {
-			cyp = 'MERGE (n:character {id: "'+n.i+'", name: "'+n.n+'", desc: "'+n.d+'", ss: "'+n.s+'", birthday: "'+n.b+'"}) MERGE (c:corp {id: "'+c.i+'", name: "'+c.n+'", desc: "'+c.d+'", tax_rate: "'+c.t+'", date_founded: "'+c.df+'", ticker: "'+c.tg+'", url: "'+c.url+'"}) MERGE (n)-[r:Be_Part_Of  {name: "Be_Part_Of", old: "false"}]->(c) return n, c';
 		}
-		var test = [];
-		cypher(cyp)
-		.on('data', function (result){
-			test.push(result);
-		})
-		.on('end', function() {
-			callback(test);
-		});
+		if (info.basic.corporation_id) {
+			corp = {
+				id: info.basic.corporation_id,
+				name: info.corp.name,
+				tax_rate: info.corp.tax_rate,
+				ticker: info.corp.ticker,
+				url: info.corp.url,
+				member_count: info.corp.member_count,
+				description: info.corp.description,
+				date_founded: info.corp.date_founded,
+				alliance: null
+			}
+		}
+		let char = {
+			id: info.id,
+			name: info.basic.name,
+			security_status: info.basic.security_status,
+			description: info.basic.description,
+			birthday: info.basic.birthday,
+			img: info.img.px128x128,
+			corpHistory: new Array()
+		}
+
+		if (info.corp.alliance_id){
+			ALLIANCE.findOneAndUpdate({id: info.corp.alliance_id}, all, {upsert: true, new: true}, function(err, c) {
+				corp.alliance = c._id;
+				CORP.findOneAndUpdate({id: info.basic.corporation_id}, corp, {upsert: true, new: true}, function(err, cc) {
+					char.corp = cc._id
+					corplist(char, info.corpHistory, function(e){
+						CHAR.findOneAndUpdate({id: info.id}, char, {upsert: true, new: true})
+						.populate({path : 'corp', populate : {path : 'alliance'}})
+						.exec(function(err, ccc) {
+							callback(ccc);
+						});
+					})	
+				});
+			});
+		} else if (info.basic.corporation_id) {
+			CORP.findOneAndUpdate({id: info.basic.corporation_id}, corp, {upsert: true, new: true}, function(err, cc) {
+				char.corp = cc._id
+				corplist(char, info.corpHistory, function(e){
+					CHAR.findOneAndUpdate({id: info.id}, char, {upsert: true, new: true})
+					.populate({path : 'corp', populate : {path : 'alliance'}})
+					.exec(function(err, ccc) {
+						callback(ccc);
+					});
+				})	
+			});
+		} else {
+			corplist(char, info.corpHistory, function(e){
+				CHAR.findOneAndUpdate({id: info.id}, char, {upsert: true, new: true})
+				.populate({path : 'corp', populate : {path : 'alliance'}})
+				.exec(function(err, ccc) {
+					callback(ccc);
+				});
+			})	
+		}
+		
 	},
 }
