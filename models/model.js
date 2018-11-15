@@ -10,7 +10,7 @@ module.exports = (mongoose) => {
 		birthday: Date,
 		img: String,
 		corp: {type: Schema.Types.ObjectId, ref: 'Corp'},
-		corpHistory: [{ type: Schema.Types.ObjectId, ref: 'Corp' }],
+		corpHistory: [{c: { type: Schema.Types.ObjectId, ref: 'Corp' }, start_date: Date}],
 		created : { type: Date },
 		updated : { type: Date },
 	});

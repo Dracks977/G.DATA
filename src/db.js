@@ -1,45 +1,11 @@
 const rp = require('request-promise');
-
-
-function corplist (char, info, callback) {
-	var x= info.length;
-	console.log(x);
-	for (var i = info.length - 1; i >= 0; i--) {
-		var cid = info[i].corporation_id
-		rp('https://esi.evetech.net/latest/corporations/'+cid+'/?datasource=tranquility').then(function (htmlString) {
-			let c = JSON.parse(htmlString)
-			corp = {
-				id: cid,
-				name: c.name,
-				tax_rate: c.tax_rate,
-				ticker: c.ticker,
-				url: c.url,
-				member_count: c.member_count,
-				description: c.description,
-				date_founded: c.date_founded,
-				alliance: null
-			}
-			CORP.findOneAndUpdate({id: cid}, corp, {upsert: true, new: true}, function(err, cc) {
-				char.corpHistory.push(cc._id);
-				if(x == 1) {
-					callback(char)
-				}
-				x--;
-			})
-		})
-	}
-}
-
-
 module.exports =  {
 	//recupere tout les info
-	api: (id, callback) => {
+	char: (id, callback) => {
 		var info = new Object();
 		info.id = id;
 		rp('https://esi.evetech.net/latest/characters/'+id+'/?datasource=tranquility').then(function (htmlString) {
 			info.basic = JSON.parse(htmlString)
-			rp('https://esi.evetech.net/latest/characters/'+id+'/corporationhistory/?datasource=tranquility').then(function (htmlString) {
-				info.corpHistory = JSON.parse(htmlString)
 				rp('https://esi.evetech.net/latest/characters/'+id+'/portrait/?datasource=tranquility').then(function (htmlString) {
 					info.img = JSON.parse(htmlString)
 					rp('https://esi.evetech.net/latest/corporations/'+info.basic.corporation_id+'/?datasource=tranquility').then(function (htmlString) {
@@ -55,9 +21,6 @@ module.exports =  {
 						} else {
 							callback(info);
 						}
-					}).catch(function (err) {
-						console.log(err)
-					});
 				}).catch(function (err) {
 					console.log(err)
 				});
@@ -68,8 +31,7 @@ module.exports =  {
 			console.log(err)
 		});
 	},
-	// remplacer par mongodb
-	charNode : (info, callback) => {
+	charput : (info, callback) => {
 		let all;
 		let corp;
 		if(info.corp.alliance_id){
@@ -107,34 +69,28 @@ module.exports =  {
 				corp.alliance = c._id;
 				CORP.findOneAndUpdate({id: info.basic.corporation_id}, corp, {upsert: true, new: true}, function(err, cc) {
 					char.corp = cc._id
-					corplist(char, info.corpHistory, function(e){
-						CHAR.findOneAndUpdate({id: info.id}, char, {upsert: true, new: true})
-						.populate({path : 'corp', populate : {path : 'alliance'}})
-						.exec(function(err, ccc) {
-							callback(ccc);
-						});
-					})	
-				});
-			});
-		} else if (info.basic.corporation_id) {
-			CORP.findOneAndUpdate({id: info.basic.corporation_id}, corp, {upsert: true, new: true}, function(err, cc) {
-				char.corp = cc._id
-				corplist(char, info.corpHistory, function(e){
 					CHAR.findOneAndUpdate({id: info.id}, char, {upsert: true, new: true})
 					.populate({path : 'corp', populate : {path : 'alliance'}})
 					.exec(function(err, ccc) {
 						callback(ccc);
 					});
-				})	
+				});
 			});
-		} else {
-			corplist(char, info.corpHistory, function(e){
+		} else if (info.basic.corporation_id) {
+			CORP.findOneAndUpdate({id: info.basic.corporation_id}, corp, {upsert: true, new: true}, function(err, cc) {
+				char.corp = cc._id
 				CHAR.findOneAndUpdate({id: info.id}, char, {upsert: true, new: true})
 				.populate({path : 'corp', populate : {path : 'alliance'}})
 				.exec(function(err, ccc) {
 					callback(ccc);
 				});
-			})	
+			});
+		} else {
+			CHAR.findOneAndUpdate({id: info.id}, char, {upsert: true, new: true})
+			.populate({path : 'corp', populate : {path : 'alliance'}})
+			.exec(function(err, ccc) {
+				callback(ccc);
+			});
 		}
 		
 	},
