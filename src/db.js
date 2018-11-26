@@ -20,30 +20,25 @@ module.exports =  {
 		}
 		CHAR.findOneAndUpdate({id: info.id}, char, {upsert: true, new: true})
 		.populate({path : 'intels'})
-		.populate({path : 'alts'})
+		.populate({path : 'alts', populate : {path : 'alts', populate : {path : 'intels'}}})
 		.exec((err, ccc) => {
+			if (err)
+				callback(err);
 			callback({'db' : ccc, 'basic': info.basic});
 		});		
-	},
-	img : (id, callback) => {
-		rp('https://esi.evetech.net/latest/characters/'+id+'/portrait/?datasource=tranquility').then(function (htmlString) {
-			callback(JSON.parse(htmlString))
-		}).catch(function (err) {
-			callback(err)
-		});
 	},
 	corp : (id, callback) => {
 		rp('https://esi.evetech.net/latest/corporations/'+id+'/?datasource=tranquility').then(function (htmlString) {
 			callback(JSON.parse(htmlString))
 		}).catch(function (err) {
-			callback(err)
+			callback(err);
 		});
 	},
 	alliance : (id, callback) => {
 		rp('https://esi.evetech.net/latest/alliances/'+id+'/?datasource=tranquility').then(function (htmlString) {
 			callback(JSON.parse(htmlString))
 		}).catch(function (err) {
-			callback(err)
+			callback(err);
 		});
 	}
 }

@@ -59,7 +59,8 @@ app.use(function (req, res, next) {
 			redirect_uri:  process.env.CALLBACK
 		}, res);
 	} else if (req.session.db.role <= 0){
-		return next('authorizes user only');
+		res.sendStatus(401).end('Autorizes Characters Only !')
+		return null
 	}
 	else{
 		console.log(req.session)

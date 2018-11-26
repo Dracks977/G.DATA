@@ -16,24 +16,14 @@
 				<div class="uk-navbar-right">
 					<ul class="uk-navbar-nav">
 						<li>
-							<a href="#" data-uk-icon="icon:user"></a>
+							<a href="#" data-uk-icon="icon:user"><%= user.name %><div style="width: 1em"></div></a>
 							<div class="uk-navbar-dropdown uk-navbar-dropdown-bottom-left">
 								<ul class="uk-nav uk-navbar-dropdown-nav">
-									<li class="uk-nav-header">YOUR ACCOUNT</li>
-									<li><a href="#"><span data-uk-icon="icon: info"></span> Summary</a></li>
-									<li><a href="#"><span data-uk-icon="icon: refresh"></span> Edit</a></li>
-									<li><a href="#"><span data-uk-icon="icon: settings"></span> Configuration</a></li>
-									<li class="uk-nav-divider"></li>
-									<li><a href="#"><span data-uk-icon="icon: image"></span> Your Pictures</a></li>
-									<li class="uk-nav-divider"></li>
 									<li><a href="#"><span data-uk-icon="icon: sign-out"></span> Logout</a></li>
-
 								</ul>
 							</div>
 						</li>
-						<li><a href="#" data-uk-icon="icon: settings"></a></li>
-						<li><a href="#" data-uk-icon="icon: cog"></a></li>
-						<li><a class="uk-navbar-toggle" data-uk-toggle data-uk-navbar-toggle-icon href="#offcanvas-nav"></a></li>
+						<li><a href="#" data-uk-icon="icon: cog">Members access<div style="width: 1em"></div></a></li>
 					</ul>
 				</div>
 			</nav>
@@ -43,59 +33,48 @@
 	<aside id="left-col" class="uk-light uk-visible@m">
 		<div class="profile-bar">
 			<div class="uk-grid uk-grid-small uk-flex uk-flex-middle" data-uk-grid>
-				<div class="uk-width-auto"><img src="img/photo.jpg" alt="" class="uk-border-circle profile-img"></div>
+				<div class="uk-width-auto"><img src="http://imageserver.eveonline.com/Character/<%= char.db.id %>_512.jpg" alt="" class="uk-border-circle profile-img"></div>
 				<div class="uk-width-expand">
-					<span class="uk-text-small uk-text-muted">Welcome</span>
-					<h4 class="uk-margin-remove-vertical text-light">Finn the Human</h4>
+					<h4 class="uk-margin-remove-vertical text-light"><%= char.db.name %></h4>
 				</div>
 			</div>
 		</div>
 
 		<div class="bar-content uk-position-relative">
-			<ul class="uk-nav-default uk-nav-parent-icon" data-uk-nav>
-				<li class="uk-nav-header">MAIN SECTIONS</li>
-				<li class="uk-parent uk-open">
-					<a href="#">Parent</a>
-					<ul class="uk-nav-sub">
-						<li><a href="#">Sub item</a></li>
-						<li><a href="#">Sub item</a></li>
-					</ul>
+			<ul class="uk-nav-default" data-uk-nav>
+				<li class="uk-nav-header">Character</li>
+				<li class="uk-parent">
+					<span>Sec. Status : <%= char.basic.security_status %></span>
 				</li>
 				<li class="uk-parent">
-					<a href="#">Parent</a>
-					<ul class="uk-nav-sub">
-						<li><a href="#">Sub item</a></li>
-						<li><a href="#">Sub item</a></li>
-					</ul>
+					<span>Birthday : <%= char.basic.birthday %></span>
 				</li>
 				<li class="uk-parent">
-					<a href="#">Parent</a>
-					<ul class="uk-nav-sub">
-						<li><a href="#">Sub item</a></li>
-						<li><a href="#">Sub item</a></li>
-					</ul>
+					<span>Corporation : 
+						<corp id='corpname'>Loading..</corp>
+					</span>
 				</li>
-				<li class="uk-nav-header">SECONDARY</li>
+				<% if (char.basic.alliance_id) { %>
 				<li class="uk-parent">
-					<a href="#">Parent</a>
-					<ul class="uk-nav-sub">
-						<li><a href="#">Sub item</a></li>
-						<li><a href="#">Sub item</a></li>
-					</ul>
+					<span>Alliance : 
+						<alli id='alliname'>Loading</alli>
+					</span>
 				</li>
-				<li class="uk-parent">
-					<a href="#">Parent</a>
-					<ul class="uk-nav-sub">
-						<li><a href="#">Sub item</a></li>
-						<li><a href="#">Sub item</a></li>
-					</ul>
-				</li>
-				<li class="uk-nav-header">LIST OF PAGES</li>
-				<li><a href="album.html"><span class="uk-margin-small-right" data-uk-icon="icon: image"></span> Album</a></li>
-				<li><a href="article.html"><span class="uk-margin-small-right" data-uk-icon="icon: info"></span> Article</a></li>
+				<% } %>
+				<br>
 				<li class="uk-nav-divider"></li>
-				<li><a href="login.html"><span class="uk-margin-small-right" data-uk-icon="icon: sign-in"></span> Login</a></li>
-				<li><a href="login-dark.html"><span class="uk-margin-small-right" data-uk-icon="icon: sign-in"></span> Login-Dark</a></li>
+				<% if (char.db.tags.length != 0) { %>
+				<li class="uk-nav-header">TAGS</li>
+				<% for(var y=0; y<char.db.tags.length; y++) { %>
+				<li class="uk-parent">
+					<span class="uk-label"><%= char.db.tags[y] %></span>
+				</li>
+				<% } %>
+				<% } %>
+
+				<li class="uk-nav-header">LINKS</li>
+				<li><a href="https://evewho.com/pilot/<%= char.db.name %>"><span class="uk-margin-small-right" data-uk-icon="icon: info"></span> evewho</a></li>
+				<li><a href="https://zkillboard.com/character/<%= char.db.id %>"><span class="uk-margin-small-right" data-uk-icon="icon: bolt"></span> zKillboard</a></li>
 			</ul>
 		</div>
 	</aside>
@@ -118,155 +97,107 @@
 			</div>
 			<hr>
 
-			<div class="uk-grid uk-grid-medium"  uk-grid="masonry: true" data-uk-grid>
-				<!-- panel -->
-				<div class="uk-width-1-2@s uk-width-1-3@l uk-width-1-4@xl">
-					<div class="uk-card uk-card-default uk-card-small uk-card-hover">
-						<div class="uk-card-header">
-							<div class="uk-grid uk-grid-small">
-								<div class="uk-width-auto"><h4 class="uk-margin-remove-bottom">linked account</h4></div>
-								<div class="uk-width-expand uk-text-right">
-									<a href="#" class="uk-icon-link uk-margin-small-right" data-uk-icon="icon: move"></a>
-									<a href="#" class="uk-icon-link uk-margin-small-right" data-uk-icon="icon: cog"></a>
-									<a href="#" class="uk-icon-link" data-uk-icon="icon: close"></a>
-								</div>
+			<div class="uk-grid uk-grid-medium
+			uk-grid-match"  data-uk-grid>
+			<% if (char.db.alts != null) { %>
+			<% for(var i=0; i<char.db.alts.alts.length; i++) { %>
+			<% if (char.db.alts.alts[i].id != char.db.id) { %>
+			<!-- /panel -->
+			<div class="uk-width-1-2@s uk-width-1-4@l uk-width-1-4@xl">
+				<div class="uk-card uk-card-default">
+					<div class="uk-card-header">
+						<div class="uk-grid-small uk-flex-middle" uk-grid>
+							<div class="uk-width-auto">
+								<img class="uk-border-circle" width="60" height="60" src="http://imageserver.eveonline.com/Character/<%= char.db.alts.alts[i].id %>_512.jpg">
 							</div>
-						</div>
-						<div class="uk-card-body">
-							<img src="img/mapa2.svg" alt="">
-							<p class="uk-text-muted uk-text-small uk-text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+							<div class="uk-width-expand">
+								<h3 class="uk-card-title uk-margin-remove-bottom"><%= char.db.alts.alts[i].name %></h3>
+							</div>
 						</div>
 					</div>
-				</div>
-				<!-- /panel -->
-				<!-- panel -->
-				<div class="uk-width-1-2@s uk-width-1-3@l uk-width-1-4@xl">
-					<div class="uk-card uk-card-default uk-card-small uk-card-hover">
-						<div class="uk-card-header">
-							<div class="uk-grid uk-grid-small">
-								<div class="uk-width-auto"><h4 class="uk-margin-remove-bottom">linked account</h4></div>
-								<div class="uk-width-expand uk-text-right">
-									<a href="#" class="uk-icon-link uk-margin-small-right" data-uk-icon="icon: move"></a>
-									<a href="#" class="uk-icon-link uk-margin-small-right" data-uk-icon="icon: cog"></a>
-									<a href="#" class="uk-icon-link" data-uk-icon="icon: close"></a>
-								</div>
-							</div>
-						</div>
-						<div class="uk-card-body">
-							<img src="img/mapa3.svg" alt="">
-							<p class="uk-text-muted uk-text-small uk-text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-						</div>
+					<div class="uk-card-body">
+						<% for(var y=0; y<char.db.alts.alts[i].tags.length; y++) { %>
+						<span class="uk-label"><%= char.db.alts.alts[i].tags[y] %></span>
+						<% }  %>
+					</div>
+					<div class="uk-card-footer uk-text-center">
+						<a href="/character?id=<%= char.db.alts.alts[i].id %>" class="uk-button uk-button-default">Show</a>
 					</div>
 				</div>
-				<!-- /panel -->
-				<!-- panel -->
-				
-				<!-- /panel -->
-				<!-- panel -->
-				<div class="uk-width-1-2@s uk-width-1-2@l uk-width-1-4@xl">
-					<div class="uk-card uk-card-default uk-card-small uk-card-hover">
-						<div class="uk-card-header">
-							<div class="uk-grid uk-grid-small">
-								<div class="uk-width-auto"><h4 class="uk-margin-remove-bottom">linked account</h4></div>
-								<div class="uk-width-expand uk-text-right">
-									<a href="#" class="uk-icon-link uk-margin-small-right" data-uk-icon="icon: move"></a>
-									<a href="#" class="uk-icon-link uk-margin-small-right" data-uk-icon="icon: cog"></a>
-									<a href="#" class="uk-icon-link" data-uk-icon="icon: close"></a>
-								</div>
+			</div>
+			<% }  %>
+			<% }  %>
+			<% } else { %>
+			<div class="uk-width-expand uk-text-center">
+				<h3 class="uk-text-muted">No alts for this charactere</h3>
+			</div>
+			<% } %>
+
+
+			<!-- /panel -->
+
+
+			<div class=" uk-width-2-1@l uk-width-1-1@xl">
+				<div class="uk-card uk-card-default uk-card-small uk-card-hover">
+					<div class="uk-card-header">
+						<div class="uk-grid uk-grid-small">
+							<div class="uk-width-auto"><h4 class="uk-margin-remove-bottom">Intel</h4></div>
+							<div class="uk-width-expand uk-text-right">
 							</div>
-						</div>
-						<div class="uk-card-body">
-							<img src="img/mapa4.svg" alt="">
-							<p class="uk-text-muted uk-text-small uk-text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
 						</div>
 					</div>
-				</div>
-				<!-- /panel -->
-				<!-- panel -->
-				<div class="uk-width-1-2@s uk-width-1-2@l uk-width-1-4@xl">
-					<div class="uk-card uk-card-default uk-card-small uk-card-hover">
-						<div class="uk-card-header">
-							<div class="uk-grid uk-grid-small">
-								<div class="uk-width-auto"><h4 class="uk-margin-remove-bottom">linked account</h4></div>
-								<div class="uk-width-expand uk-text-right">
-									<a href="#" class="uk-icon-link uk-margin-small-right" data-uk-icon="icon: move"></a>
-									<a href="#" class="uk-icon-link uk-margin-small-right" data-uk-icon="icon: cog"></a>
-									<a href="#" class="uk-icon-link" data-uk-icon="icon: close"></a>
-								</div>
-							</div>
-						</div>
-						<div class="uk-card-body">
-							<img src="img/mapa4.svg" alt="">
-							<p class="uk-text-muted uk-text-small uk-text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-						</div>
-					</div>
-				</div>
-				<!-- /panel -->
-				<div class=" uk-width-2-1@l uk-width-1-1@xl">
-					<div class="uk-card uk-card-default uk-card-small uk-card-hover">
-						<div class="uk-card-header">
-							<div class="uk-grid uk-grid-small">
-								<div class="uk-width-auto"><h4 class="uk-margin-remove-bottom">Intel</h4></div>
-								<div class="uk-width-expand uk-text-right">
-									<a href="#" class="uk-icon-link uk-margin-small-right" data-uk-icon="icon: move"></a>
-									<a href="#" class="uk-icon-link uk-margin-small-right" data-uk-icon="icon: cog"></a>
-									<a href="#" class="uk-icon-link" data-uk-icon="icon: close"></a>
-								</div>
-							</div>
-						</div>
-						<div class="uk-card-body">
-							<div class="uk-overflow-auto">
-								<table class="uk-table uk-table-hover uk-table-divider uk-table-middle">
-									<thead>
-										<tr>
-											<th class="uk-table-shrink"></th>
-											<th>Name</th>
-											<th>Description</th>
-											<th>Date</th>
-											<th>Action</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td><img src="https://picsum.photos/40/40/?random=1" alt="Alt text" class="uk-border-circle uk-preserve-width "></td>
+					<div class="uk-card-body">
+						<div class="uk-overflow-auto">
+							<table class="uk-table uk-table-hover uk-table-divider uk-table-middle">
+										<h3 class="uk-text-muted">No intel for this charactere</h3>
+								<thead>
+									<!-- <tr>
+
+										<th>Name</th>
+										<th>Description</th>
+										<th>Date</th>
+										<th>Action</th>
+									</tr> -->
+								</thead>
+								<tbody>
+
+										<!-- <tr>
+
 											<td>John Doe</td>
 											<td>c'est un sale spy</td>
 											<td>11/09/18</td>
 											<td>
-												<a href="#" class="uk-icon-link uk-text-success" data-uk-icon="check"></a>
+												<a href="#" class="uk-icon-link uk-text-primary" data-uk-icon="link"></a>
 												<a href="#" class="uk-icon-link uk-text-danger" data-uk-icon="close"></a>
 											</td>
 										</tr>
 										<tr>
-											<td><img src="https://picsum.photos/40/40/?random=2" alt="Alt text" class="uk-border-circle uk-preserve-width "></td>
 											<td>Larry Boile</td>
 											<td>Maecenas sagittis, dolor id posuere finibus, massa nulla luctus mauris</td>
 											<td>13/09/18</td>
 											<td>
-												<a href="#" class="uk-icon-link uk-text-success" data-uk-icon="check"></a>
+												<a href="#" class="uk-icon-link uk-text-primary" data-uk-icon="link"></a>
 												<a href="#" class="uk-icon-link uk-text-danger" data-uk-icon="close"></a>
 											</td>
 										</tr>
 										<tr>
-											<td><img src="https://picsum.photos/40/40/?random=3" alt="Alt text" class="uk-border-circle uk-preserve-width "></td>
 											<td>Susan Lee</td>
 											<td>Sagittis, dolor id posuere finibus, massa nulla luctus mauris</td>
 											<td>18/09/18</td>
 											<td>
-												<a href="#" class="uk-icon-link uk-text-success" data-uk-icon="check"></a>
+												<a href="#" class="uk-icon-link uk-text-primary" data-uk-icon="link"></a>
 												<a href="#" class="uk-icon-link uk-text-danger" data-uk-icon="close"></a>
 											</td>
 										</tr>
 										<tr>
-											<td><img src="https://picsum.photos/40/40/?random=4" alt="Alt text" class="uk-border-circle uk-preserve-width "></td>
 											<td>Jerry Thomas</td>
 											<td>Maecenas sagittis, dolor id posuere finibus, massa nulla luctus mauris</td>
 											<td>21/09/18</td>
 											<td>
-												<a href="#" class="uk-icon-link uk-text-success" data-uk-icon="check"></a>
+												<a href="#" class="uk-icon-link uk-text-primary" data-uk-icon="link"></a>
 												<a href="#" class="uk-icon-link uk-text-danger" data-uk-icon="close"></a>
 											</td>
-										</tr>
+										</tr> -->
 									</tbody>
 								</table>
 							</div>
@@ -276,7 +207,7 @@
 			</div>
 			<footer class="uk-section uk-section-small uk-text-center">
 				<hr>
-				<a href="https://github.com/zzseba78/Kick-Off">Created by KickOff</a> | Built with <a href="http://getuikit.com" title="Visit UIkit 3 site" target="_blank" data-uk-tooltip><span data-uk-icon="uikit"></span></a>
+				<a href="https://github.com/zzseba78/Kick-Off">Created by Dracks</a> | Built with Love</span></a>
 			</footer>
 		</div>
 	</div>
@@ -291,7 +222,16 @@ integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
 crossorigin="anonymous"></script>
 <script type="text/javascript">
 	$('document').ready(function(){
-		console.log(<%- JSON.stringify(data) %>)
+		let char = <%- JSON.stringify(char) %>
+		console.log(<%- JSON.stringify(char) %>)
+		$.get( "api/corp/" + char.basic.corporation_id, function( data ) {
+			$( "#corpname" ).html( data.name );
+		});
+		if (char.basic.alliance_id) {
+			$.get( "api/alliance/" + char.basic.alliance_id, function( data ) {
+				$( "#alliname" ).html( data.name );
+			});
+		}
 	});
 </script>
 </html>
