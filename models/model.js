@@ -1,20 +1,17 @@
 module.exports = (mongoose) => {
 	let Schema = mongoose.Schema;
 
-	//character
+	//character eve a afficher
 	let Char = new Schema({
 		id: Number,
 		name: String,
-		security_status: Number,
-		description: String,
-		birthday: Date,
-		img: String,
-		corp: {type: Schema.Types.ObjectId, ref: 'Corp'},
-		corpHistory: [{c: { type: Schema.Types.ObjectId, ref: 'Corp' }, start_date: Date}],
-		created : { type: Date },
-		updated : { type: Date },
+		intels: [{ type: Schema.Types.ObjectId, ref: 'Intels' }],
+		tags: [String],
+		alts: [{ type: Schema.Types.ObjectId, ref: 'Char' }],
+		created: { type: Date },
+		updated: { type: Date },
 	});
-	
+
 	Char.pre('save', function(next){
 		now = new Date();
 		this.updated = now;
@@ -24,22 +21,17 @@ module.exports = (mongoose) => {
 		next();
 	});
 
-	//corp
-	let Corp = new Schema({
+
+	// user pour la gestion des droit sur le site != charactere
+	let User = new Schema({
 		id: Number,
 		name: String,
-		tax_rate: Number,
-		ticker: String,
-		url: String,
-		member_count: Number,
-		description: String,
-		date_founded: Date,
-		alliance: { type: Schema.Types.ObjectId, ref: 'Alliance' },
-		created : { type: Date },
-		updated : { type: Date },
+		role: { type: Number, default: 0 },
+		created: { type: Date },
+		updated: { type: Date },
 	});
-
-	Corp.pre('save', function(next){
+	
+	User.pre('save', function(next){
 		now = new Date();
 		this.updated = now;
 		if ( !this.created ) {
@@ -48,16 +40,18 @@ module.exports = (mongoose) => {
 		next();
 	});
 
-	//alliance
-	let Alliance = new Schema({
-		id: Number,
-		name: String,
-		ticker: String,
+	//intels (message en gros sur le joueur)
+	let Intels = new Schema({
+		links: [String],
+		comment: String,
+		action: String,
+		type: String,
+		date: Date,
 		created : { type: Date },
 		updated : { type: Date },
 	});
 
-	Alliance.pre('save', function(next){
+	Intels.pre('save', function(next){
 		now = new Date();
 		this.updated = now;
 		if ( !this.created ) {
@@ -65,10 +59,11 @@ module.exports = (mongoose) => {
 		}
 		next();
 	});
+
 
 	//global
 
 	CHAR = mongoose.model('Char', Char);
-	CORP = mongoose.model('Corp', Corp);
-	ALLIANCE = mongoose.model('Alliance', Alliance);
+	USER = mongoose.model('User', User);
+	INTELS = mongoose.model('Intels', Intels);
 }
