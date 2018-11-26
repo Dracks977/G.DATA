@@ -7,7 +7,7 @@ module.exports = (mongoose) => {
 		name: String,
 		intels: [{ type: Schema.Types.ObjectId, ref: 'Intels' }],
 		tags: [String],
-		alts: [{ type: Schema.Types.ObjectId, ref: 'Char' }],
+		alts: { type: Schema.Types.ObjectId, ref: 'Alt',  default: null},
 		created: { type: Date },
 		updated: { type: Date },
 	});
@@ -40,6 +40,21 @@ module.exports = (mongoose) => {
 		next();
 	});
 
+	let Alt = new Schema({
+		alts: [{ type: Schema.Types.ObjectId, ref: 'Char'}],
+		created: { type: Date },
+		updated: { type: Date },
+	});
+	
+	Alt.pre('save', function(next){
+		now = new Date();
+		this.updated = now;
+		if ( !this.created ) {
+			this.created = now;
+		}
+		next();
+	});
+
 	//intels (message en gros sur le joueur)
 	let Intels = new Schema({
 		links: [String],
@@ -64,6 +79,7 @@ module.exports = (mongoose) => {
 	//global
 
 	CHAR = mongoose.model('Char', Char);
+	ALT = mongoose.model('Alt', Alt);
 	USER = mongoose.model('User', User);
 	INTELS = mongoose.model('Intels', Intels);
 }
