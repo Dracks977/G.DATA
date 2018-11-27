@@ -15,13 +15,17 @@
             <form action="/character" method="get">
                 <fieldset class="uk-fieldset">
                     <legend class="uk-text-center uk-legend">G.DATA</legend>
-                    <div class="uk-margin uk-grid-small uk-child-width-auto uk-width-1-1">
+                    <!-- <div class="uk-margin uk-grid-small uk-child-width-auto uk-width-1-1">
                        <label><input class="uk-radio" type="radio"  checked> Simple Search</label>
                        <label><input class="uk-radio" type="radio"> Query Search</label>
                        <label><input class="uk-checkbox" type="checkbox" checked> Character</label>
                        <label><input class="uk-checkbox" type="checkbox"> Corp</label>
-                   </div>
-                   <div class="uk-margin">
+                   </div> -->
+                   <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid uk-flex-center">
+                    <label><input class="uk-radio" type="radio" name="radio2" checked> Character Search</label>
+                    <label><input class="uk-radio" type="radio" name="radio1"> Tags Search</label>
+                </div>
+                <div class="uk-margin">
                     <div class="uk-inline uk-width-1-1">
                         <span class="uk-form-icon uk-form-icon-flip" data-uk-icon="icon: search"></span>
                         <input id="auto" class="uk-input uk-form-large" autocomplete="off"  placeholder="Characters" type="search">
@@ -79,7 +83,7 @@ crossorigin="anonymous"></script>
         console.log(ui.item.id)
     }
 },
-minLength: 4,
+minLength: 3,
 
 }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
         return $( "<li>" )

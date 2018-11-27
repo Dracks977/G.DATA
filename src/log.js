@@ -7,16 +7,7 @@ module.exports = function(app, path, ejs, fs, esso){
 	* redirige les diferent role vers leurs pages
 	*/
 	app.get('/', function(req, res){
-		if (!req.session.userinfo) {
-			esso.login(
-			{
-				client_id: process.env.C_ID,
-				client_secret: process.env.C_SECRET,
-				redirect_uri:  process.env.CALLBACK
-			}, res);
-		} else {
-			res.sendFile(path.resolve(__dirname + '/../public/views/index.html'))
-		}
+		res.sendFile(path.resolve(__dirname + '/../public/views/index.html'))
 	})
 	
 	/*

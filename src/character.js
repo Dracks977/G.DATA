@@ -6,6 +6,7 @@ module.exports = function(app, path, ejs, fs){
 	app.get('/character', function(req, res){
 		db.char(req.query.id, (info) =>{
 			db.charput(info, (result) =>{
+				console.log(result)
 				fs.readFile(path.resolve(__dirname + '/../public/views/character.html'), 'utf-8', (err, content) => {
 					if (err) {
 						res.end('error occurred' + err);
@@ -32,13 +33,13 @@ module.exports = function(app, path, ejs, fs){
 		})
 	});
 
-	app.post('/api/alts/link', function(req, res){
-		if (req.body.alt && req.body.main){
-			db.char(req.body.alt, function(info){
+	app.post('/api/alts/link', function(req, res) {
+		if (req.body.alt && req.body.main) {
+			db.char(req.body.alt, function(info) {
 				db.charput(info,(result) => {
 					//result = le new perso
 					CHAR.findById(req.body.main).populate({path : 'alts'}).exec((err, doc) =>{
-						if (err){
+						if (err) {
 							res.status(500).send(err)
 							return
 						}
@@ -71,7 +72,27 @@ module.exports = function(app, path, ejs, fs){
 				})
 			})
 		} else {
-			res.send(301)
+			res.status(500).send('What the fuck');
+		}
+	});
+
+	app.post('/api/tags/add', function(req, res){
+		console.log(req.body)
+		if (req.body.id && req.body.name && req.body.visibility && req.body._id) {
+			let tags = {from : req.body._id, name: req.body.name, visibility: req.body.visibility};
+			CHAR.findById(req.body.id).exec((err, doc) => {
+				console.log(doc)
+				if (err)
+					res.send(err);
+				doc.tags.push(tags)
+				doc.save((err,result) => {
+					if (err)
+						res.send(err);
+					res.sendStatus(200);
+				})
+			})
+		} else {
+			res.sendStatus(404);
 		}
 	});
 
