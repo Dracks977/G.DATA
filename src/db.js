@@ -21,6 +21,7 @@ module.exports =  {
 		CHAR.findOneAndUpdate({id: info.id}, char, {upsert: true, new: true})
 		.populate({path : 'intels'})
 		.populate({path : 'alts', populate : {path : 'alts', populate : {path : 'intels'}}})
+		.populate({path : 'alts', populate : {path : 'alts', populate : {path : 'tags.from'}}})
 		.populate({path : 'tags.from'})
 		.exec((err, ccc) => {
 			if (err)

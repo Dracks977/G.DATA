@@ -6,6 +6,8 @@
 </head>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.6/css/uikit.min.css">
 <link rel="stylesheet" type="text/css" href="css/dashboard.css">
+<link rel="stylesheet" type="text/css" href="css/character.css">
+
 <body>
 
 	<!-- modals tags -->
@@ -55,6 +57,43 @@
 					<div id="missingtag" class="uk-alert-warning" style="display: none;" uk-alert>
 						<a class="uk-alert-close" uk-close></a>
 						<p>hey dude, fill the fields</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end -->
+
+	<!-- modals alts -->
+	<div id="modal-alt" class="uk-modal-full" uk-modal>
+		<div class="uk-modal-dialog">
+			<button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>
+			<div class="uk-grid-collapse uk-child-width-1-2@s uk-flex-middle" uk-grid>
+				<div class="uk-background-cover" style="background-image: url('https://webimg.ccpgamescdn.com/kvd74o0q2fjg/3ydmvxylnW4kQ6YWE6iwc0/bdd2976aba130fa1b392c8da31e17961/Capsuleer_Day_1920x1080.jpg');" uk-height-viewport></div>
+				<div id='charauto' class="uk-padding-large">
+					<h1 class="uk-text-center">LINK A CHARACTER</h1>
+					<form>
+						<fieldset class="uk-fieldset">	
+							<legend class="uk-legend"></legend>
+							<div class="uk-margin">
+								<div  class="uk-inline uk-width-1-1">
+									<span class="uk-form-icon uk-form-icon-flip" data-uk-icon="icon: search"></span>
+									<input id="auto" class="uk-input uk-form-large" autocomplete="on"  placeholder="Character name" type="search">
+									<ul></ul>
+									<input id="cid" style=" display: none;" type=" text" name="id">
+								</div>
+							</div>
+
+						</fieldset>
+					</form>
+					<a class="uk-button uk-button-default uk-width-1-1" onclick="addLink();">Submit</a>
+					<div id="errorlink" class="uk-alert-danger" style="display: none;" uk-alert>
+						<a class="uk-alert-close" uk-close></a>
+						<p>Damn, it's a bug. quickly contact the administrator</p>
+					</div>
+					<div id="missinglink" class="uk-alert-warning" style="display: none;" uk-alert>
+						<a class="uk-alert-close" uk-close></a>
+						<p>hey dude, this alt already belongs to someone</p>
 					</div>
 				</div>
 			</div>
@@ -123,9 +162,9 @@
 				<% for(var y=0; y<char.db.tags.length; y++) { %>
 				<li class="uk-parent">
 					<% if (char.db.tags[y].visibility <= user.role) { -%>
-						<span class="uk-label" uk-tooltip="title: <%= char.db.tags[y].from.name %>"><%= char.db.tags[y].name %></span>
+					<span class="uk-label" uk-tooltip="title: <%= char.db.tags[y].from.name %>"><%= char.db.tags[y].name %></span>
 					<% } else { -%>
-						<span class="uk-label" uk-tooltip="title: Confidential">Confidential</span>
+					<span class="uk-label" uk-tooltip="title: Confidential">Confidential</span>
 					<% } -%>	
 				</li>
 				<% } %>
@@ -147,7 +186,7 @@
 						<div class="uk-card-body">
 							<p uk-margin class="uk-text-center">
 								<button class="uk-button uk-button-secondary" href="#modal-full" uk-toggle>add a tags</button>
-								<button class="uk-button uk-button-primary">link a character</button>
+								<button class="uk-button uk-button-primary" href="#modal-alt" uk-toggle>link a character</button>
 								<button class="uk-button uk-button-danger">new intel</button>
 							</p>
 						</div>
@@ -170,21 +209,22 @@
 							</div>
 							<div class="uk-width-expand">
 								<h3 class="uk-card-title uk-margin-remove-bottom"><%= char.db.alts.alts[i].name %></h3>
+								<p class='corpalt' _id='<%= char.db.alts.alts[i].id %>' style='margin-top: 0px'></p>
 							</div>
 						</div>
 					</div>
 					<div class="uk-card-body">
 						<% if (char.db.alts.alts[i].tags.length != 0) { %>
 						<% for(var y=0; y<char.db.alts.alts[i].tags.length; y++) { %>
-						<% if (char.db.alts.alts[i].visibility <= user.role) { -%>
-						<span class="uk-label" uk-tooltip="title: <%=char.db.alts.alts[i].from.name %>"><%= char.db.alts.alts[i].tags[y].name %></span>
+						<% if (char.db.alts.alts[i].tags[y].visibility <= user.role) { -%>
+						<span class="uk-label" uk-tooltip="title: <%=char.db.alts.alts[i].tags[y].from.name %>"><%= char.db.alts.alts[i].tags[y].name %></span>
 						<% } else { %>
 						<span class="uk-label" uk-tooltip="title: Confidential">Confidential</span>
 						<% } %>
 						<% } %>
 						<% } else { %>
-						<div class="uk-width-expand uk-text-center">
-							<h3 class="uk-text-muted">No tags for this charactere</h3>
+						<div class="uk-text-center">
+							<p class="uk-text-muted">No tags for this charactere</p>
 						</div>
 						<% } %>
 					</div>
@@ -221,65 +261,65 @@
 								<thead>
 									<!-- <tr>
 
-										<th>Name</th>
-										<th>Description</th>
-										<th>Date</th>
-										<th>Action</th>
-									</tr> -->
-								</thead>
-								<tbody>
+									<th>Name</th>
+									<th>Description</th>
+									<th>Date</th>
+									<th>Action</th>
+								</tr> -->
+							</thead>
+							<tbody>
 
-										<!-- <tr>
+								<!-- <tr>
 
-											<td>John Doe</td>
-											<td>c'est un sale spy</td>
-											<td>11/09/18</td>
-											<td>
-												<a href="#" class="uk-icon-link uk-text-primary" data-uk-icon="link"></a>
-												<a href="#" class="uk-icon-link uk-text-danger" data-uk-icon="close"></a>
-											</td>
-										</tr>
-										<tr>
-											<td>Larry Boile</td>
-											<td>Maecenas sagittis, dolor id posuere finibus, massa nulla luctus mauris</td>
-											<td>13/09/18</td>
-											<td>
-												<a href="#" class="uk-icon-link uk-text-primary" data-uk-icon="link"></a>
-												<a href="#" class="uk-icon-link uk-text-danger" data-uk-icon="close"></a>
-											</td>
-										</tr>
-										<tr>
-											<td>Susan Lee</td>
-											<td>Sagittis, dolor id posuere finibus, massa nulla luctus mauris</td>
-											<td>18/09/18</td>
-											<td>
-												<a href="#" class="uk-icon-link uk-text-primary" data-uk-icon="link"></a>
-												<a href="#" class="uk-icon-link uk-text-danger" data-uk-icon="close"></a>
-											</td>
-										</tr>
-										<tr>
-											<td>Jerry Thomas</td>
-											<td>Maecenas sagittis, dolor id posuere finibus, massa nulla luctus mauris</td>
-											<td>21/09/18</td>
-											<td>
-												<a href="#" class="uk-icon-link uk-text-primary" data-uk-icon="link"></a>
-												<a href="#" class="uk-icon-link uk-text-danger" data-uk-icon="close"></a>
-											</td>
-										</tr> -->
-									</tbody>
-								</table>
-							</div>
-						</div>
-					</div>
+								<td>John Doe</td>
+								<td>c'est un sale spy</td>
+								<td>11/09/18</td>
+								<td>
+								<a href="#" class="uk-icon-link uk-text-primary" data-uk-icon="link"></a>
+								<a href="#" class="uk-icon-link uk-text-danger" data-uk-icon="close"></a>
+								</td>
+								</tr>
+								<tr>
+								<td>Larry Boile</td>
+								<td>Maecenas sagittis, dolor id posuere finibus, massa nulla luctus mauris</td>
+								<td>13/09/18</td>
+								<td>
+								<a href="#" class="uk-icon-link uk-text-primary" data-uk-icon="link"></a>
+								<a href="#" class="uk-icon-link uk-text-danger" data-uk-icon="close"></a>
+								</td>
+								</tr>
+								<tr>
+								<td>Susan Lee</td>
+								<td>Sagittis, dolor id posuere finibus, massa nulla luctus mauris</td>
+								<td>18/09/18</td>
+								<td>
+								<a href="#" class="uk-icon-link uk-text-primary" data-uk-icon="link"></a>
+								<a href="#" class="uk-icon-link uk-text-danger" data-uk-icon="close"></a>
+								</td>
+								</tr>
+								<tr>
+								<td>Jerry Thomas</td>
+								<td>Maecenas sagittis, dolor id posuere finibus, massa nulla luctus mauris</td>
+								<td>21/09/18</td>
+								<td>
+								<a href="#" class="uk-icon-link uk-text-primary" data-uk-icon="link"></a>
+								<a href="#" class="uk-icon-link uk-text-danger" data-uk-icon="close"></a>
+								</td>
+							</tr> -->
+						</tbody>
+					</table>
 				</div>
 			</div>
-			<footer class="uk-section uk-section-small uk-text-center">
-				<hr>
-				<a href="https://github.com/Dracks977">Created by Dracks</a> | Send me some isk...</span></a>
-			</footer>
 		</div>
 	</div>
-	<!-- /CONTENT -->
+</div>
+<footer class="uk-section uk-section-small uk-text-center">
+	<hr>
+	<a href="https://github.com/Dracks977">Created by Dracks</a> | Send me some isk...</span></a>
+</footer>
+</div>
+</div>
+<!-- /CONTENT -->
 
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.8/js/uikit.min.js"></script>
@@ -287,6 +327,10 @@
 <script
 src="https://code.jquery.com/jquery-3.3.1.js"
 integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+crossorigin="anonymous"></script>
+<script
+src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
 crossorigin="anonymous"></script>
 <script type="text/javascript">
 	$('document').ready(function() {
@@ -300,8 +344,15 @@ crossorigin="anonymous"></script>
 				$( "#alliname" ).html( data.name );
 			});
 			<% } %>
-
+			$('.corpalt').each(function( index ) {
+				let self = this
+				$.get( "api/char/corpname/" + $(this).attr('_id'), function( data ) {
+					console.log(data)
+					$(self).text(data);
+				});
+			})
 		});
+
 	function addTag() {
 		let tag = {
 			name : $('#tagname').val(),
@@ -318,5 +369,24 @@ crossorigin="anonymous"></script>
 				$("#errortag").removeAttr("style");
 		});
 	}
+
+	function addLink() {
+		let link = {
+			alt : $('#cid').val(),
+			main : '<%= char.db._id %>',
+		}
+		$.post( "/api/alts/link", link).done( function (data){
+			location.reload();
+		}) .fail(function(e) {
+			if (e.status == 301)
+				$("#missinglink").removeAttr("style");
+			else
+				$("#errorlink").removeAttr("style");
+		});
+	}
+	
 </script>
+<script type="text/javascript" src='js/character.js'></script>
+
+
 </html>

@@ -27,6 +27,14 @@ module.exports = function(app, path, ejs, fs){
 		})
 	});
 
+	app.get('/api/char/corpname/:id', function(req, res){
+		db.char(req.params.id, function(result){
+			db.corp(result.basic.corporation_id, function(result2){
+			res.json(result2.name)
+			})
+		})
+	});
+
 	app.get('/api/alliance/:id', function(req, res){
 		db.alliance(req.params.id, function(result){
 			res.json(result)
@@ -44,7 +52,7 @@ module.exports = function(app, path, ejs, fs){
 							return
 						}
 						if (result.db.alts != null) {
-							res.status(200).send('Already on alts group');
+							res.status(301).send('Already on alts group');
 						} else if (result.db.alts == null && doc.alts == null){
 							const alts = new ALT();
 							alts.alts.push(doc)
