@@ -25,7 +25,6 @@
 			if(ui.item){
 				$(event.target).val(ui.item.value);
 				$('#cid').val(ui.item.id)
-				console.log(ui.item.id)
 			}
 		},
 		minLength: 3,

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title> </title>
+	<title>Three Eyed Ravens</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.6/css/uikit.min.css">
@@ -101,11 +101,87 @@
 	</div>
 	<!-- end -->
 
+	<!-- modals tags -->
+	<div id="modal-intel" class="uk-modal-full" uk-modal>
+		<div class="uk-modal-dialog">
+			<button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>
+			<div class="uk-grid-collapse uk-child-width-1-2@s uk-flex-middle" uk-grid>
+				<div class="uk-background-cover" style="background-image: url('https://www.verite.space/maps/influence/influence.png');" uk-height-viewport></div>
+				<div class="uk-padding-large padding-modif">
+					<h1 class="uk-text-center">ADD INTEL</h1>
+					<form>
+						<fieldset class="uk-fieldset">
+							<legend class="uk-legend">Characters</legend>
+							<div class="uk-margin">
+								<select id="intelfor" class="uk-select">
+									<option value="<%= char.db._id %>"><%= char.db.name %></option>
+									<% if (char.db.alts != null) { %>
+									<% for(var i=0; i<char.db.alts.alts.length; i++) { %>
+									<% if (char.db.alts.alts[i].id != char.db.id) { %>
+									<option value="<%= char.db.alts.alts[i]._id %>"><%= char.db.alts.alts[i].name %></option>
+									<% } %>
+									<% } %>
+									<% } %>
+								</select>
+							</div>
+							<legend class="uk-legend">Date</legend>
+							<div class="uk-margin">
+								<input id="dateintel" class="uk-input" type="text" placeholder="Date">
+							</div>
+							<legend class="uk-legend">Type</legend>
+							<div class="uk-margin">
+								<select id="inteltype" class="uk-select">
+									<option value="Confirmed">Confirmed</option>
+									<option value="Suspicion">Suspicion</option>
+									<option value="Cleared">Cleared</option>
+									<option value="Char SOLD">Char SOLD</option>
+									<option value="Other">Other</option>
+								</select>
+							</div>
+							<legend class="uk-legend">Action</legend>
+							<div class="uk-margin">
+								<input id="actionintel" class="uk-input" type="text" placeholder="Action name">
+							</div>
+							<legend class="uk-legend">Links</legend>
+							<div class="uk-margin">
+								<input id="linkintel" class="uk-input" type="text" placeholder="link;otherlink;other...">
+							</div>
+							<legend class="uk-legend">Visibility</legend>
+							<div class="uk-margin">
+								<select id="intelvisi" class="uk-select">
+									<option value="1">Public</option>
+									<option value="2">Private</option>
+									<option value="3">Secret</option>
+									<option value="4">Top Secret</option>
+									<option value="5">Extremely Secret</option>
+								</select>
+							</div>
+							<legend class="uk-legend">Comment</legend>
+							<div class="uk-margin">
+							 <textarea id='intelcomment' class="uk-textarea"></textarea>
+							</div>
+						</fieldset>
+					</form>
+					<a class="uk-button uk-button-default uk-width-1-1" onclick="addIntel();">Submit</a>
+					<div id="errorintel" class="uk-alert-danger" style="display: none;" uk-alert>
+						<a class="uk-alert-close" uk-close></a>
+						<p>Damn, it's a bug. quickly contact the administrator</p>
+					</div>
+					<div id="missingintel" class="uk-alert-warning" style="display: none;" uk-alert>
+						<a class="uk-alert-close" uk-close></a>
+						<p>hey dude, fill the fields</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end -->
+
 	<header id="top-head" class="uk-position-fixed">
 		<div class="uk-container uk-container-expand uk-background-secondary">
 			<nav class="uk-navbar uk-light" data-uk-navbar="mode:click">
 				<div class="uk-navbar-left">
-					<a class="uk-navbar-item uk-logo" href="/">G.DATA</a>
+					<a class="uk-navbar-item uk-logo" href="/">Three Eyed Ravens</a>
 				</div>
 				<div class="uk-navbar-right">
 					<ul class="uk-navbar-nav">
@@ -164,7 +240,7 @@
 					<% if (char.db.tags[y].visibility <= user.role) { -%>
 					<span class="uk-label" uk-tooltip="title: <%= char.db.tags[y].from.name %>"><%= char.db.tags[y].name %></span>
 					<% } else { -%>
-					<span class="uk-label" uk-tooltip="title: Confidential">Confidential</span>
+					<span class="uk-label" uk-tooltip="title: <%= char.db.tags[y].from.name %>">Confidential</span>
 					<% } -%>	
 				</li>
 				<% } %>
@@ -187,7 +263,7 @@
 							<p uk-margin class="uk-text-center">
 								<button class="uk-button uk-button-secondary" href="#modal-full" uk-toggle>add a tags</button>
 								<button class="uk-button uk-button-primary" href="#modal-alt" uk-toggle>link a character</button>
-								<button class="uk-button uk-button-danger">new intel</button>
+								<button class="uk-button uk-button-danger" href="#modal-intel" uk-toggle>new intel</button>
 							</p>
 						</div>
 					</div>
@@ -219,7 +295,7 @@
 						<% if (char.db.alts.alts[i].tags[y].visibility <= user.role) { -%>
 						<span class="uk-label" uk-tooltip="title: <%=char.db.alts.alts[i].tags[y].from.name %>"><%= char.db.alts.alts[i].tags[y].name %></span>
 						<% } else { %>
-						<span class="uk-label" uk-tooltip="title: Confidential">Confidential</span>
+						<span class="uk-label" uk-tooltip="title: <%=char.db.alts.alts[i].tags[y].from.name %>">Confidential</span>
 						<% } %>
 						<% } %>
 						<% } else { %>
@@ -315,7 +391,7 @@
 </div>
 <footer class="uk-section uk-section-small uk-text-center">
 	<hr>
-	<a href="https://github.com/Dracks977">Created by Dracks</a> | Send me some isk...</span></a>
+	<a href="https://github.com/Dracks977">Created by Dracks</a> | For Dead Coalition</span></a>
 </footer>
 </div>
 </div>
@@ -324,6 +400,7 @@
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.8/js/uikit.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.8/js/uikit-icons.min.js"></script>
+
 <script
 src="https://code.jquery.com/jquery-3.3.1.js"
 integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
@@ -332,10 +409,11 @@ crossorigin="anonymous"></script>
 src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
 integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
 crossorigin="anonymous"></script>
+<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.js'></script>
 <script type="text/javascript">
 	$('document').ready(function() {
 		// a enlever breche de securité
-		console.log(<%- JSON.stringify(char) %>)
+		// console.log(<%- JSON.stringify(char) %>)
 		$.get( "api/corp/" + <%= char.basic.corporation_id%>, function( data ) {
 			$( "#corpname" ).html( data.name );
 		});
@@ -351,6 +429,7 @@ crossorigin="anonymous"></script>
 					$(self).text(data);
 				});
 			})
+			$( "#dateintel" ).datepicker({ dateFormat: 'mm-dd-yy' });
 		});
 
 	function addTag() {

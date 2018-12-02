@@ -40,6 +40,7 @@ module.exports = (mongoose) => {
 		next();
 	});
 
+	// ajouter la visibility
 	let Alt = new Schema({
 		alts: [{ type: Schema.Types.ObjectId, ref: 'Char'}],
 		created: { type: Date },

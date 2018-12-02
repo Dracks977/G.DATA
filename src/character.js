@@ -6,14 +6,11 @@ module.exports = function(app, path, ejs, fs){
 	app.get('/character', function(req, res){
 		db.char(req.query.id, (info) =>{
 			db.charput(info, (result) =>{
-				console.log(result)
 				fs.readFile(path.resolve(__dirname + '/../public/views/character.html'), 'utf-8', (err, content) => {
 					if (err) {
 						res.end('error occurred' + err);
 						return;
 					} 
-					console.log("=========")
-					console.log(req.session.db)
    						let renderedHtml = ejs.render(content, {'user' : req.session.db, 'char' : result});  //get redered HTML code
    						res.end(renderedHtml);
    					});
@@ -30,7 +27,7 @@ module.exports = function(app, path, ejs, fs){
 	app.get('/api/char/corpname/:id', function(req, res){
 		db.char(req.params.id, function(result){
 			db.corp(result.basic.corporation_id, function(result2){
-			res.json(result2.name)
+				res.json(result2.name)
 			})
 		})
 	});
@@ -85,11 +82,9 @@ module.exports = function(app, path, ejs, fs){
 	});
 
 	app.post('/api/tags/add', function(req, res){
-		console.log(req.body)
 		if (req.body.id && req.body.name && req.body.visibility && req.body._id) {
 			let tags = {from : req.body._id, name: req.body.name, visibility: req.body.visibility};
 			CHAR.findById(req.body.id).exec((err, doc) => {
-				console.log(doc)
 				if (err)
 					res.send(err);
 				doc.tags.push(tags)
@@ -98,6 +93,29 @@ module.exports = function(app, path, ejs, fs){
 						res.send(err);
 					res.sendStatus(200);
 				})
+			})
+		} else {
+			res.sendStatus(404);
+		}
+	});
+
+	app.post('/api/intel/add', function(req, res){
+		console.log(req.body);
+		if (req.body.links && req.body.comment && req.body.from && req.body.visibility && req.body.type && req.body.date && req.body.action && req.body.id) {
+			let intel = {
+				'links': req.body.links,
+				'comment': req.body.comment,
+				'action': req.body.action,
+				'visibility': req.body.visibility,
+				'type': req.body.type,
+				'date': req.body.date
+			};
+			CHAR.findById(req.body.from).exec((err, doc) => {
+				if (err)
+					res.send(err);
+				intel.from = doc;
+				console.log(intel);
+				// ici cree l'intel et le liée au personage
 			})
 		} else {
 			res.sendStatus(404);

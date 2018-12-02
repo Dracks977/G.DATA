@@ -63,7 +63,6 @@ app.use(function (req, res, next) {
 		return null
 	}
 	else{
-		console.log(req.session)
 		return next()
 	}
 });
