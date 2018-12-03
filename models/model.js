@@ -61,7 +61,7 @@ module.exports = (mongoose) => {
 		links: [String],
 		comment: String,
 		action: String,
-		from: { type: Schema.Types.ObjectId, ref: 'User'},
+		from: {id: { type: Schema.Types.ObjectId, ref: 'User'}, name: String},
 		visibility: { type: Number, default: 1 },
 		type: String,
 		date: Date,

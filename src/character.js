@@ -11,9 +11,10 @@ module.exports = function(app, path, ejs, fs){
 						res.end('error occurred' + err);
 						return;
 					} 
-   						let renderedHtml = ejs.render(content, {'user' : req.session.db, 'char' : result});  //get redered HTML code
-   						res.end(renderedHtml);
-   					});
+					var moment = require('moment');
+   					let renderedHtml = ejs.render(content, {'user' : req.session.db, 'char' : result, moment: moment });  //get redered HTML code
+   					res.end(renderedHtml);
+   				});
 			})
 		})
 	});
@@ -90,7 +91,7 @@ module.exports = function(app, path, ejs, fs){
 				doc.tags.push(tags)
 				doc.save((err,result) => {
 					if (err)
-						res.send(err);
+						res.sendStatus(500);
 					res.sendStatus(200);
 				})
 			})
@@ -101,22 +102,32 @@ module.exports = function(app, path, ejs, fs){
 
 	app.post('/api/intel/add', function(req, res){
 		console.log(req.body);
-		if (req.body.links && req.body.comment && req.body.from && req.body.visibility && req.body.type && req.body.date && req.body.action && req.body.id) {
+		if (req.body.links && req.body.comment && req.body.from && req.body.visibility && req.body.type && req.body.action && req.body.id) {
 			let intel = {
 				'links': req.body.links,
 				'comment': req.body.comment,
 				'action': req.body.action,
 				'visibility': req.body.visibility,
 				'type': req.body.type,
-				'date': req.body.date
+				'date': new Date(),
+				'from': {
+					'id': req.body.id,
+					'name': req.body.name
+				}
 			};
-			CHAR.findById(req.body.from).exec((err, doc) => {
-				if (err)
-					res.send(err);
-				intel.from = doc;
-				console.log(intel);
-				// ici cree l'intel et le liée au personage
+			const intels = new INTELS(intel);
+			intels.save().then(() => {
+				CHAR.findById(req.body.id).exec((err, docc) => {
+					console.log(intels)
+					docc.intels.push(intels)
+					docc.save((err,result) => {
+						if (err)
+							res.sendStatus(500);
+						res.sendStatus(200);
+					})
+				})
 			})
+			
 		} else {
 			res.sendStatus(404);
 		}

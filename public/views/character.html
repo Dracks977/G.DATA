@@ -144,280 +144,297 @@
 									<% } %>
 								</select>
 							</div>
-							<legend class="uk-legend">Date</legend>
+							<!-- <legend class="uk-legend">Date</legend>
 							<div class="uk-margin">
-								<input id="dateintel" class="uk-input" type="text" placeholder="Date">
-							</div>
-							<legend class="uk-legend">Type</legend>
-							<div class="uk-margin">
-								<select id="inteltype" class="uk-select">
-									<option value="Confirmed">Confirmed</option>
-									<option value="Suspicion">Suspicion</option>
-									<option value="Cleared">Cleared</option>
-									<option value="Char SOLD">Char SOLD</option>
-									<option value="Other">Other</option>
-								</select>
-							</div>
-							<legend class="uk-legend">Action</legend>
-							<div class="uk-margin">
-								<input id="actionintel" class="uk-input" type="text" placeholder="Action name">
-							</div>
-							<legend class="uk-legend">Links</legend>
-							<div class="uk-margin">
-								<input id="linkintel" class="uk-input" type="text" placeholder="link;otherlink;other...">
-							</div>
-							<legend class="uk-legend">Visibility</legend>
-							<div class="uk-margin">
-								<select id="intelvisi" class="uk-select">
-									<option value="1">Public</option>
-									<% if (2 <= user.role) { -%>
-									<option value="2">Private</option>
-									<% } if (3 <= user.role) { %>
-									<option value="3">Secret</option>
-									<% } if (4 <= user.role) { %>
-									<option value="4">Top Secret</option>
-									<% } if (5 <= user.role) { %>
-									<option value="5">Extremely Secret</option>
-									<% } %>
-								</select>
-							</div>
-							<legend class="uk-legend">Comment</legend>
-							<div class="uk-margin">
-							 <textarea id='intelcomment' class="uk-textarea"></textarea>
-							</div>
-						</fieldset>
-					</form>
-					<a class="uk-button uk-button-default uk-width-1-1" onclick="addIntel();">Submit</a>
-					<div id="errorintel" class="uk-alert-danger" style="display: none;" uk-alert>
-						<a class="uk-alert-close" uk-close></a>
-						<p>Damn, it's a bug. quickly contact the administrator</p>
-					</div>
-					<div id="missingintel" class="uk-alert-warning" style="display: none;" uk-alert>
-						<a class="uk-alert-close" uk-close></a>
-						<p>hey dude, fill the fields</p>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- end -->
-
-	<header id="top-head" class="uk-position-fixed">
-		<div class="uk-container uk-container-expand uk-background-secondary">
-			<nav class="uk-navbar uk-light" data-uk-navbar="mode:click">
-				<div class="uk-navbar-left">
-					<a class="uk-navbar-item uk-logo" href="/">Three Eyed Ravens</a>
-				</div>
-				<div class="uk-navbar-right">
-					<ul class="uk-navbar-nav">
-						<li>
-							<a href="#" data-uk-icon="icon:user"><%= user.name %><div style="width: 1em"></div></a>
-							<div class="uk-navbar-dropdown uk-navbar-dropdown-bottom-left">
-								<ul class="uk-nav uk-navbar-dropdown-nav">
-									<li><a href="#"><span data-uk-icon="icon: sign-out"></span> Logout</a></li>
-								</ul>
-							</div>
-						</li>
-						<li><a href="#" data-uk-icon="icon: cog">Members access<div style="width: 1em"></div></a></li>
-					</ul>
-				</div>
-			</nav>
-		</div>
-	</header>
-
-	<aside id="left-col" class="uk-light uk-visible@m">
-		<div class="profile-bar">
-			<div class="uk-grid uk-grid-small uk-flex uk-flex-middle" data-uk-grid>
-				<div class="uk-width-auto"><img src="http://imageserver.eveonline.com/Character/<%= char.db.id %>_512.jpg" alt="" class="uk-border-circle profile-img"></div>
-				<div class="uk-width-expand">
-					<h4 class="uk-margin-remove-vertical text-light"><%= char.db.name %></h4>
-				</div>
-			</div>
-		</div>
-
-		<div class="bar-content uk-position-relative">
-			<ul class="uk-nav-default" data-uk-nav>
-				<li class="uk-nav-header">Character</li>
-				<li class="uk-parent">
-					<span>Sec. Status : <%= char.basic.security_status %></span>
-				</li>
-				<li class="uk-parent">
-					<span>Birthday : <%= char.basic.birthday %></span>
-				</li>
-				<li class="uk-parent">
-					<span>Corporation : 
-						<corp id='corpname'>Loading..</corp>
-					</span>
-				</li>
-				<% if (char.basic.alliance_id) { %>
-				<li class="uk-parent">
-					<span>Alliance : 
-						<alli id='alliname'>Loading</alli>
-					</span>
-				</li>
-				<% } %>
-				<br>
-				<li class="uk-nav-divider"></li>
-				<% if (char.db.tags.length != 0) { %>
-				<li class="uk-nav-header">TAGS</li>
-				<% for(var y=0; y<char.db.tags.length; y++) { %>
-				<li class="uk-parent">
-					<% if (char.db.tags[y].visibility <= user.role) { -%>
-					<span class="uk-label" uk-tooltip="title: <%= char.db.tags[y].from.name %>"><%= char.db.tags[y].name %></span>
-					<% } else { -%>
-					<span class="uk-label" uk-tooltip="title: <%= char.db.tags[y].from.name %>">Confidential</span>
-					<% } -%>	
-				</li>
-				<% } %>
-				<% } %>
-
-				<li class="uk-nav-header">LINKS</li>
-				<li><a href="https://evewho.com/pilot/<%= char.db.name %>"><span class="uk-margin-small-right" data-uk-icon="icon: info"></span> evewho</a></li>
-				<li><a href="https://zkillboard.com/character/<%= char.db.id %>"><span class="uk-margin-small-right" data-uk-icon="icon: bolt"></span> zKillboard</a></li>
-			</ul>
-		</div>
-	</aside>
-	<!-- /LEFT BAR -->
-
-	<div id="content" data-uk-height-viewport="expand: true">
-		<div class="uk-container uk-container-expand">
-			<div class="uk-grid uk-grid-divider uk-grid-medium uk-child-width-1-1 uk-child-width-1-1@l uk-child-width-1-1@xl" data-uk-grid>
-				<div class="uk-width-1-1@s uk-width-1-1@l uk-width-1-1@xl">
-					<div class="uk-card uk-card-default uk-card-small">
-						<div class="uk-card-body">
-							<p uk-margin class="uk-text-center">
-								<button class="uk-button uk-button-secondary" href="#modal-full" uk-toggle>add a tags</button>
-								<button class="uk-button uk-button-primary" href="#modal-alt" uk-toggle>link a character</button>
-								<button class="uk-button uk-button-danger" href="#modal-intel" uk-toggle>new intel</button>
-							</p>
+							<input id="dateintel" class="uk-input" type="text" placeholder="Date">
+						</div> -->
+						<legend class="uk-legend">Type</legend>
+						<div class="uk-margin">
+							<select id="inteltype" class="uk-select">
+								<option value="Confirmed">Confirmed</option>
+								<option value="Suspicion">Suspicion</option>
+								<option value="Cleared">Cleared</option>
+								<option value="Char SOLD">Char SOLD</option>
+								<option value="Other">Other</option>
+							</select>
 						</div>
-					</div>
+						<legend class="uk-legend">Action</legend>
+						<div class="uk-margin">
+							<input id="actionintel" class="uk-input" type="text" placeholder="Action name">
+						</div>
+						<legend class="uk-legend">Links</legend>
+						<div class="uk-margin">
+							<input id="linkintel" class="uk-input" type="text" placeholder="link;otherlink;other...">
+						</div>
+						<legend class="uk-legend">Visibility</legend>
+						<div class="uk-margin">
+							<select id="intelvisi" class="uk-select">
+								<option value="1">Public</option>
+								<% if (2 <= user.role) { -%>
+								<option value="2">Private</option>
+								<% } if (3 <= user.role) { %>
+								<option value="3">Secret</option>
+								<% } if (4 <= user.role) { %>
+								<option value="4">Top Secret</option>
+								<% } if (5 <= user.role) { %>
+								<option value="5">Extremely Secret</option>
+								<% } %>
+							</select>
+						</div>
+						<legend class="uk-legend">Comment</legend>
+						<div class="uk-margin">
+							<textarea id='intelcomment' class="uk-textarea"></textarea>
+						</div>
+					</fieldset>
+				</form>
+				<a class="uk-button uk-button-default uk-width-1-1" onclick="addIntel();">Submit</a>
+				<div id="errorintel" class="uk-alert-danger" style="display: none;" uk-alert>
+					<a class="uk-alert-close" uk-close></a>
+					<p>Damn, it's a bug. quickly contact the administrator</p>
 				</div>
-			</div>
-			<hr class="uk-divider-icon">
-			<div class="uk-grid uk-grid-medium
-			uk-grid-match"  data-uk-grid>
-			<% if (char.db.alts != null) { %>
-			<% for(var i=0; i<char.db.alts.alts.length; i++) { %>
-			<% if (char.db.alts.alts[i].id != char.db.id) { %>
-			<!-- /panel -->
-			<div class="uk-width-1-2@s uk-width-1-4@l uk-width-1-4@xl">
-				<div class="uk-card uk-card-default">
-					<div class="uk-card-header">
-						<div class="uk-grid-small uk-flex-middle" uk-grid>
-							<div class="uk-width-auto">
-								<img class="uk-border-circle" width="60" height="60" src="http://imageserver.eveonline.com/Character/<%= char.db.alts.alts[i].id %>_512.jpg">
-							</div>
-							<div class="uk-width-expand">
-								<h3 class="uk-card-title uk-margin-remove-bottom"><%= char.db.alts.alts[i].name %></h3>
-								<p class='corpalt' _id='<%= char.db.alts.alts[i].id %>' style='margin-top: 0px'></p>
-							</div>
-						</div>
-					</div>
-					<div class="uk-card-body">
-						<% if (char.db.alts.alts[i].tags.length != 0) { %>
-						<% for(var y=0; y<char.db.alts.alts[i].tags.length; y++) { %>
-						<% if (char.db.alts.alts[i].tags[y].visibility <= user.role) { -%>
-						<span class="uk-label" uk-tooltip="title: <%=char.db.alts.alts[i].tags[y].from.name %>"><%= char.db.alts.alts[i].tags[y].name %></span>
-						<% } else { %>
-						<span class="uk-label" uk-tooltip="title: <%=char.db.alts.alts[i].tags[y].from.name %>">Confidential</span>
-						<% } %>
-						<% } %>
-						<% } else { %>
-						<div class="uk-text-center">
-							<p class="uk-text-muted">No tags for this charactere</p>
-						</div>
-						<% } %>
-					</div>
-					<div class="uk-card-footer uk-text-center">
-						<a href="/character?id=<%= char.db.alts.alts[i].id %>" class="uk-button uk-button-default">Show</a>
-					</div>
-				</div>
-			</div>
-			<% } %>
-			<% } %>
-			<% } else { %>
-			<div class="uk-width-expand uk-text-center">
-				<h3 class="uk-text-muted">No alts for this character</h3>
-			</div>
-			<% } %>
-
-
-			<!-- /panel -->
-
-
-			<div class=" uk-width-2-1@l uk-width-1-1@xl">
-				<div class="uk-card uk-card-default uk-card-small uk-card-hover">
-					<div class="uk-card-header">
-						<div class="uk-grid uk-grid-small">
-							<div class="uk-width-auto"><h4 class="uk-margin-remove-bottom">Intel</h4></div>
-							<div class="uk-width-expand uk-text-right">
-							</div>
-						</div>
-					</div>
-					<div class="uk-card-body">
-						<div class="uk-overflow-auto">
-							<table class="uk-table uk-table-hover uk-table-divider uk-table-middle">
-								<h3 class="uk-text-muted">No intel for this charactere</h3>
-								<thead>
-									<tr>
-
-									<th>Name</th>
-									<th>Description</th>
-									<th>Date</th>
-									<th>Action</th>
-								</tr>
-							</thead>
-							<tbody>
-
-								<tr>
-
-								<td>John Doe</td>
-								<td>c'est un sale spy</td>
-								<td>11/09/18</td>
-								<td>
-								<a href="#" class="uk-icon-link uk-text-primary" data-uk-icon="link"></a>
-								<a href="#" class="uk-icon-link uk-text-danger" data-uk-icon="close"></a>
-								</td>
-								</tr>
-								<tr>
-								<td>Larry Boile</td>
-								<td>Maecenas sagittis, dolor id posuere finibus, massa nulla luctus mauris</td>
-								<td>13/09/18</td>
-								<td>
-								<a href="#" class="uk-icon-link uk-text-primary" data-uk-icon="link"></a>
-								<a href="#" class="uk-icon-link uk-text-danger" data-uk-icon="close"></a>
-								</td>
-								</tr>
-								<tr>
-								<td>Susan Lee</td>
-								<td>Sagittis, dolor id posuere finibus, massa nulla luctus mauris</td>
-								<td>18/09/18</td>
-								<td>
-								<a href="#" class="uk-icon-link uk-text-primary" data-uk-icon="link"></a>
-								<a href="#" class="uk-icon-link uk-text-danger" data-uk-icon="close"></a>
-								</td>
-								</tr>
-								<tr>
-								<td>Jerry Thomas</td>
-								<td>Maecenas sagittis, dolor id posuere finibus, massa nulla luctus mauris</td>
-								<td>21/09/18</td>
-								<td>
-								<a href="#" class="uk-icon-link uk-text-primary" data-uk-icon="link"></a>
-								<a href="#" class="uk-icon-link uk-text-danger" data-uk-icon="close"></a>
-								</td>
-							</tr>
-						</tbody>
-					</table>
+				<div id="missingintel" class="uk-alert-warning" style="display: none;" uk-alert>
+					<a class="uk-alert-close" uk-close></a>
+					<p>hey dude, fill the fields</p>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-<footer class="uk-section uk-section-small uk-text-center">
-	<hr>
-	<a href="https://github.com/Dracks977">Created by Dracks</a> | For Dead Coalition</span></a>
-</footer>
+<!-- end -->
+
+<header id="top-head" class="uk-position-fixed">
+	<div class="uk-container uk-container-expand uk-background-secondary">
+		<nav class="uk-navbar uk-light" data-uk-navbar="mode:click">
+			<div class="uk-navbar-left">
+				<a class="uk-navbar-item uk-logo" href="/">Three Eyed Ravens</a>
+			</div>
+			<div class="uk-navbar-right">
+				<ul class="uk-navbar-nav">
+					<li>
+						<a href="#" data-uk-icon="icon:user"><%= user.name %><div style="width: 1em"></div></a>
+						<div class="uk-navbar-dropdown uk-navbar-dropdown-bottom-left">
+							<ul class="uk-nav uk-navbar-dropdown-nav">
+								<li><a href="#"><span data-uk-icon="icon: sign-out"></span> Logout</a></li>
+							</ul>
+						</div>
+					</li>
+					<li><a href="#" data-uk-icon="icon: cog">Members access<div style="width: 1em"></div></a></li>
+				</ul>
+			</div>
+		</nav>
+	</div>
+</header>
+
+<aside id="left-col" class="uk-light uk-visible@m">
+	<div class="profile-bar">
+		<div class="uk-grid uk-grid-small uk-flex uk-flex-middle" data-uk-grid>
+			<div class="uk-width-auto"><img src="http://imageserver.eveonline.com/Character/<%= char.db.id %>_512.jpg" alt="" class="uk-border-circle profile-img"></div>
+			<div class="uk-width-expand">
+				<h4 class="uk-margin-remove-vertical text-light"><%= char.db.name %></h4>
+			</div>
+		</div>
+	</div>
+
+	<div class="bar-content uk-position-relative">
+		<ul class="uk-nav-default" data-uk-nav>
+			<li class="uk-nav-header">Character</li>
+			<li class="uk-parent">
+				<span>Sec. Status : <%= char.basic.security_status %></span>
+			</li>
+			<li class="uk-parent">
+				<span>Birthday : <%- moment(char.basic.birthday).format('LL') %></span>
+			</li>
+			<li class="uk-parent">
+				<span>Corporation : 
+					<corp id='corpname'>Loading..</corp>
+				</span>
+			</li>
+			<% if (char.basic.alliance_id) { %>
+			<li class="uk-parent">
+				<span>Alliance : 
+					<alli id='alliname'>Loading</alli>
+				</span>
+			</li>
+			<% } %>
+			<br>
+			<li class="uk-nav-divider"></li>
+			<% if (char.db.tags.length != 0) { %>
+			<li class="uk-nav-header">TAGS</li>
+			<% for(var y=0; y<char.db.tags.length; y++) { %>
+			<li class="uk-parent">
+				<% if (char.db.tags[y].visibility <= user.role) { -%>
+				<span class="uk-label" uk-tooltip="title: <%= char.db.tags[y].from.name %>"><%= char.db.tags[y].name %></span>
+				<% } else { -%>
+				<span class="uk-label" uk-tooltip="title: <%= char.db.tags[y].from.name %>">Confidential</span>
+				<% } -%>	
+			</li>
+			<% } %>
+			<% } %>
+
+			<li class="uk-nav-header">LINKS</li>
+			<li><a href="https://evewho.com/pilot/<%= char.db.name %>"><span class="uk-margin-small-right" data-uk-icon="icon: info"></span> evewho</a></li>
+			<li><a href="https://zkillboard.com/character/<%= char.db.id %>"><span class="uk-margin-small-right" data-uk-icon="icon: bolt"></span> zKillboard</a></li>
+		</ul>
+	</div>
+</aside>
+<!-- /LEFT BAR -->
+
+<div id="content" data-uk-height-viewport="expand: true">
+	<div class="uk-container uk-container-expand">
+		<div class="uk-grid uk-grid-divider uk-grid-medium uk-child-width-1-1 uk-child-width-1-1@l uk-child-width-1-1@xl" data-uk-grid>
+			<div class="uk-width-1-1@s uk-width-1-1@l uk-width-1-1@xl">
+				<div class="uk-card uk-card-default uk-card-small">
+					<div class="uk-card-body">
+						<p uk-margin class="uk-text-center">
+							<button class="uk-button uk-button-secondary" href="#modal-full" uk-toggle>add a tags</button>
+							<button class="uk-button uk-button-primary" href="#modal-alt" uk-toggle>link a character</button>
+							<button class="uk-button uk-button-danger" href="#modal-intel" uk-toggle>new intel</button>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<hr class="uk-divider-icon">
+		<div class="uk-grid uk-grid-medium
+		uk-grid-match"  data-uk-grid>
+		<% if (char.db.alts != null) { %>
+		<% for(var i=0; i<char.db.alts.alts.length; i++) { %>
+		<% if (char.db.alts.alts[i].id != char.db.id) { %>
+		<!-- /panel -->
+		<div class="uk-width-1-2@s uk-width-1-4@l uk-width-1-4@xl">
+			<div class="uk-card uk-card-default">
+				<div class="uk-card-header">
+					<div class="uk-grid-small uk-flex-middle" uk-grid>
+						<div class="uk-width-auto">
+							<img class="uk-border-circle" width="60" height="60" src="http://imageserver.eveonline.com/Character/<%= char.db.alts.alts[i].id %>_512.jpg">
+						</div>
+						<div class="uk-width-expand">
+							<h3 class="uk-card-title uk-margin-remove-bottom"><%= char.db.alts.alts[i].name %></h3>
+							<p class='corpalt' _id='<%= char.db.alts.alts[i].id %>' style='margin-top: 0px'></p>
+						</div>
+					</div>
+				</div>
+				<div class="uk-card-body">
+					<% if (char.db.alts.alts[i].tags.length != 0) { %>
+					<% for(var y=0; y<char.db.alts.alts[i].tags.length; y++) { %>
+					<% if (char.db.alts.alts[i].tags[y].visibility <= user.role) { -%>
+					<span class="uk-label" uk-tooltip="title: <%=char.db.alts.alts[i].tags[y].from.name %>"><%= char.db.alts.alts[i].tags[y].name %></span>
+					<% } else { %>
+					<span class="uk-label" uk-tooltip="title: <%=char.db.alts.alts[i].tags[y].from.name %>">Confidential</span>
+					<% } %>
+					<% } %>
+					<% } else { %>
+					<div class="uk-text-center">
+						<p class="uk-text-muted">No tags for this charactere</p>
+					</div>
+					<% } %>
+				</div>
+				<div class="uk-card-footer uk-text-center">
+					<a href="/character?id=<%= char.db.alts.alts[i].id %>" class="uk-button uk-button-default">Show</a>
+				</div>
+			</div>
+		</div>
+		<% } %>
+		<% } %>
+		<% } else { %>
+		<div class="uk-width-expand uk-text-center">
+			<h3 class="uk-text-muted">No alts for this character</h3>
+		</div>
+		<% } %>
+
+
+		<!-- /panel -->
+
+
+		<div class=" uk-width-2-1@l uk-width-1-1@xl">
+			<div class="uk-card uk-card-default uk-card-small uk-card-hover">
+				<div class="uk-card-header">
+					<div class="uk-grid uk-grid-small">
+						<div class="uk-width-auto"><h4 class="uk-margin-remove-bottom">Intel</h4></div>
+						<div class="uk-width-expand uk-text-right">
+						</div>
+					</div>
+				</div>
+				<div class="uk-card-body">
+					<div class="uk-overflow-auto">
+						<table class="uk-table uk-table-hover uk-table-divider uk-table-middle">
+							<thead>
+								<tr>
+									<th>On</th>
+									<th>Type</th>
+									<th>Action</th>
+									<th>Comment</th>
+									<th>From</th>
+									<th>Date</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								<% for(var y=0; y<char.db.intels.length; y++) { %>
+								<tr>
+									<% if (char.db.intels[y].visibility <= user.role) { -%>
+									<td><%= char.db.name %></td>
+									<td><%= char.db.intels[y].type %></td>
+									<td><%= char.db.intels[y].action %></td>
+									<td><%= char.db.intels[y].comment %></td>
+									<td><%= char.db.intels[y].from.name %></td>
+									<td><%- moment(char.db.intels[y].date).format('LL') %></td>
+									<td>
+										<a href="#" class="uk-icon-link uk-text-primary" data-uk-icon="link"></a>
+										<!-- <a href="#" class="uk-icon-link uk-text-danger" data-uk-icon="close"></a> -->
+									</td>
+									<% } else { %>
+									<td>Confidential</td>
+									<td>Confidential</td>
+									<td>Redacted</td>
+									<td><%= char.db.intels[y].from.name %></td>
+									<td><%= char.db.intels[y].date %></td>
+									<td>
+									</td>
+									<% } %>
+								</tr>
+								<% } %>
+								<% if (char.db.alts != null) { %>
+								<% for(var i=0; i<char.db.alts.alts.length; i++) { %>
+								<% if (char.db.alts.alts[i].id != char.db.id) { %>
+								<% for(var x=0; x<char.db.alts.alts[i].intels.length; x++) { %>
+								<tr>
+									<% if (char.db.alts.alts[i].intels[x].visibility <= user.role) { -%>
+									<td><%= char.db.alts.alts[i].name %></td>
+									<td><%= char.db.alts.alts[i].intels[x].type %></td>
+									<td><%= char.db.alts.alts[i].intels[x].action %></td>
+									<td><%= char.db.alts.alts[i].intels[x].comment %></td>
+									<td><%= char.db.alts.alts[i].intels[x].from.name %></td>
+									<td><%= char.db.alts.alts[i].intels[x].date %></td>
+									<td>
+										<a href="#" class="uk-icon-link uk-text-primary" data-uk-icon="link"></a>
+										<!-- <a href="#" class="uk-icon-link uk-text-danger" data-uk-icon="close"></a> -->
+									</td>
+									<% } else { %>
+									<td>Confidential</td>
+									<td>Confidential</td>
+									<td>Redacted</td>
+									<td><%= char.db.alts.alts[i].intels[x].from.name %></td>
+									<td><%= char.db.alts.alts[i].intels[x].date %></td>
+									<td>
+									</td>
+									<% } %>
+								</tr>
+								<% } %>
+								<% } %>
+								<% } %>
+								<% } %>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<footer class="uk-section uk-section-small uk-text-center">
+		<hr>
+		<a href="https://github.com/Dracks977">Created by Dracks</a> | For Dead Coalition</span></a>
+	</footer>
 </div>
 </div>
 <!-- /CONTENT -->
@@ -434,11 +451,10 @@ crossorigin="anonymous"></script>
 src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
 integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
 crossorigin="anonymous"></script>
-<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.js'></script>
 <script type="text/javascript">
 	$('document').ready(function() {
 		// a enlever breche de securité
-		// console.log(<%- JSON.stringify(char) %>)
+		console.log(<%- JSON.stringify(char) %>)
 		$.get( "api/corp/" + <%= char.basic.corporation_id%>, function( data ) {
 			$( "#corpname" ).html( data.name );
 		});
@@ -450,11 +466,10 @@ crossorigin="anonymous"></script>
 			$('.corpalt').each(function( index ) {
 				let self = this
 				$.get( "api/char/corpname/" + $(this).attr('_id'), function( data ) {
-					console.log(data)
 					$(self).text(data);
 				});
 			})
-			$( "#dateintel" ).datepicker({ dateFormat: 'mm-dd-yy' });
+			// $( "#dateintel" ).datepicker({ dateFormat: 'mm-dd-yy' });
 		});
 
 	function addTag() {
@@ -487,6 +502,29 @@ crossorigin="anonymous"></script>
 			else
 				$("#errorlink").removeAttr("style");
 		});
+	}
+
+	function addIntel() {
+		let intel = {
+			links: $('#linkintel').val().split(';'),
+			comment: $('#intelcomment').val(),
+			action:  $('#actionintel').val(),
+			from: '<%= user._id %>',
+			visibility: $('#intelvisi').val(),
+			type: $('#inteltype').val(),
+			id: $('#intelfor').val(),
+			name : '<%= user.name %>'
+		}
+
+		$.post( "/api/intel/add", intel).done( function (data){
+			location.reload();
+		}) .fail(function(e) {
+			if (e.status == 404)
+				$("#missingintel").removeAttr("style");
+			else
+				$("#errorintel").removeAttr("style");
+		});
+
 	}
 	
 </script>
