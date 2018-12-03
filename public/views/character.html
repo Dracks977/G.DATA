@@ -41,10 +41,15 @@
 							<div class="uk-margin">
 								<select id="tagvisi" class="uk-select">
 									<option value="1">Public</option>
+									<% if (2 <= user.role) { -%>
 									<option value="2">Private</option>
+									<% } if (3 <= user.role) { %>
 									<option value="3">Secret</option>
+									<% } if (4 <= user.role) { %>
 									<option value="4">Top Secret</option>
+									<% } if (5 <= user.role) { %>
 									<option value="5">Extremely Secret</option>
+									<% } %>
 								</select>
 							</div>
 						</fieldset>
@@ -74,7 +79,7 @@
 					<h1 class="uk-text-center">LINK A CHARACTER</h1>
 					<form>
 						<fieldset class="uk-fieldset">	
-							<legend class="uk-legend"></legend>
+							<legend class="uk-legend">Charater</legend>
 							<div class="uk-margin">
 								<div  class="uk-inline uk-width-1-1">
 									<span class="uk-form-icon uk-form-icon-flip" data-uk-icon="icon: search"></span>
@@ -82,6 +87,21 @@
 									<ul></ul>
 									<input id="cid" style=" display: none;" type=" text" name="id">
 								</div>
+							</div>
+							<legend class="uk-legend">Visibility</legend>
+							<div class="uk-margin">
+								<select id="tagvisi" class="uk-select">
+									<option value="1">Public</option>
+									<% if (2 <= user.role) { -%>
+									<option value="2">Private</option>
+									<% } if (3 <= user.role) { %>
+									<option value="3">Secret</option>
+									<% } if (4 <= user.role) { %>
+									<option value="4">Top Secret</option>
+									<% } if (5 <= user.role) { %>
+									<option value="5">Extremely Secret</option>
+									<% } %>
+								</select>
 							</div>
 
 						</fieldset>
@@ -150,10 +170,15 @@
 							<div class="uk-margin">
 								<select id="intelvisi" class="uk-select">
 									<option value="1">Public</option>
+									<% if (2 <= user.role) { -%>
 									<option value="2">Private</option>
+									<% } if (3 <= user.role) { %>
 									<option value="3">Secret</option>
+									<% } if (4 <= user.role) { %>
 									<option value="4">Top Secret</option>
+									<% } if (5 <= user.role) { %>
 									<option value="5">Extremely Secret</option>
+									<% } %>
 								</select>
 							</div>
 							<legend class="uk-legend">Comment</legend>
