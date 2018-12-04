@@ -1,6 +1,5 @@
-• ne pas pouvoir poster plus haut que le grade du mec (visibility ne doit pas pouvoir etre sup a user.role)
-• ajout visibility link
-• intel report new date()
+• intel liens affichage
+
 
 • ajouter edit intel + mise a jour visibility link
 • effacer n+1 (sauf si max)
