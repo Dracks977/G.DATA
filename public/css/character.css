@@ -6,6 +6,9 @@
 	width: 25%;
 	padding: 1%;
 }
+.uk-modal-dialog {
+    width: 50%;
+}
 
 .padding-modif {
 	padding-top: 1px;

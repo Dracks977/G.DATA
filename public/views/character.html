@@ -345,6 +345,14 @@
 
 		<!-- /panel -->
 
+		<!-- modal lien -->
+		<div id="modal-center" class="uk-flex-top" uk-modal>
+			<div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
+				<button class="uk-modal-close-default" type="button" uk-close></button>
+				<ul id="liens">
+				</ul>
+			</div>
+		</div>
 
 		<div class=" uk-width-2-1@l uk-width-1-1@xl">
 			<div class="uk-card uk-card-default uk-card-small uk-card-hover">
@@ -380,7 +388,7 @@
 									<td><%= char.db.intels[y].from.name %></td>
 									<td><%- moment(char.db.intels[y].date).format('LL') %></td>
 									<td>
-										<a href="#" class="uk-icon-link uk-text-primary" data-uk-icon="link"></a>
+										<a class="uk-icon-link uk-text-primary" onclick="liens(<%= JSON.stringify(char.db.intels[y].links) %>)" data-uk-icon="link"></a>
 										<!-- <a href="#" class="uk-icon-link uk-text-danger" data-uk-icon="close"></a> -->
 									</td>
 									<% } else { %>
@@ -407,7 +415,7 @@
 									<td><%= char.db.alts.alts[i].intels[x].from.name %></td>
 									<td><%= char.db.alts.alts[i].intels[x].date %></td>
 									<td>
-										<a href="#" class="uk-icon-link uk-text-primary" data-uk-icon="link"></a>
+										<a class="uk-icon-link uk-text-primary" onclick="liens(<%= JSON.stringify(char.db.intels[y].links) %>)"  data-uk-icon="link"></a>
 										<!-- <a href="#" class="uk-icon-link uk-text-danger" data-uk-icon="close"></a> -->
 									</td>
 									<% } else { %>
@@ -471,6 +479,15 @@ crossorigin="anonymous"></script>
 			})
 			// $( "#dateintel" ).datepicker({ dateFormat: 'mm-dd-yy' });
 		});
+
+	function liens(link) {
+		$('#liens').empty()
+		for (var i = link.length - 1; i >= 0; i--) {
+			console.log(link[i])
+			$('#liens').append('<a target="_blank" href=\"'+link[i]+'\">'+link[i]+'</a>')
+		}
+		UIkit.modal($('#modal-center')).show();
+	}
 
 	function addTag() {
 		let tag = {
