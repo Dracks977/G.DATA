@@ -484,7 +484,7 @@ crossorigin="anonymous"></script>
 		$('#liens').empty()
 		for (var i = link.length - 1; i >= 0; i--) {
 			console.log(link[i])
-			$('#liens').append('<a target="_blank" href=\"'+link[i]+'\">'+link[i]+'</a>')
+			$('#liens').append('<a target="_blank" href=\"'+link[i]+'\">'+link[i]+'</a></br>')
 		}
 		UIkit.modal($('#modal-center')).show();
 	}
