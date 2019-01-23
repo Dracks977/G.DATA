@@ -1,12 +1,16 @@
-• intel liens affichage
 
 
-• ajouter edit intel + mise a jour visibility link
-• effacer n+1 (sauf si max)
-• if delink add auto intel avec visibility de l'intel
+
+release du site
+• effacer n+1 pour intel
 • gestion des droits
+• delink avec add auto intel (avec le nom de la personne qui a delink) avec visibility de la personne qui a delink
 
-
-• Vert if chez darkness + panel gestion alliance de gotg
-• rouge if chez gotg + panel gestion tag alert
+a faire rapidement
+• ajouter edit intel par le créateur
 • recherche par tag ==> que le perso du tag + nbr de gens dans alts
+
+
+• gestion des alerte
+	• Vert if chez darkness + panel gestion alliance de gotg
+	• rouge if chez gotg + panel gestion tag alert (rouge si tag ou alliance rouge)
