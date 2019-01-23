@@ -263,7 +263,11 @@
 			<% for(var y=0; y<char.db.tags.length; y++) { %>
 			<li class="uk-parent">
 				<% if (char.db.tags[y].visibility <= user.role) { -%>
-				<span class="uk-label" uk-tooltip="title: <%= char.db.tags[y].from.name %>"><%= char.db.tags[y].name %></span>
+				<span class="uk-label"  uk-tooltip="title: <%= char.db.tags[y].from.name %>"><%= char.db.tags[y].name %>
+					<% if (char.db.tags[y].visibility < user.role || user.role >= 5) { -%>
+					<a href="#"><span style="color:black" data-uk-icon="icon: close" data-id="<%= char.db.tags[y]._id %>" data-cid="<%= char.db._id %>" onclick="rmtag(this);"></a>
+					<% }-%>
+				</span>
 				<% } else { -%>
 				<span class="uk-label" uk-tooltip="title: <%= char.db.tags[y].from.name %>">Confidential</span>
 				<% } -%>	
@@ -318,7 +322,11 @@
 					<% if (char.db.alts.alts[i].tags.length != 0) { %>
 					<% for(var y=0; y<char.db.alts.alts[i].tags.length; y++) { %>
 					<% if (char.db.alts.alts[i].tags[y].visibility <= user.role) { -%>
-					<span class="uk-label" uk-tooltip="title: <%=char.db.alts.alts[i].tags[y].from.name %>"><%= char.db.alts.alts[i].tags[y].name %></span>
+					<span class="uk-label" uk-tooltip="title: <%=char.db.alts.alts[i].tags[y].from.name %>"><%= char.db.alts.alts[i].tags[y].name %>
+						<% if (char.db.alts.alts[i].tags[y].visibility < user.role || user.role >= 5) { -%>
+						<a href="#"><span style="color:white" data-uk-icon="icon: close" data-id="<%= char.db.alts.alts[i].tags[y]._id %>" data-cid="<%= char.db.alts.alts[i]._id %>" onclick="rmtag(this);"></a>
+						<% }-%>
+					</span>
 					<% } else { %>
 					<span class="uk-label" uk-tooltip="title: <%=char.db.alts.alts[i].tags[y].from.name %>">Confidential</span>
 					<% } %>
@@ -542,6 +550,19 @@ crossorigin="anonymous"></script>
 				$("#errorintel").removeAttr("style");
 		});
 
+	}
+
+	function rmtag(_this) {
+		let a = [].filter.call(_this.attributes, function(at) { return /^data-/.test(at.name); });
+		let tag = {
+			_id : a[1].value,
+			cid : a[2].value
+		}
+		$.post( "/api/tags/rm", tag).done( function (data){
+			$(_this).parent().parent().remove()
+		}) .fail(function(e) {
+			console.log(e);
+		});
 	}
 	
 </script>

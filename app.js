@@ -70,7 +70,7 @@ app.use(function (req, res, next) {
 /*======================routes==========================*/ 
 
 /*------include fichier------*/
-require('./src/main.js')(app, path, ejs, fs);
+require('./src/remove.js')(app, path, ejs, fs);
 require('./src/character.js')(app, path, ejs, fs);
 require('./src/log.js')(app, path, ejs, fs, esso);
 
