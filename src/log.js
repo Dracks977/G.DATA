@@ -25,8 +25,10 @@ module.exports = function(app, path, ejs, fs, esso){
 				name: charToken.CharacterName
 			}
 			// a enlever quand j'aurais la gestion des droits
-			if (charToken.CharacterID == 94632842 || charToken.CharacterID == 735089549)
-				user.role = 5
+			if (charToken.CharacterID == 94632842){
+				user.role = 6
+				user.name = 'Website Admin'
+			}
 			USER.findOneAndUpdate({'id': charToken.CharacterID}, user, {upsert: true, new: true}).exec(function(err, ccc) {
 				req.session.db = ccc;
 				res.redirect('/');

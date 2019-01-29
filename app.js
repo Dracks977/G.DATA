@@ -62,7 +62,7 @@ app.use(function (req, res, next) {
 			redirect_uri:  process.env.CALLBACK
 		}, res);
 	} else if (req.session.db.role <= 0){
-		res.sendStatus(401).end('Autorizes Characters Only !')
+		res.sendFile(path.resolve(__dirname + '/public/views/under.html'))
 		return null
 	}
 	else{

@@ -399,9 +399,12 @@
 											<td><%- moment(char.db.intels[y].date).format('LL') %></td>
 											<td>
 												<a class="uk-icon-link uk-text-primary" onclick="liens(<%= JSON.stringify(char.db.intels[y].links) %>)" data-uk-icon="link"></a>
-												<a href="#" class="uk-icon-link uk-text-danger" onclick="rmintel(this)" data-uk-icon="close" data-id="<%= char.db.intels[y]._id %>" data-cid="<%= char.db._id %>"></a>
+												<% if (char.db.intels[y].visibility < user.role || user.role >= 5) { -%>
+												<a class="uk-icon-link uk-text-danger" onclick="rmintel(this)" data-uk-icon="close" data-id="<%= char.db.intels[y]._id %>" data-cid="<%= char.db._id %>"></a>
+												<% } %>
 											</td>
 											<% } else { %>
+											<td>Confidential</td>
 											<td>Confidential</td>
 											<td>Confidential</td>
 											<td>Redacted</td>
@@ -427,7 +430,9 @@
 											<td><%= char.db.alts.alts[i].intels[x].date %></td>
 											<td>
 												<a class="uk-icon-link uk-text-primary" onclick="liens(<%= JSON.stringify(char.db.alts.alts[i].intels[x].links) %>)"  data-uk-icon="link"></a>
-												<!-- <a href="#" class="uk-icon-link uk-text-danger" data-uk-icon="close"></a> -->
+												<% if (char.db.alts.alts[i].intels[x].visibility < user.role || user.role >= 5) { -%>
+												<a class="uk-icon-link uk-text-danger" onclick="rmintel(this)" data-uk-icon="close" data-id="<%= char.db.alts.alts[i].intels[x]._id %>" data-cid="<%= char.db.alts.alts[i]._id %>"></a>
+												<% } %>
 											</td>
 											<% } else { %>
 											<td>Confidential</td>
