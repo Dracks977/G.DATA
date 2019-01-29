@@ -266,202 +266,205 @@
 				<span class="uk-label"  uk-tooltip="title: <%= char.db.tags[y].from.name %>"><%= char.db.tags[y].name %>
 					<% if (char.db.tags[y].visibility < user.role || user.role >= 5) { -%>
 					<a href="#"><span style="color:black" data-uk-icon="icon: close" data-id="<%= char.db.tags[y]._id %>" data-cid="<%= char.db._id %>" onclick="rmtag(this);"></a>
-					<% }-%>
-				</span>
-				<% } else { -%>
-				<span class="uk-label" uk-tooltip="title: <%= char.db.tags[y].from.name %>">Confidential</span>
-				<% } -%>	
-			</li>
-			<% } %>
-			<% } %>
-
-			<li class="uk-nav-header">LINKS</li>
-			<li><a href="https://evewho.com/pilot/<%= char.db.name %>"><span class="uk-margin-small-right" data-uk-icon="icon: info"></span> evewho</a></li>
-			<li><a href="https://zkillboard.com/character/<%= char.db.id %>"><span class="uk-margin-small-right" data-uk-icon="icon: bolt"></span> zKillboard</a></li>
-		</ul>
-	</div>
-</aside>
-<!-- /LEFT BAR -->
-
-<div id="content" data-uk-height-viewport="expand: true">
-	<div class="uk-container uk-container-expand">
-		<div class="uk-grid uk-grid-divider uk-grid-medium uk-child-width-1-1 uk-child-width-1-1@l uk-child-width-1-1@xl" data-uk-grid>
-			<div class="uk-width-1-1@s uk-width-1-1@l uk-width-1-1@xl">
-				<div class="uk-card uk-card-default uk-card-small">
-					<div class="uk-card-body">
-						<p uk-margin class="uk-text-center">
-							<button class="uk-button uk-button-secondary" href="#modal-full" uk-toggle>add a tags</button>
-							<button class="uk-button uk-button-primary" href="#modal-alt" uk-toggle>link a character</button>
-							<button class="uk-button uk-button-danger" href="#modal-intel" uk-toggle>new intel</button>
-						</p>
-					</div>
-				</div>
-			</div>
-		</div>
-		<hr class="uk-divider-icon">
-		<div class="uk-grid uk-grid-medium
-		uk-grid-match"  data-uk-grid>
-		<% if (char.db.alts != null) { %>
-		<% for(var i=0; i<char.db.alts.alts.length; i++) { %>
-		<% if (char.db.alts.alts[i].id != char.db.id) { %>
-		<!-- /panel -->
-		<div class="uk-width-1-2@s uk-width-1-4@l uk-width-1-4@xl">
-			<div class="uk-card uk-card-default">
-				<div class="uk-card-header">
-					<div class="uk-grid-small uk-flex-middle" uk-grid>
-						<div class="uk-width-auto">
-							<img class="uk-border-circle" width="60" height="60" src="http://imageserver.eveonline.com/Character/<%= char.db.alts.alts[i].id %>_512.jpg">
-						</div>
-						<div class="uk-width-expand">
-							<h3 class="uk-card-title uk-margin-remove-bottom"><%= char.db.alts.alts[i].name %></h3>
-							<p class='corpalt' _id='<%= char.db.alts.alts[i].id %>' style='margin-top: 0px'></p>
-						</div>
-					</div>
-				</div>
-				<div class="uk-card-body">
-					<% if (char.db.alts.alts[i].tags.length != 0) { %>
-					<% for(var y=0; y<char.db.alts.alts[i].tags.length; y++) { %>
-					<% if (char.db.alts.alts[i].tags[y].visibility <= user.role) { -%>
-					<span class="uk-label" uk-tooltip="title: <%=char.db.alts.alts[i].tags[y].from.name %>"><%= char.db.alts.alts[i].tags[y].name %>
-						<% if (char.db.alts.alts[i].tags[y].visibility < user.role || user.role >= 5) { -%>
-						<a href="#"><span style="color:white" data-uk-icon="icon: close" data-id="<%= char.db.alts.alts[i].tags[y]._id %>" data-cid="<%= char.db.alts.alts[i]._id %>" onclick="rmtag(this);"></a>
 						<% }-%>
 					</span>
-					<% } else { %>
-					<span class="uk-label" uk-tooltip="title: <%=char.db.alts.alts[i].tags[y].from.name %>">Confidential</span>
-					<% } %>
-					<% } %>
-					<% } else { %>
-					<div class="uk-text-center">
-						<p class="uk-text-muted">No tags for this character</p>
-					</div>
-					<% } %>
-				</div>
-				<div class="uk-card-footer uk-text-center">
-					<a href="/character?id=<%= char.db.alts.alts[i].id %>" class="uk-button uk-button-default">Show</a>
-				</div>
-			</div>
+					<% } else { -%>
+					<span class="uk-label" uk-tooltip="title: <%= char.db.tags[y].from.name %>">Confidential</span>
+					<% } -%>	
+				</li>
+				<% } %>
+				<% } %>
+
+				<li class="uk-nav-header">LINKS</li>
+				<li><a href="https://evewho.com/pilot/<%= char.db.name %>"><span class="uk-margin-small-right" data-uk-icon="icon: info"></span> evewho</a></li>
+				<li><a href="https://zkillboard.com/character/<%= char.db.id %>"><span class="uk-margin-small-right" data-uk-icon="icon: bolt"></span> zKillboard</a></li>
+			</ul>
 		</div>
-		<% } %>
-		<% } %>
-		<% } else { %>
-		<div class="uk-width-expand uk-text-center">
-			<h3 class="uk-text-muted">No alts for this character</h3>
-		</div>
-		<% } %>
+	</aside>
+	<!-- /LEFT BAR -->
 
-
-		<!-- /panel -->
-
-		<!-- modal lien -->
-		<div id="modal-center" class="uk-flex-top" uk-modal>
-			<div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
-				<button class="uk-modal-close-default" type="button" uk-close></button>
-				<ul id="liens">
-				</ul>
-			</div>
-		</div>
-
-		<div class=" uk-width-2-1@l uk-width-1-1@xl">
-			<div class="uk-card uk-card-default uk-card-small uk-card-hover">
-				<div class="uk-card-header">
-					<div class="uk-grid uk-grid-small">
-						<div class="uk-width-auto"><h4 class="uk-margin-remove-bottom">Intel</h4></div>
-						<div class="uk-width-expand uk-text-right">
+	<div id="content" data-uk-height-viewport="expand: true">
+		<div class="uk-container uk-container-expand">
+			<div class="uk-grid uk-grid-divider uk-grid-medium uk-child-width-1-1 uk-child-width-1-1@l uk-child-width-1-1@xl" data-uk-grid>
+				<div class="uk-width-1-1@s uk-width-1-1@l uk-width-1-1@xl">
+					<div class="uk-card uk-card-default uk-card-small">
+						<div class="uk-card-body">
+							<p uk-margin class="uk-text-center">
+								<button class="uk-button uk-button-secondary" href="#modal-full" uk-toggle>add a tags</button>
+								<button class="uk-button uk-button-primary" href="#modal-alt" uk-toggle>link a character</button>
+								<button class="uk-button uk-button-danger" href="#modal-intel" uk-toggle>new intel</button>
+							</p>
 						</div>
 					</div>
 				</div>
-				<div class="uk-card-body">
-					<div class="uk-overflow-auto">
-						<table class="uk-table uk-table-hover uk-table-divider uk-table-middle">
-							<thead>
-								<tr>
-									<th>On</th>
-									<th>Type</th>
-									<th>Action</th>
-									<th>Comment</th>
-									<th>From</th>
-									<th>Date</th>
-									<th></th>
-								</tr>
-							</thead>
-							<tbody>
-								<% for(var y=0; y<char.db.intels.length; y++) { %>
-								<tr>
-									<% if (char.db.intels[y].visibility <= user.role) { -%>
-									<td><%= char.db.name %></td>
-									<td><%= char.db.intels[y].type %></td>
-									<td><%= char.db.intels[y].action %></td>
-									<td><%= char.db.intels[y].comment %></td>
-									<td><%= char.db.intels[y].from.name %></td>
-									<td><%- moment(char.db.intels[y].date).format('LL') %></td>
-									<td>
-										<a class="uk-icon-link uk-text-primary" onclick="liens(<%= JSON.stringify(char.db.intels[y].links) %>)" data-uk-icon="link"></a>
-										<!-- <a href="#" class="uk-icon-link uk-text-danger" data-uk-icon="close"></a> -->
-									</td>
-									<% } else { %>
-									<td>Confidential</td>
-									<td>Confidential</td>
-									<td>Redacted</td>
-									<td><%= char.db.intels[y].from.name %></td>
-									<td><%= char.db.intels[y].date %></td>
-									<td>
-									</td>
-									<% } %>
-								</tr>
-								<% } %>
-								<% if (char.db.alts != null) { %>
-								<% for(var i=0; i<char.db.alts.alts.length; i++) { %>
-								<% if (char.db.alts.alts[i].id != char.db.id) { %>
-								<% for(var x=0; x<char.db.alts.alts[i].intels.length; x++) { %>
-								<tr>
-									<% if (char.db.alts.alts[i].intels[x].visibility <= user.role) { -%>
-									<td><%= char.db.alts.alts[i].name %></td>
-									<td><%= char.db.alts.alts[i].intels[x].type %></td>
-									<td><%= char.db.alts.alts[i].intels[x].action %></td>
-									<td><%= char.db.alts.alts[i].intels[x].comment %></td>
-									<td><%= char.db.alts.alts[i].intels[x].from.name %></td>
-									<td><%= char.db.alts.alts[i].intels[x].date %></td>
-									<td>
-										<a class="uk-icon-link uk-text-primary" onclick="liens(<%= JSON.stringify(char.db.alts.alts[i].intels[x].links) %>)"  data-uk-icon="link"></a>
-										<!-- <a href="#" class="uk-icon-link uk-text-danger" data-uk-icon="close"></a> -->
-									</td>
-									<% } else { %>
-									<td>Confidential</td>
-									<td>Confidential</td>
-									<td>Redacted</td>
-									<td><%= char.db.alts.alts[i].intels[x].from.name %></td>
-									<td><%= char.db.alts.alts[i].intels[x].date %></td>
-									<td>
-									</td>
-									<% } %>
-								</tr>
-								<% } %>
-								<% } %>
-								<% } %>
-								<% } %>
-							</tbody>
-						</table>
+			</div>
+			<hr class="uk-divider-icon">
+			<div class="uk-grid uk-grid-medium
+			uk-grid-match"  data-uk-grid>
+			<% if (char.db.alts != null) { %>
+			<% for(var i=0; i<char.db.alts.alts.length; i++) { %>
+			<% if (char.db.alts.alts[i].id != char.db.id) { %>
+			<!-- /panel -->
+			<div class="uk-width-1-2@s uk-width-1-4@l uk-width-1-4@xl">
+				<div class="uk-card uk-card-default">
+					<div class="uk-card-header">
+						<div class="uk-grid-small uk-flex-middle" uk-grid>
+							<div class="uk-width-auto">
+								<img class="uk-border-circle" width="60" height="60" src="http://imageserver.eveonline.com/Character/<%= char.db.alts.alts[i].id %>_512.jpg">
+							</div>
+							<div class="uk-width-expand">
+								<h3 class="uk-card-title uk-margin-remove-bottom"><%= char.db.alts.alts[i].name %></h3>
+								<p class='corpalt' _id='<%= char.db.alts.alts[i].id %>' style='margin-top: 0px'></p>
+							</div>
+						</div>
+					</div>
+					<div class="uk-card-body">
+						<% if (char.db.alts.alts[i].tags.length != 0) { %>
+						<% for(var y=0; y<char.db.alts.alts[i].tags.length; y++) { %>
+						<% if (char.db.alts.alts[i].tags[y].visibility <= user.role) { -%>
+						<span class="uk-label" uk-tooltip="title: <%=char.db.alts.alts[i].tags[y].from.name %>"><%= char.db.alts.alts[i].tags[y].name %>
+							<% if (char.db.alts.alts[i].tags[y].visibility < user.role || user.role >= 5) { -%>
+							<a href="#"><span style="color:white" data-uk-icon="icon: close" data-id="<%= char.db.alts.alts[i].tags[y]._id %>" data-cid="<%= char.db.alts.alts[i]._id %>" onclick="rmtag(this);"></a>
+								<% }-%>
+							</span>
+							<% } else { %>
+							<span class="uk-label" uk-tooltip="title: <%=char.db.alts.alts[i].tags[y].from.name %>">Confidential</span>
+							<% } %>
+							<% } %>
+							<% } else { %>
+							<div class="uk-text-center">
+								<p class="uk-text-muted">No tags for this character</p>
+							</div>
+							<% } %>
+						</div>
+						<div class="uk-card-footer uk-text-center">
+							<a href="/character?id=<%= char.db.alts.alts[i].id %>" class="uk-button uk-button-default">Show</a>
+						</div>
+					</div>
+				</div>
+				<% } %>
+				<% } %>
+				<% } else { %>
+				<div class="uk-width-expand uk-text-center">
+					<h3 class="uk-text-muted">No alts for this character</h3>
+				</div>
+				<% } %>
+
+
+				<!-- /panel -->
+
+				<!-- modal lien -->
+				<div id="modal-center" class="uk-flex-top" uk-modal>
+					<div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
+						<button class="uk-modal-close-default" type="button" uk-close></button>
+						<ul id="liens">
+						</ul>
+					</div>
+				</div>
+
+				<div class=" uk-width-2-1@l uk-width-1-1@xl">
+					<div class="uk-card uk-card-default uk-card-small uk-card-hover">
+						<div class="uk-card-header">
+							<div class="uk-grid uk-grid-small">
+								<div class="uk-width-auto"><h4 class="uk-margin-remove-bottom">Intel</h4></div>
+								<div class="uk-width-expand uk-text-right">
+								</div>
+							</div>
+						</div>
+						<div class="uk-card-body">
+							<div class="uk-overflow-auto">
+								<table class="uk-table uk-table-hover uk-table-divider uk-table-middle">
+									<thead>
+										<tr>
+											<th>On</th>
+											<th>Type</th>
+											<th>Action</th>
+											<th>Comment</th>
+											<th>From</th>
+											<th>Date</th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody>
+
+										<!-- intel du personnage -->
+										<% for(var y=0; y<char.db.intels.length; y++) { %>
+										<tr>
+											<% if (char.db.intels[y].visibility <= user.role) { -%>
+											<td><%= char.db.name %></td>
+											<td><%= char.db.intels[y].type %></td>
+											<td><%= char.db.intels[y].action %></td>
+											<td><%= char.db.intels[y].comment %></td>
+											<td><%= char.db.intels[y].from.name %></td>
+											<td><%- moment(char.db.intels[y].date).format('LL') %></td>
+											<td>
+												<a class="uk-icon-link uk-text-primary" onclick="liens(<%= JSON.stringify(char.db.intels[y].links) %>)" data-uk-icon="link"></a>
+												<a href="#" class="uk-icon-link uk-text-danger" onclick="rmintel(this)" data-uk-icon="close" data-id="<%= char.db.intels[y]._id %>" data-cid="<%= char.db._id %>"></a>
+											</td>
+											<% } else { %>
+											<td>Confidential</td>
+											<td>Confidential</td>
+											<td>Redacted</td>
+											<td><%= char.db.intels[y].from.name %></td>
+											<td><%= char.db.intels[y].date %></td>
+											<td>
+											</td>
+											<% } %>
+										</tr>
+										<% } %>
+										<!-- intel des alts (on enleve l'intel du perso principal on est obliger de faire x2 car si il a pas du tout d'alt voila) -->
+										<% if (char.db.alts != null) { %>
+										<% for(var i=0; i<char.db.alts.alts.length; i++) { %>
+										<% if (char.db.alts.alts[i].id != char.db.id) { %>
+										<% for(var x=0; x<char.db.alts.alts[i].intels.length; x++) { %>
+										<tr>
+											<% if (char.db.alts.alts[i].intels[x].visibility <= user.role) { -%>
+											<td><%= char.db.alts.alts[i].name %></td>
+											<td><%= char.db.alts.alts[i].intels[x].type %></td>
+											<td><%= char.db.alts.alts[i].intels[x].action %></td>
+											<td><%= char.db.alts.alts[i].intels[x].comment %></td>
+											<td><%= char.db.alts.alts[i].intels[x].from.name %></td>
+											<td><%= char.db.alts.alts[i].intels[x].date %></td>
+											<td>
+												<a class="uk-icon-link uk-text-primary" onclick="liens(<%= JSON.stringify(char.db.alts.alts[i].intels[x].links) %>)"  data-uk-icon="link"></a>
+												<!-- <a href="#" class="uk-icon-link uk-text-danger" data-uk-icon="close"></a> -->
+											</td>
+											<% } else { %>
+											<td>Confidential</td>
+											<td>Confidential</td>
+											<td>Redacted</td>
+											<td><%= char.db.alts.alts[i].intels[x].from.name %></td>
+											<td><%= char.db.alts.alts[i].intels[x].date %></td>
+											<td>
+											</td>
+											<% } %>
+										</tr>
+										<% } %>
+										<% } %>
+										<% } %>
+										<% } %>
+									</tbody>
+								</table>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
+			<footer class="uk-section uk-section-small uk-text-center">
+				<hr>
+				<a href="https://github.com/Dracks977">Created by Dracks</a> | For Dead Coalition</span></a>
+			</footer>
 		</div>
 	</div>
-	<footer class="uk-section uk-section-small uk-text-center">
-		<hr>
-		<a href="https://github.com/Dracks977">Created by Dracks</a> | For Dead Coalition</span></a>
-	</footer>
-</div>
-</div>
-<!-- /CONTENT -->
+	<!-- /CONTENT -->
 
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.8/js/uikit.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.8/js/uikit-icons.min.js"></script>
 
 <script
-src="https://code.jquery.com/jquery-3.3.1.js"
-integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+src="https://code.jquery.com/jquery-3.3.1.min.js"
+integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
 crossorigin="anonymous"></script>
 <script
 src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
@@ -488,14 +491,7 @@ crossorigin="anonymous"></script>
 			// $( "#dateintel" ).datepicker({ dateFormat: 'mm-dd-yy' });
 		});
 
-	function liens(link) {
-		$('#liens').empty()
-		for (var i = link.length - 1; i >= 0; i--) {
-			console.log(link[i])
-			$('#liens').append('<a target="_blank" href=\"'+link[i]+'\">'+link[i]+'</a></br>')
-		}
-		UIkit.modal($('#modal-center')).show();
-	}
+	
 
 	function addTag() {
 		let tag = {
@@ -551,6 +547,15 @@ crossorigin="anonymous"></script>
 		});
 
 	}
+	
+	function liens(link) {
+		$('#liens').empty()
+		for (var i = link.length - 1; i >= 0; i--) {
+			console.log(link[i])
+			$('#liens').append('<a target="_blank" href=\"'+link[i]+'\">'+link[i]+'</a></br>')
+		}
+		UIkit.modal($('#modal-center')).show();
+	}
 
 	function rmtag(_this) {
 		let a = [].filter.call(_this.attributes, function(at) { return /^data-/.test(at.name); });
@@ -559,6 +564,20 @@ crossorigin="anonymous"></script>
 			cid : a[2].value
 		}
 		$.post( "/api/tags/rm", tag).done( function (data){
+			$(_this).parent().parent().remove()
+		}) .fail(function(e) {
+			console.log(e);
+		});
+	}
+
+	// ajouter les attribut comme l'autre
+	function rmintel(_this) {
+		let a = [].filter.call(_this.attributes, function(at) { return /^data-/.test(at.name); });
+		let intel = {
+			_id : a[1].value,
+			cid : a[2].value
+		}
+		$.post( "/api/intel/rm", intel).done( function (data){
 			$(_this).parent().parent().remove()
 		}) .fail(function(e) {
 			console.log(e);
