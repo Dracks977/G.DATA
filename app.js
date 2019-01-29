@@ -76,6 +76,7 @@ app.use(function (req, res, next) {
 require('./src/remove.js')(app, path, ejs, fs);
 require('./src/character.js')(app, path, ejs, fs);
 require('./src/log.js')(app, path, ejs, fs, esso);
+require('./src/members.js')(app, path, ejs, fs);
 
 /*======================route fichier static (public)====================*/
 app.use("/css", express.static(__dirname + '/public/css'));

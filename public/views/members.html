@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Three Eyed Ravens</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.6/css/uikit.min.css">
+<link rel="stylesheet" type="text/css" href="css/dashboard.css">
+<link rel="stylesheet" type="text/css" href="css/character.css">
+<link rel="stylesheet" type="text/css" href="css/members.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+
+<body>	
+	<header id="top-head" class="uk-position-fixed">
+		<div class="uk-container uk-container-expand uk-background-secondary">
+			<nav class="uk-navbar uk-light" data-uk-navbar="mode:click">
+				<div class="uk-navbar-left">
+					<a class="uk-navbar-item uk-logo" href="/">Three Eyed Ravens</a>
+				</div>
+				<div class="uk-navbar-right">
+					<ul class="uk-navbar-nav">
+						<li>
+							<a href="#" data-uk-icon="icon:user"><%= user.name %><div style="width: 1em"></div></a>
+							<div class="uk-navbar-dropdown uk-navbar-dropdown-bottom-left">
+								<ul class="uk-nav uk-navbar-dropdown-nav">
+									<li><a href="/Logout"><span data-uk-icon="icon: sign-out"></span> Logout</a></li>
+								</ul>
+							</div>
+						</li>
+						<li><a href="/members" data-uk-icon="icon: cog">Members access<div style="width: 1em"></div></a></li>
+					</ul>
+				</div>
+			</nav>
+		</div>
+	</header>
+
+	<aside id="left-col" class="uk-light uk-visible@m">
+		<div class="bar-content uk-position-relative">
+			<ul class="uk-nav-default" data-uk-nav>
+				<h4>Remember</h4>
+				<li class="uk-nav-header">Waiting</li>
+				<li class="uk-parent">No vissibility</li>
+				<hr>
+				<li class="uk-nav-header">Public</li>
+				<li class="uk-parent">Can be read by recruiters and higher ranks</li>
+				<hr>
+				<li class="uk-nav-header">Private</li>
+				<li class="uk-parent">Can be read by directors and above ranks. Can't be read by recruiters and lower ranks</li>
+				<hr>
+				<li class="uk-nav-header">Secret</li>
+				<li class="uk-parent">Can be read by CEO and above ranks. can't be ready by directors and lower ranks</li>
+				<hr>
+				<li class="uk-nav-header">Top secret</li>
+				<li class="uk-parent">Allowed to be read only by intelligence officiers and above ranks. Corp CEO, directors and recruiters have no access</li>
+				<hr>
+				<li class="uk-nav-header">Extremely Secret</li>
+				<li class="uk-parent">ask Sort , Geekwarrior or head of Intel  they're the only ones who can read this ...</li>
+			</ul>
+		</div>
+	</aside>
+
+	<div id="modal-center" class="uk-flex-top" uk-modal>
+		<div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
+
+			<button class="uk-modal-close-default" type="button" uk-close></button>
+
+			<form >
+				<fieldset class="uk-fieldset">
+
+					<legend id="mname" class="uk-legend uk-text-center">Legend</legend>
+
+					<div class="uk-margin">
+						<select id="msel" class="uk-select">
+							<% if (1 < user.role) { -%>
+							<option value="0">Waiting</option>
+							<option value="1">Public</option>
+							<% } if (2 < user.role) { -%>
+							<option value="2">Private</option>
+							<% } if (3 < user.role) { %>
+							<option value="3">Secret</option>
+							<% } if (4 < user.role) { %>
+							<option value="4">Top Secret</option>
+							<% } if (5 <= user.role) { %>
+							<option value="5">Extremely Secret</option>
+							<% } %>
+						</select>
+					</div>
+					<a id="msub" class="uk-button uk-button-default uk-width-1-1">Submit</a>
+					<div id="errorrole" class="uk-alert-danger" style="display: none;" uk-alert>
+					<a class="uk-alert-close" uk-close></a>
+					<p>Damn, it's a bug. quickly contact the administrator</p>
+				</div>
+				</fieldset>
+			</form>
+
+		</div>
+	</div>
+
+	<!-- /LEFT BAR -->
+
+	<div id="content" data-uk-height-viewport="expand: true">
+		<div class="uk-container uk-container-expand">
+
+
+			<table id="table_id" class="hover row-border">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Role</th>
+						<th>action</th>
+						<th>action</th>
+					</tr>
+				</thead>
+			</table>
+
+			<footer class="uk-section uk-section-small uk-text-center">
+				<hr>
+				<a href="https://github.com/Dracks977">Created by Dracks</a> | For Dead Coalition</span></a>
+			</footer>
+		</div>
+	</div>
+	<!-- /CONTENT -->
+
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.8/js/uikit.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.8/js/uikit-icons.min.js"></script>
+
+<script
+src="https://code.jquery.com/jquery-3.3.1.min.js"
+integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+crossorigin="anonymous"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+    var table = $('#table_id').DataTable({
+        ordering: true,
+        ajax: 'api/members/get',
+        responsive: true,
+        columnDefs: [{
+                targets: 2,
+                visible: false
+            },
+            {
+                targets: -1,
+                data: 1,
+                render: function(data, type, row, meta) {
+                    let o = {
+                        "Waiting": 0,
+                        "Public": 1,
+                        "Private": 2,
+                        "Secret": 3,
+                        "Top secret": 4,
+                        "Extremely Secret": 5,
+                        "IT Developer": 6
+                    }
+                    if ('<%= user.role %>' != 1 && o[data] < '<%= user.role %>' || '<%= user.role %>' >= 5)
+                        return '<button class="uk-button uk-button-secondary">Change vissibility</button>'
+                    else
+                        return '<button disabled class="uk-button uk-button-secondary">Change vissibility</button>'
+                }
+            }
+        ],
+    });
+    $('#table_id tbody').on('click', 'button', function() {
+        console.log('<%= user.role %>')
+        let data = table.row($(this).parents('tr')).data();
+        $("#mname").text("Change " + data[0] + " vissibility")
+        $("#msub").click(function() {
+            let o = {
+                _id: data[2],
+                role: $("#msel").val()
+            }
+            $.post("/api/members/role", o).done(function(data) {
+                table.ajax.reload();
+                UIkit.modal($('#modal-center')).hide();
+            }).fail(function(e) {
+                $("#errorrole").removeAttr("style");
+            });
+        })
+        UIkit.modal($('#modal-center')).show();
+    });
+});
+</script>
+
+
+</html>

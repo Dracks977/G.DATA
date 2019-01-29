@@ -218,7 +218,7 @@
 							</ul>
 						</div>
 					</li>
-					<li><a href="#" data-uk-icon="icon: cog">Members access<div style="width: 1em"></div></a></li>
+					<li><a href="/members" data-uk-icon="icon: cog">Members access<div style="width: 1em"></div></a></li>
 				</ul>
 			</div>
 		</nav>
@@ -476,119 +476,122 @@ src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
 integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
 crossorigin="anonymous"></script>
 <script type="text/javascript">
-	$('document').ready(function() {
-		// a enlever breche de securité
-		console.log(<%- JSON.stringify(char) %>)
-		$.get( "api/corp/" + <%= char.basic.corporation_id%>, function( data ) {
-			$( "#corpname" ).html( data.name );
-		});
-		<% if (char.basic.alliance_id) { %>
-			$.get( "api/alliance/" + <%= char.basic.alliance_id%>, function( data ) {
-				$( "#alliname" ).html( data.name );
-			});
-			<% } %>
-			$('.corpalt').each(function( index ) {
-				let self = this
-				$.get( "api/char/corpname/" + $(this).attr('_id'), function( data ) {
-					$(self).text(data);
-				});
-			})
-			// $( "#dateintel" ).datepicker({ dateFormat: 'mm-dd-yy' });
-		});
+$('document').ready(function() {
+    // a enlever breche de securité
+    console.log(<%- JSON.stringify(char) %>)
+    $.get("api/corp/" + <%= char.basic.corporation_id%>, function(data) {
+        $("#corpname").html(data.name);
+    });
+    <% if (char.basic.alliance_id) { %>
+    $.get("api/alliance/" + <%= char.basic.alliance_id%>, function(data) {
+        $("#alliname").html(data.name);
+    });
+    <% } %>
+    $('.corpalt').each(function(index) {
+        let self = this
+        $.get("api/char/corpname/" + $(this).attr('_id'), function(data) {
+            $(self).text(data);
+        });
+    })
+    // $( "#dateintel" ).datepicker({ dateFormat: 'mm-dd-yy' });
+});
 
-	
 
-	function addTag() {
-		let tag = {
-			name : $('#tagname').val(),
-			visibility : $('#tagvisi').val(),
-			_id : '<%= user._id%>',
-			id : $('#tagfor').val()
-		}
-		$.post( "/api/tags/add", tag).done( function (data){
-			location.reload();
-		}) .fail(function(e) {
-			if (e.status == 404)
-				$("#missingtag").removeAttr("style");
-			else
-				$("#errortag").removeAttr("style");
-		});
-	}
 
-	function addLink() {
-		let link = {
-			alt : $('#cid').val(),
-			main : '<%= char.db._id %>',
-		}
-		$.post( "/api/alts/link", link).done( function (data){
-			location.reload();
-		}) .fail(function(e) {
-			if (e.status == 301)
-				$("#missinglink").removeAttr("style");
-			else
-				$("#errorlink").removeAttr("style");
-		});
-	}
+function addTag() {
+    let tag = {
+        name: $('#tagname').val(),
+        visibility: $('#tagvisi').val(),
+        _id: '<%= user._id%>',
+        id: $('#tagfor').val()
+    }
+    $.post("/api/tags/add", tag).done(function(data) {
+        location.reload();
+    }).fail(function(e) {
+        if (e.status == 404)
+            $("#missingtag").removeAttr("style");
+        else
+            $("#errortag").removeAttr("style");
+    });
+}
 
-	function addIntel() {
-		let intel = {
-			links: $('#linkintel').val().split(';'),
-			comment: $('#intelcomment').val(),
-			action:  $('#actionintel').val(),
-			from: '<%= user._id %>',
-			visibility: $('#intelvisi').val(),
-			type: $('#inteltype').val(),
-			id: $('#intelfor').val(),
-			name : '<%= user.name %>'
-		}
+function addLink() {
+    let link = {
+        alt: $('#cid').val(),
+        main: '<%= char.db._id %>',
+    }
+    $.post("/api/alts/link", link).done(function(data) {
+        location.reload();
+    }).fail(function(e) {
+        if (e.status == 301)
+            $("#missinglink").removeAttr("style");
+        else
+            $("#errorlink").removeAttr("style");
+    });
+}
 
-		$.post( "/api/intel/add", intel).done( function (data){
-			location.reload();
-		}) .fail(function(e) {
-			if (e.status == 404)
-				$("#missingintel").removeAttr("style");
-			else
-				$("#errorintel").removeAttr("style");
-		});
+function addIntel() {
+    let intel = {
+        links: $('#linkintel').val().split(';'),
+        comment: $('#intelcomment').val(),
+        action: $('#actionintel').val(),
+        from: '<%= user._id %>',
+        visibility: $('#intelvisi').val(),
+        type: $('#inteltype').val(),
+        id: $('#intelfor').val(),
+        name: '<%= user.name %>'
+    }
 
-	}
-	
-	function liens(link) {
-		$('#liens').empty()
-		for (var i = link.length - 1; i >= 0; i--) {
-			console.log(link[i])
-			$('#liens').append('<a target="_blank" href=\"'+link[i]+'\">'+link[i]+'</a></br>')
-		}
-		UIkit.modal($('#modal-center')).show();
-	}
+    $.post("/api/intel/add", intel).done(function(data) {
+        location.reload();
+    }).fail(function(e) {
+        if (e.status == 404)
+            $("#missingintel").removeAttr("style");
+        else
+            $("#errorintel").removeAttr("style");
+    });
 
-	function rmtag(_this) {
-		let a = [].filter.call(_this.attributes, function(at) { return /^data-/.test(at.name); });
-		let tag = {
-			_id : a[1].value,
-			cid : a[2].value
-		}
-		$.post( "/api/tags/rm", tag).done( function (data){
-			$(_this).parent().parent().remove()
-		}) .fail(function(e) {
-			console.log(e);
-		});
-	}
+}
 
-	// ajouter les attribut comme l'autre
-	function rmintel(_this) {
-		let a = [].filter.call(_this.attributes, function(at) { return /^data-/.test(at.name); });
-		let intel = {
-			_id : a[1].value,
-			cid : a[2].value
-		}
-		$.post( "/api/intel/rm", intel).done( function (data){
-			$(_this).parent().parent().remove()
-		}) .fail(function(e) {
-			console.log(e);
-		});
-	}
-	
+function liens(link) {
+    $('#liens').empty()
+    for (var i = link.length - 1; i >= 0; i--) {
+        console.log(link[i])
+        $('#liens').append('<a target="_blank" href=\"' + link[i] + '\">' + link[i] + '</a></br>')
+    }
+    UIkit.modal($('#modal-center')).show();
+}
+
+function rmtag(_this) {
+    let a = [].filter.call(_this.attributes, function(at) {
+        return /^data-/.test(at.name);
+    });
+    let tag = {
+        _id: a[1].value,
+        cid: a[2].value
+    }
+    $.post("/api/tags/rm", tag).done(function(data) {
+        $(_this).parent().parent().remove()
+    }).fail(function(e) {
+        console.log(e);
+    });
+}
+
+// ajouter les attribut comme l'autre
+function rmintel(_this) {
+    let a = [].filter.call(_this.attributes, function(at) {
+        return /^data-/.test(at.name);
+    });
+    let intel = {
+        _id: a[1].value,
+        cid: a[2].value
+    }
+    $.post("/api/intel/rm", intel).done(function(data) {
+        $(_this).parent().parent().remove()
+    }).fail(function(e) {
+        console.log(e);
+    });
+}
 </script>
 <script type="text/javascript" src='js/character.js'></script>
 
