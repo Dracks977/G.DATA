@@ -11,6 +11,8 @@ const path = require('path');
 const session = require('express-session');
 const esso = require('eve-sso-simple');
 const url = 'mongodb://'+ process.env.DB_HOST +':'+ process.env.DB_PORT +'/' + process.env.DB_NAME;
+const minify = require('express-minify');
+
 
 /*======================================================*/
 
@@ -29,6 +31,7 @@ require('./models/model.js')(mongoose);
 
 // Middleware session
 app.engine('html', require('ejs').renderFile);
+app.use(minify({cache: __dirname + '/cache'}));
 
 app.use(session(
 {
