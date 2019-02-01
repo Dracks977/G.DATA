@@ -2,7 +2,7 @@ $(function() {
     $("#auto").autocomplete({
         source: function(request, response) {
             $.ajax({
-                url: "https://zkillboard.com/autocomplete/" + $("#auto").val(),
+                url: "/api/character/search/" + $("#auto").val(),
                 dataType: "json",
                 data: {
                     searchText: request
