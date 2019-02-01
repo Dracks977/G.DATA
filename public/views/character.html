@@ -462,7 +462,7 @@
 			</div>
 			<footer class="uk-section uk-section-small uk-text-center">
 				<hr>
-				<a href="https://github.com/Dracks977"  uk-tooltip="Add visibility info on tag and intel<br>Change search api">Version 1.0.1</a> | For Dead Coalition</span></a>
+				<a href="https://github.com/Dracks977"  uk-tooltip="Add visibility info on tag and intel<br>Change search api<br>Add visibility tooltips and fix text">Version 1.0.1</a> | For Dead Coalition</span></a>
 			</footer>
 		</div>
 	</div>
@@ -482,8 +482,6 @@ integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
 crossorigin="anonymous"></script>
 <script type="text/javascript">
 $('document').ready(function() {
-    // a enlever breche de securité
-    console.log(<%- JSON.stringify(char) %>)
     $.get("api/corp/" + <%= char.basic.corporation_id%>, function(data) {
         $("#corpname").html(data.name);
     });
