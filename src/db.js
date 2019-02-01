@@ -1,6 +1,32 @@
 const rp = require('request-promise');
 // fichier appelle en api
 module.exports = {
+    search: (name, callback) => {
+        let rep = []
+        rp('https://esi.evetech.net/latest/search/?categories=character&datasource=tranquility&language=en-us&search='+name+'&strict=false')
+        .then(function(htmlString) {
+            char = JSON.parse(htmlString).character;
+            var stop = char.length;
+            if (char.length >= 10)
+                stop = 10
+            for (var i = 0; i != stop; i++) {
+                console.log(char[i])
+                let cid  = char[i]
+                rp('https://esi.evetech.net/latest/characters/'+ cid +'/?datasource=tranquility').then(function(htmlString) {
+                    info = JSON.parse(htmlString)
+                    stop--;
+                    rep.push({id: cid, name: info.name})
+
+                    if (stop <= 0)
+                        callback(null,rep);
+                }).catch(function(err) {
+                    callback(err,null);
+                });
+            }
+        }).catch(function(err) {
+            callback(err,null);
+        });
+    },
     //recupere tout les info
     char: (id, callback) => {
         var info = new Object();
@@ -19,52 +45,52 @@ module.exports = {
             name: info.basic.name,
         }
         CHAR.findOneAndUpdate({
-                id: info.id
-            }, char, {
-                upsert: true,
-                new: true
-            })
-            .populate({
+            id: info.id
+        }, char, {
+            upsert: true,
+            new: true
+        })
+        .populate({
+            path: 'intels',
+            populate: {
                 path: 'intels',
+                populate: {
+                    path: 'from'
+                }
+            }
+        })
+        .populate({
+            path: 'alts',
+            populate: {
+                path: 'alts',
                 populate: {
                     path: 'intels',
                     populate: {
-                        path: 'from'
+                        path: 'intels.from'
                     }
                 }
-            })
-            .populate({
+            }
+        })
+        .populate({
+            path: 'alts',
+            populate: {
                 path: 'alts',
                 populate: {
-                    path: 'alts',
-                    populate: {
-                        path: 'intels',
-                        populate: {
-                            path: 'intels.from'
-                        }
-                    }
+                    path: 'tags.from'
                 }
-            })
-            .populate({
-                path: 'alts',
-                populate: {
-                    path: 'alts',
-                    populate: {
-                        path: 'tags.from'
-                    }
-                }
-            })
-            .populate({
-                path: 'tags.from'
-            })
-            .exec((err, ccc) => {
-                if (err)
-                    callback(err);
-                callback({
-                    'db': ccc,
-                    'basic': info.basic
-                });
+            }
+        })
+        .populate({
+            path: 'tags.from'
+        })
+        .exec((err, ccc) => {
+            if (err)
+                callback(err);
+            callback({
+                'db': ccc,
+                'basic': info.basic
             });
+        });
     },
     corp: (id, callback) => {
         rp('https://esi.evetech.net/latest/corporations/' + id + '/?datasource=tranquility').then(function(htmlString) {

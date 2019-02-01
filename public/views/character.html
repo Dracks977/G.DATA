@@ -263,13 +263,13 @@
 			<% for(var y=0; y<char.db.tags.length; y++) { %>
 			<li class="uk-parent">
 				<% if (char.db.tags[y].visibility <= user.role) { -%>
-				<span class="uk-label"  uk-tooltip="title: <%= char.db.tags[y].from.name %>"><%= char.db.tags[y].name %>
+				<span class="uk-label"  uk-tooltip="title: <%= char.db.tags[y].from.name %>#<%= visi[char.db.tags[y].visibility] %>"><%= char.db.tags[y].name %>
 					<% if (char.db.tags[y].visibility < user.role || user.role >= 5) { -%>
 					<a href="#"><span style="color:black" data-uk-icon="icon: close" data-id="<%= char.db.tags[y]._id %>" data-cid="<%= char.db._id %>" onclick="rmtag(this);"></a>
 						<% }-%>
 					</span>
 					<% } else { -%>
-					<span class="uk-label" uk-tooltip="title: <%= char.db.tags[y].from.name %>">Confidential</span>
+					<span class="uk-label" uk-tooltip="title: <%= char.db.tags[y].from.name %>#<%= visi[char.db.tags[y].visibility] %>">Confidential</span>
 					<% } -%>	
 				</li>
 				<% } %>
@@ -322,13 +322,13 @@
 						<% if (char.db.alts.alts[i].tags.length != 0) { %>
 						<% for(var y=0; y<char.db.alts.alts[i].tags.length; y++) { %>
 						<% if (char.db.alts.alts[i].tags[y].visibility <= user.role) { -%>
-						<span class="uk-label" uk-tooltip="title: <%=char.db.alts.alts[i].tags[y].from.name %>"><%= char.db.alts.alts[i].tags[y].name %>
+						<span class="uk-label" uk-tooltip="title: <%=char.db.alts.alts[i].tags[y].from.name %>#<%= visi[char.db.alts.alts[i].tags[y].visibility] %>"><%= char.db.alts.alts[i].tags[y].name %>
 							<% if (char.db.alts.alts[i].tags[y].visibility < user.role || user.role >= 5) { -%>
 							<a href="#"><span style="color:white" data-uk-icon="icon: close" data-id="<%= char.db.alts.alts[i].tags[y]._id %>" data-cid="<%= char.db.alts.alts[i]._id %>" onclick="rmtag(this);"></a>
 								<% }-%>
 							</span>
 							<% } else { %>
-							<span class="uk-label" uk-tooltip="title: <%=char.db.alts.alts[i].tags[y].from.name %>">Confidential</span>
+							<span class="uk-label" uk-tooltip="title: <%=char.db.alts.alts[i].tags[y].from.name %>#<%= visi[char.db.alts.alts[i].tags[y].visibility]%>">Confidential</span>
 							<% } %>
 							<% } %>
 							<% } else { %>
@@ -381,6 +381,7 @@
 											<th>Action</th>
 											<th>Comment</th>
 											<th>From</th>
+											<th>Vissibility</th>
 											<th>Date</th>
 											<th></th>
 										</tr>
@@ -396,6 +397,7 @@
 											<td><%= char.db.intels[y].action %></td>
 											<td><%= char.db.intels[y].comment %></td>
 											<td><%= char.db.intels[y].from.name %></td>
+											<td><%= visi[char.db.intels[y].visibility] %></td>
 											<td><%- moment(char.db.intels[y].date).format('LL') %></td>
 											<td>
 												<a class="uk-icon-link uk-text-primary" onclick="liens(<%= JSON.stringify(char.db.intels[y].links) %>)" data-uk-icon="link"></a>
@@ -409,6 +411,7 @@
 											<td>Confidential</td>
 											<td>Redacted</td>
 											<td><%= char.db.intels[y].from.name %></td>
+											<td><%= visi[char.db.intels[y].visibility] %></td>
 											<td><%= char.db.intels[y].date %></td>
 											<td>
 											</td>
@@ -427,6 +430,7 @@
 											<td><%= char.db.alts.alts[i].intels[x].action %></td>
 											<td><%= char.db.alts.alts[i].intels[x].comment %></td>
 											<td><%= char.db.alts.alts[i].intels[x].from.name %></td>
+											<td><%= visi[char.db.alts.alts[i].intels[x].visibility] %></td>
 											<td><%= char.db.alts.alts[i].intels[x].date %></td>
 											<td>
 												<a class="uk-icon-link uk-text-primary" onclick="liens(<%= JSON.stringify(char.db.alts.alts[i].intels[x].links) %>)"  data-uk-icon="link"></a>
@@ -439,6 +443,7 @@
 											<td>Confidential</td>
 											<td>Redacted</td>
 											<td><%= char.db.alts.alts[i].intels[x].from.name %></td>
+											<td><%= visi[char.db.alts.alts[i].intels[x].visibility] %></td>
 											<td><%= char.db.alts.alts[i].intels[x].date %></td>
 											<td>
 											</td>

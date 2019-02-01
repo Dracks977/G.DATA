@@ -15,7 +15,8 @@ module.exports = function(app, path, ejs, fs) {
     				let renderedHtml = ejs.render(content, {
     					'user': req.session.db,
     					'char': result,
-    					moment: moment
+                        'visi' : ["Waiting", "Public", "Private", "Secret", "Top secret", "Extremely Secret", "IT Developer"],
+                        moment: moment
                     }); //get redered HTML code
     				res.end(renderedHtml);
     			});
@@ -141,4 +142,13 @@ module.exports = function(app, path, ejs, fs) {
     		res.sendStatus(404);
     	}
     });
+
+    app.get('/api/character/search/:name', function(req, res) {
+        db.search(req.params.name, function(err,rep){
+            if (err)
+                res.json(err)
+            else
+                res.json(rep)
+        })
+    })
 }
