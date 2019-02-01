@@ -39,7 +39,7 @@
 			<ul class="uk-nav-default" data-uk-nav>
 				<h4>Remember</h4>
 				<li class="uk-nav-header">Waiting</li>
-				<li class="uk-parent">No vissibility</li>
+				<li class="uk-parent">No visibility</li>
 				<hr>
 				<li class="uk-nav-header">Public</li>
 				<li class="uk-parent">Can be read by recruiters and higher ranks</li>
@@ -154,9 +154,9 @@ crossorigin="anonymous"></script>
                         "IT Developer": 6
                     }
                     if ('<%= user.role %>' != 1 && o[data] < '<%= user.role %>' || '<%= user.role %>' >= 5)
-                        return '<button class="uk-button uk-button-secondary">Change vissibility</button>'
+                        return '<button class="uk-button uk-button-secondary">Change visibility</button>'
                     else
-                        return '<button disabled class="uk-button uk-button-secondary">Change vissibility</button>'
+                        return '<button disabled class="uk-button uk-button-secondary">Change visibility</button>'
                 }
             }
         ],
@@ -164,7 +164,7 @@ crossorigin="anonymous"></script>
     $('#table_id tbody').on('click', 'button', function() {
         console.log('<%= user.role %>')
         let data = table.row($(this).parents('tr')).data();
-        $("#mname").text("Change " + data[0] + " vissibility")
+        $("#mname").text("Change " + data[0] + " visibility")
         $("#msub").click(function() {
             let o = {
                 _id: data[2],
