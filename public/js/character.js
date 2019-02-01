@@ -9,13 +9,13 @@ $(function() {
                 },
                 success: function(data) {
                     response($.map(data, function(item) {
-                        if (item.type == "character") {
+                        // if (item.type == "character") {
                             return {
                                 label: item.name,
                                 value: item.name,
                                 id: item.id
                             };
-                        }
+                        // s
                     }));
                 },
 
