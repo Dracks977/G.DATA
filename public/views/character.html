@@ -301,6 +301,117 @@
 			<hr class="uk-divider-icon">
 			<div class="uk-grid uk-grid-medium
 			uk-grid-match"  data-uk-grid>
+			
+
+
+			<!-- /panel -->
+
+			<!-- modal lien -->
+			<div id="modal-center" class="uk-flex-top" uk-modal>
+				<div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
+					<button class="uk-modal-close-default" type="button" uk-close></button>
+					<ul id="liens">
+					</ul>
+				</div>
+			</div>
+
+			<div class=" uk-width-2-1@l uk-width-1-1@xl">
+				<div class="uk-card uk-card-default uk-card-small uk-card-hover">
+					<div class="uk-card-header">
+						<div class="uk-grid uk-grid-small">
+							<div class="uk-width-auto"><h4 class="uk-margin-remove-bottom">Intel</h4></div>
+							<div class="uk-width-expand uk-text-right">
+							</div>
+						</div>
+					</div>
+					<div class="uk-card-body">
+						<div class="uk-overflow-auto">
+							<table class="uk-table uk-table-hover uk-table-divider uk-table-middle">
+								<thead>
+									<tr>
+										<th>On</th>
+										<th>Type</th>
+										<th>Action</th>
+										<th>Comment</th>
+										<th>From</th>
+										<th>Visibility</th>
+										<th>Date</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+
+									<!-- intel du personnage -->
+									<% for(var y=0; y<char.db.intels.length; y++) { %>
+									<tr>
+										<% if (char.db.intels[y].visibility <= user.role) { -%>
+										<td><%= char.db.name %></td>
+										<td><%= char.db.intels[y].type %></td>
+										<td><%= char.db.intels[y].action %></td>
+										<td><%= char.db.intels[y].comment %></td>
+										<td><%= char.db.intels[y].from.name %></td>
+										<td><%= visi[char.db.intels[y].visibility] %></td>
+										<td><%- moment(char.db.intels[y].date).format('LL') %></td>
+										<td>
+											<a class="uk-icon-link uk-text-primary" onclick="liens(<%= JSON.stringify(char.db.intels[y].links) %>)" data-uk-icon="link"></a>
+											<% if (char.db.intels[y].visibility < user.role || user.role >= 5) { -%>
+											<a class="uk-icon-link uk-text-danger" onclick="rmintel(this)" data-uk-icon="close" data-id="<%= char.db.intels[y]._id %>" data-cid="<%= char.db._id %>"></a>
+											<% } %>
+										</td>
+										<% } else { %>
+										<td>Confidential</td>
+										<td>Confidential</td>
+										<td>Confidential</td>
+										<td>Redacted</td>
+										<td><%= char.db.intels[y].from.name %></td>
+										<td><%= visi[char.db.intels[y].visibility] %></td>
+										<td><%= char.db.intels[y].date %></td>
+										<td>
+										</td>
+										<% } %>
+									</tr>
+									<% } %>
+									<!-- intel des alts (on enleve l'intel du perso principal on est obliger de faire x2 car si il a pas du tout d'alt voila) -->
+									<% if (char.db.alts != null) { %>
+									<% for(var i=0; i<char.db.alts.alts.length; i++) { %>
+									<% if (char.db.alts.alts[i].id != char.db.id) { %>
+									<% for(var x=0; x<char.db.alts.alts[i].intels.length; x++) { %>
+									<tr>
+										<% if (char.db.alts.alts[i].intels[x].visibility <= user.role) { -%>
+										<td><%= char.db.alts.alts[i].name %></td>
+										<td><%= char.db.alts.alts[i].intels[x].type %></td>
+										<td><%= char.db.alts.alts[i].intels[x].action %></td>
+										<td><%= char.db.alts.alts[i].intels[x].comment %></td>
+										<td><%= char.db.alts.alts[i].intels[x].from.name %></td>
+										<td><%= visi[char.db.alts.alts[i].intels[x].visibility] %></td>
+										<td><%= char.db.alts.alts[i].intels[x].date %></td>
+										<td>
+											<a class="uk-icon-link uk-text-primary" onclick="liens(<%= JSON.stringify(char.db.alts.alts[i].intels[x].links) %>)"  data-uk-icon="link"></a>
+											<% if (char.db.alts.alts[i].intels[x].visibility < user.role || user.role >= 5) { -%>
+											<a class="uk-icon-link uk-text-danger" onclick="rmintel(this)" data-uk-icon="close" data-id="<%= char.db.alts.alts[i].intels[x]._id %>" data-cid="<%= char.db.alts.alts[i]._id %>"></a>
+											<% } %>
+										</td>
+										<% } else { %>
+										<td>Confidential</td>
+										<td>Confidential</td>
+										<td>Redacted</td>
+										<td><%= char.db.alts.alts[i].intels[x].from.name %></td>
+										<td><%= visi[char.db.alts.alts[i].intels[x].visibility] %></td>
+										<td><%= char.db.alts.alts[i].intels[x].date %></td>
+										<td>
+										</td>
+										<% } %>
+									</tr>
+									<% } %>
+									<% } %>
+									<% } %>
+									<% } %>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
 			<% if (char.db.alts != null) { %>
 			<% for(var i=0; i<char.db.alts.alts.length; i++) { %>
 			<% if (char.db.alts.alts[i].id != char.db.id) { %>
@@ -349,116 +460,6 @@
 					<h3 class="uk-text-muted">No alts for this character</h3>
 				</div>
 				<% } %>
-
-
-				<!-- /panel -->
-
-				<!-- modal lien -->
-				<div id="modal-center" class="uk-flex-top" uk-modal>
-					<div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
-						<button class="uk-modal-close-default" type="button" uk-close></button>
-						<ul id="liens">
-						</ul>
-					</div>
-				</div>
-
-				<div class=" uk-width-2-1@l uk-width-1-1@xl">
-					<div class="uk-card uk-card-default uk-card-small uk-card-hover">
-						<div class="uk-card-header">
-							<div class="uk-grid uk-grid-small">
-								<div class="uk-width-auto"><h4 class="uk-margin-remove-bottom">Intel</h4></div>
-								<div class="uk-width-expand uk-text-right">
-								</div>
-							</div>
-						</div>
-						<div class="uk-card-body">
-							<div class="uk-overflow-auto">
-								<table class="uk-table uk-table-hover uk-table-divider uk-table-middle">
-									<thead>
-										<tr>
-											<th>On</th>
-											<th>Type</th>
-											<th>Action</th>
-											<th>Comment</th>
-											<th>From</th>
-											<th>Visibility</th>
-											<th>Date</th>
-											<th></th>
-										</tr>
-									</thead>
-									<tbody>
-
-										<!-- intel du personnage -->
-										<% for(var y=0; y<char.db.intels.length; y++) { %>
-										<tr>
-											<% if (char.db.intels[y].visibility <= user.role) { -%>
-											<td><%= char.db.name %></td>
-											<td><%= char.db.intels[y].type %></td>
-											<td><%= char.db.intels[y].action %></td>
-											<td><%= char.db.intels[y].comment %></td>
-											<td><%= char.db.intels[y].from.name %></td>
-											<td><%= visi[char.db.intels[y].visibility] %></td>
-											<td><%- moment(char.db.intels[y].date).format('LL') %></td>
-											<td>
-												<a class="uk-icon-link uk-text-primary" onclick="liens(<%= JSON.stringify(char.db.intels[y].links) %>)" data-uk-icon="link"></a>
-												<% if (char.db.intels[y].visibility < user.role || user.role >= 5) { -%>
-												<a class="uk-icon-link uk-text-danger" onclick="rmintel(this)" data-uk-icon="close" data-id="<%= char.db.intels[y]._id %>" data-cid="<%= char.db._id %>"></a>
-												<% } %>
-											</td>
-											<% } else { %>
-											<td>Confidential</td>
-											<td>Confidential</td>
-											<td>Confidential</td>
-											<td>Redacted</td>
-											<td><%= char.db.intels[y].from.name %></td>
-											<td><%= visi[char.db.intels[y].visibility] %></td>
-											<td><%= char.db.intels[y].date %></td>
-											<td>
-											</td>
-											<% } %>
-										</tr>
-										<% } %>
-										<!-- intel des alts (on enleve l'intel du perso principal on est obliger de faire x2 car si il a pas du tout d'alt voila) -->
-										<% if (char.db.alts != null) { %>
-										<% for(var i=0; i<char.db.alts.alts.length; i++) { %>
-										<% if (char.db.alts.alts[i].id != char.db.id) { %>
-										<% for(var x=0; x<char.db.alts.alts[i].intels.length; x++) { %>
-										<tr>
-											<% if (char.db.alts.alts[i].intels[x].visibility <= user.role) { -%>
-											<td><%= char.db.alts.alts[i].name %></td>
-											<td><%= char.db.alts.alts[i].intels[x].type %></td>
-											<td><%= char.db.alts.alts[i].intels[x].action %></td>
-											<td><%= char.db.alts.alts[i].intels[x].comment %></td>
-											<td><%= char.db.alts.alts[i].intels[x].from.name %></td>
-											<td><%= visi[char.db.alts.alts[i].intels[x].visibility] %></td>
-											<td><%= char.db.alts.alts[i].intels[x].date %></td>
-											<td>
-												<a class="uk-icon-link uk-text-primary" onclick="liens(<%= JSON.stringify(char.db.alts.alts[i].intels[x].links) %>)"  data-uk-icon="link"></a>
-												<% if (char.db.alts.alts[i].intels[x].visibility < user.role || user.role >= 5) { -%>
-												<a class="uk-icon-link uk-text-danger" onclick="rmintel(this)" data-uk-icon="close" data-id="<%= char.db.alts.alts[i].intels[x]._id %>" data-cid="<%= char.db.alts.alts[i]._id %>"></a>
-												<% } %>
-											</td>
-											<% } else { %>
-											<td>Confidential</td>
-											<td>Confidential</td>
-											<td>Redacted</td>
-											<td><%= char.db.alts.alts[i].intels[x].from.name %></td>
-											<td><%= visi[char.db.alts.alts[i].intels[x].visibility] %></td>
-											<td><%= char.db.alts.alts[i].intels[x].date %></td>
-											<td>
-											</td>
-											<% } %>
-										</tr>
-										<% } %>
-										<% } %>
-										<% } %>
-										<% } %>
-									</tbody>
-								</table>
-							</div>
-						</div>
-					</div>
-				</div>
 			</div>
 			<footer class="uk-section uk-section-small uk-text-center">
 				<hr>
@@ -481,119 +482,119 @@ src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
 integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
 crossorigin="anonymous"></script>
 <script type="text/javascript">
-$('document').ready(function() {
-    $.get("api/corp/" + <%= char.basic.corporation_id%>, function(data) {
-        $("#corpname").html(data.name);
-    });
-    <% if (char.basic.alliance_id) { %>
-    $.get("api/alliance/" + <%= char.basic.alliance_id%>, function(data) {
-        $("#alliname").html(data.name);
-    });
-    <% } %>
-    $('.corpalt').each(function(index) {
-        let self = this
-        $.get("api/char/corpname/" + $(this).attr('_id'), function(data) {
-            $(self).text(data);
-        });
-    })
+	$('document').ready(function() {
+		$.get("api/corp/" + <%= char.basic.corporation_id%>, function(data) {
+			$("#corpname").html(data.name);
+		});
+		<% if (char.basic.alliance_id) { %>
+			$.get("api/alliance/" + <%= char.basic.alliance_id%>, function(data) {
+				$("#alliname").html(data.name);
+			});
+			<% } %>
+			$('.corpalt').each(function(index) {
+				let self = this
+				$.get("api/char/corpname/" + $(this).attr('_id'), function(data) {
+					$(self).text(data);
+				});
+			})
     // $( "#dateintel" ).datepicker({ dateFormat: 'mm-dd-yy' });
 });
 
 
 
-function addTag() {
-    let tag = {
-        name: $('#tagname').val(),
-        visibility: $('#tagvisi').val(),
-        _id: '<%= user._id%>',
-        id: $('#tagfor').val()
-    }
-    $.post("/api/tags/add", tag).done(function(data) {
-        location.reload();
-    }).fail(function(e) {
-        if (e.status == 404)
-            $("#missingtag").removeAttr("style");
-        else
-            $("#errortag").removeAttr("style");
-    });
-}
+	function addTag() {
+		let tag = {
+			name: $('#tagname').val(),
+			visibility: $('#tagvisi').val(),
+			_id: '<%= user._id%>',
+			id: $('#tagfor').val()
+		}
+		$.post("/api/tags/add", tag).done(function(data) {
+			location.reload();
+		}).fail(function(e) {
+			if (e.status == 404)
+				$("#missingtag").removeAttr("style");
+			else
+				$("#errortag").removeAttr("style");
+		});
+	}
 
-function addLink() {
-    let link = {
-        alt: $('#cid').val(),
-        main: '<%= char.db._id %>',
-    }
-    $.post("/api/alts/link", link).done(function(data) {
-        location.reload();
-    }).fail(function(e) {
-        if (e.status == 301)
-            $("#missinglink").removeAttr("style");
-        else
-            $("#errorlink").removeAttr("style");
-    });
-}
+	function addLink() {
+		let link = {
+			alt: $('#cid').val(),
+			main: '<%= char.db._id %>',
+		}
+		$.post("/api/alts/link", link).done(function(data) {
+			location.reload();
+		}).fail(function(e) {
+			if (e.status == 301)
+				$("#missinglink").removeAttr("style");
+			else
+				$("#errorlink").removeAttr("style");
+		});
+	}
 
-function addIntel() {
-    let intel = {
-        links: $('#linkintel').val().split(';'),
-        comment: $('#intelcomment').val(),
-        action: $('#actionintel').val(),
-        from: '<%= user._id %>',
-        visibility: $('#intelvisi').val(),
-        type: $('#inteltype').val(),
-        id: $('#intelfor').val(),
-        name: '<%= user.name %>'
-    }
+	function addIntel() {
+		let intel = {
+			links: $('#linkintel').val().split(';'),
+			comment: $('#intelcomment').val(),
+			action: $('#actionintel').val(),
+			from: '<%= user._id %>',
+			visibility: $('#intelvisi').val(),
+			type: $('#inteltype').val(),
+			id: $('#intelfor').val(),
+			name: '<%= user.name %>'
+		}
 
-    $.post("/api/intel/add", intel).done(function(data) {
-        location.reload();
-    }).fail(function(e) {
-        if (e.status == 404)
-            $("#missingintel").removeAttr("style");
-        else
-            $("#errorintel").removeAttr("style");
-    });
+		$.post("/api/intel/add", intel).done(function(data) {
+			location.reload();
+		}).fail(function(e) {
+			if (e.status == 404)
+				$("#missingintel").removeAttr("style");
+			else
+				$("#errorintel").removeAttr("style");
+		});
 
-}
+	}
 
-function liens(link) {
-    $('#liens').empty()
-    for (var i = link.length - 1; i >= 0; i--) {
-        console.log(link[i])
-        $('#liens').append('<a target="_blank" href=\"' + link[i] + '\">' + link[i] + '</a></br>')
-    }
-    UIkit.modal($('#modal-center')).show();
-}
+	function liens(link) {
+		$('#liens').empty()
+		for (var i = link.length - 1; i >= 0; i--) {
+			console.log(link[i])
+			$('#liens').append('<a target="_blank" href=\"' + link[i] + '\">' + link[i] + '</a></br>')
+		}
+		UIkit.modal($('#modal-center')).show();
+	}
 
-function rmtag(_this) {
-    let a = [].filter.call(_this.attributes, function(at) {
-        return /^data-/.test(at.name);
-    });
-    let tag = {
-        _id: a[1].value,
-        cid: a[2].value
-    }
-    $.post("/api/tags/rm", tag).done(function(data) {
-        $(_this).parent().parent().remove()
-    }).fail(function(e) {
-        console.log(e);
-    });
-}
+	function rmtag(_this) {
+		let a = [].filter.call(_this.attributes, function(at) {
+			return /^data-/.test(at.name);
+		});
+		let tag = {
+			_id: a[1].value,
+			cid: a[2].value
+		}
+		$.post("/api/tags/rm", tag).done(function(data) {
+			$(_this).parent().parent().remove()
+		}).fail(function(e) {
+			console.log(e);
+		});
+	}
 
 // ajouter les attribut comme l'autre
 function rmintel(_this) {
-    let a = [].filter.call(_this.attributes, function(at) {
-        return /^data-/.test(at.name);
-    });
-    let intel = {
-        _id: a[1].value,
-        cid: a[2].value
-    }
-    $.post("/api/intel/rm", intel).done(function(data) {
-        $(_this).parent().parent().remove()
-    }).fail(function(e) {
-        console.log(e);
-    });
+	let a = [].filter.call(_this.attributes, function(at) {
+		return /^data-/.test(at.name);
+	});
+	let intel = {
+		_id: a[1].value,
+		cid: a[2].value
+	}
+	$.post("/api/intel/rm", intel).done(function(data) {
+		$(_this).parent().parent().remove()
+	}).fail(function(e) {
+		console.log(e);
+	});
 }
 </script>
 <script type="text/javascript" src='js/character.js'></script>
