@@ -10,7 +10,6 @@ module.exports = {
             if (char.length >= 10)
                 stop = 10
             for (var i = 0; i != stop; i++) {
-                console.log(char[i])
                 let cid  = char[i]
                 rp('https://esi.evetech.net/latest/characters/'+ cid +'/?datasource=tranquility').then(function(htmlString) {
                     info = JSON.parse(htmlString)
