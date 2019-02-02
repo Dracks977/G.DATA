@@ -6,22 +6,17 @@ module.exports = {
         rp('https://esi.evetech.net/latest/search/?categories=character&datasource=tranquility&language=en-us&search='+name+'&strict=false')
         .then(function(htmlString) {
             char = JSON.parse(htmlString).character;
-            var stop = char.length;
-            if (char.length >= 10)
-                stop = 10
-            for (var i = 0; i != stop; i++) {
-                let cid  = char[i]
-                rp('https://esi.evetech.net/latest/characters/'+ cid +'/?datasource=tranquility').then(function(htmlString) {
-                    info = JSON.parse(htmlString)
-                    stop--;
-                    rep.push({id: cid, name: info.name})
-
-                    if (stop <= 0)
-                        callback(null,rep);
-                }).catch(function(err) {
-                    callback(err,null);
-                });
-            }
+            var options = {
+                method: 'POST',
+                uri: 'https://esi.evetech.net/latest/universe/names/?datasource=tranquility',
+                body: char.slice(0, 10),
+                json: true
+            };
+            rp(options).then(function(info) {
+                    callback(null,info);
+            }).catch(function(err) {
+                callback(err,null);
+            });
         }).catch(function(err) {
             callback(err,null);
         });

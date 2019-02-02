@@ -165,10 +165,10 @@ crossorigin="anonymous"></script>
         ],
     });
     $('#table_id tbody').on('click', 'button', function() {
-        console.log('<%= user.role %>')
         let data = table.row($(this).parents('tr')).data();
         $("#mname").text("Change " + data[0] + " visibility")
         $("#msub").click(function() {
+        	console.log(data[2])
             let o = {
                 _id: data[2],
                 role: $("#msel").val()
