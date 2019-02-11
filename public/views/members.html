@@ -174,8 +174,8 @@ crossorigin="anonymous"></script>
                 role: $("#msel").val()
             }
             $.post("/api/members/role", o).done(function(data) {
-                table.ajax.reload();
                 UIkit.modal($('#modal-center')).hide();
+                location.reload();
             }).fail(function(e) {
                 $("#errorrole").removeAttr("style");
             });
