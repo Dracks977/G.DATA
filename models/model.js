@@ -26,6 +26,7 @@ module.exports = (mongoose) => {
 	let User = new Schema({
 		id: Number,
 		name: String,
+		corp: String,
 		role: { type: Number, default: 0 },
 		created: { type: Date },
 		updated: { type: Date },

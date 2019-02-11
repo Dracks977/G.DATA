@@ -26,11 +26,15 @@ module.exports = function(app, path, ejs, fs) {
             let obj = {};
             obj.data = [];
             users.forEach(function(user) {
-                obj.data.push([user.name, role[user.role], user._id]);
+                if (!user.corp){
+                    user.corp = "update on next connection..."
+                }
+                obj.data.push([user.name, role[user.role], user._id, user.corp]);
             });
             res.send(obj);
         })
     })
+    // a sécuriser
     app.post('/api/members/role', function(req, res) {
         if (req.body._id && req.body.role) {
             USER.findOneAndUpdate({
