@@ -3,7 +3,7 @@ module.exports = function(type, req, other) {
 	obj.action = type;
 	switch (type) {
 		case 'LOGIN':
-		obj.desc = req.session.db.name + ' log in 3er with : ' + req.ip;
+		obj.desc = req.session.db.name + ' log in 3er with : ' + req.headers['x-forwarded-for'].split(',')[0];
 		break;
 		case 'VIEWCHAR':
 		obj.desc = req.session.db.name +' view character : ' + other.db.name + '(' + other.db.id + ')';
