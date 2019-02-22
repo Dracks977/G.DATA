@@ -3,37 +3,42 @@ module.exports = function(app, path, ejs, fs) {
      * Route page d'acceuil
      * redirige les diferent role vers leurs pages
      */
-    app.get('/members', function(req, res) {
-        fs.readFile(path.resolve(__dirname + '/../public/views/members.html'), 'utf-8', (err, content) => {
-            if (err) {
-                res.end('error occurred' + err);
-                return;
-            }
-            let renderedHtml = ejs.render(content, {
-                'user': req.session.db
+     app.get('/members', function(req, res) {
+         fs.readFile(path.resolve(__dirname + '/../public/views/members.html'), 'utf-8', (err, content) => {
+             if (err) {
+                 res.end('error occurred' + err);
+                 return;
+             }
+             let renderedHtml = ejs.render(content, {
+                 'user': req.session.db
             }); //get redered HTML code
-            res.end(renderedHtml);
-        });
-    })
+             res.end(renderedHtml);
+         });
+     })
 
-    app.get('/api/members/get', function(req, res) {
-        let role = ["Waiting", "Public", "Private", "Secret", "Top secret", "Extremely Secret", "IT Developer"]
-        USER.find({}, function(err, users) {
-            if (err) {
-                res.status(500).send('What the fuck');
-                return;
-            }
-            let obj = {};
-            obj.data = [];
-            users.forEach(function(user) {
-                if (!user.corp){
-                    user.corp = "update on next connection..."
-                }
-                obj.data.push([user.name, role[user.role], user._id, user.corp]);
-            });
-            res.send(obj);
-        })
-    })
+     app.post('/api/members/get', function(req, res) {
+         USER.dataTables({
+             limit: req.body.length,
+             skip: req.body.start,
+             order: req.body.order,
+             columns: req.body.columns,
+             formatter: 'toPublic',
+             search: {
+                 value: req.body.search.value,
+                 fields: ['name', 'corp']
+             },
+             sort: {
+                 name: 1
+             }
+         }).then(function (table) {
+             res.json({
+                 data: table.data,
+                 recordsFiltered: table.total,
+                 recordsTotal: table.total
+             });
+         })
+     })
+
     // a sécuriser
     app.post('/api/members/role', function(req, res) {
         if (req.body._id && req.body.role) {

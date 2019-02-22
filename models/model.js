@@ -1,6 +1,6 @@
 module.exports = (mongoose) => {
 	let Schema = mongoose.Schema;
-
+	let dataTables = require('mongoose-datatables')
 	//character eve a afficher
 	let Char = new Schema({
 		id: Number,
@@ -40,6 +40,20 @@ module.exports = (mongoose) => {
 		}
 		next();
 	});
+
+	User.plugin(dataTables, {
+		formatters: {
+			toPublic : function (info) {
+				var role = ["Waiting", "Public", "Private", "Secret", "Top secret", "Extremely Secret", "IT Developer"]
+				return {
+					name: info.name,
+					corp: info.corp ? info.corp : 'update on next connection...',
+					role: role[info.role],
+					_id: info._id
+				}
+			}
+		}
+	})
 
 	// ajouter la visibility
 	let Alt = new Schema({
