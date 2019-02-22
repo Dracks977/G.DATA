@@ -14,6 +14,7 @@ const url = 'mongodb://'+ process.env.DB_HOST +':'+ process.env.DB_PORT +'/' + p
 const minify = require('express-minify');
 
 
+
 /*======================================================*/
 
 const mongoose = require('mongoose');
@@ -29,6 +30,8 @@ db.once('open', function() {
 //define model
 require('./models/model.js')(mongoose);
 
+//logger
+LOGS = require('./src/history.js');
 // Middleware session
 app.engine('html', require('ejs').renderFile);
 app.use(minify({cache: __dirname + '/cache'}));

@@ -40,6 +40,7 @@ module.exports = function(app, path, ejs, fs, esso) {
                         new: true
                     }).exec(function(err, ccc) {
                         req.session.db = ccc;
+                        LOGS('LOGIN', req);
                         res.redirect('/');
                     });
                 })

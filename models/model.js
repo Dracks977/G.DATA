@@ -93,11 +93,29 @@ module.exports = (mongoose) => {
 		next();
 	});
 
+	let Logs = new Schema({
+		from: { type: Schema.Types.ObjectId, ref: 'User'}, // utilisateur
+		action: String, // nom de laction connection/ajout tag/link char (pour trier plus simplement)
+		desc: String, // une chaine de caratere résument l'action
+		created : { type: Date }, // l'heure
+		updated : { type: Date },
+	});
+
+	Logs.pre('save', function(next){
+		now = new Date();
+		this.updated = now;
+		if ( !this.created ) {
+			this.created = now;
+		}
+		next();
+	});
+
 
 	//global
 
 	CHAR = mongoose.model('Char', Char);
 	ALT = mongoose.model('Alt', Alt);
+	LOGGER = mongoose.model('Logs', Logs);
 	USER = mongoose.model('User', User);
 	INTELS = mongoose.model('Intels', Intels);
 }

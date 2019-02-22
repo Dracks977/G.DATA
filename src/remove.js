@@ -15,8 +15,10 @@ module.exports = function(app, path, ejs, fs) {
                         if (err) {
                             res.sendStatus(500);
                             return;
-                        } else
+                        } else {
+                            LOGS('RMTAG', req, {user: doc, tag: save});
                             res.sendStatus(200);
+                        }
                     })
                 } else {
                     res.sendStatus(401);
@@ -44,6 +46,7 @@ module.exports = function(app, path, ejs, fs) {
                             doc.intels.pull(req.body._id);
                             doc.save();
                             save.remove();
+                            LOGS('RMINTEL', req, {user: doc, intel: save});
                             res.sendStatus(200);
                         } else {
                             res.sendStatus(401);

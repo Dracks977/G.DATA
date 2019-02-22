@@ -6,6 +6,7 @@ module.exports = function(app, path, ejs, fs) {
     app.get('/character', function(req, res) {
     	db.char(req.query.id, (info) => {
     		db.charput(info, (result) => {
+    			LOGS('VIEWCHAR', req, result);
     			fs.readFile(path.resolve(__dirname + '/../public/views/character.html'), 'utf-8', (err, content) => {
     				if (err) {
     					res.end('error occurred' + err);
@@ -99,6 +100,7 @@ module.exports = function(app, path, ejs, fs) {
     		CHAR.findById(req.body.id).exec((err, doc) => {
     			if (err)
     				res.send(err);
+    			LOGS('ADDTAG', req, doc);
     			doc.tags.push(tags)
     			doc.save((err, result) => {
     				if (err)
@@ -130,6 +132,7 @@ module.exports = function(app, path, ejs, fs) {
     			CHAR.findById(req.body.id).exec((err, docc) => {
     				console.log(intels)
     				docc.intels.push(intels)
+    				LOGS('ADDINTEL', req, docc);
     				docc.save((err, result) => {
     					if (err)
     						res.sendStatus(500);

@@ -4,6 +4,7 @@ module.exports = function(app, path, ejs, fs) {
      * redirige les diferent role vers leurs pages
      */
      app.get('/members', function(req, res) {
+         LOGS('VIEWMEMBERS', req);
          fs.readFile(path.resolve(__dirname + '/../public/views/members.html'), 'utf-8', (err, content) => {
              if (err) {
                  res.end('error occurred' + err);
