@@ -41,16 +41,21 @@ module.exports = function(app, path, ejs, fs) {
 
     // a sécuriser
     app.post('/api/members/role', function(req, res) {
+
         if (req.body._id && req.body.role) {
-            USER.findOneAndUpdate({
-                '_id': req.body._id
-            }, {
-                role: req.body.role
-            }).exec(function(err, ccc) {
-                res.sendStatus(200);
-            });
+            if (req.body.role < req.session.db.role || req.session.db.role >= 5) {
+                USER.findOneAndUpdate({
+                    '_id': req.body._id
+                }, {
+                    role: req.body.role
+                }).exec(function(err, ccc) {
+                    res.sendStatus(200);
+                });
+            } else {
+                res.sendStatus(401);
+            }
         } else {
-            res.sendStatus(500)
+            res.sendStatus(500);
         }
     })
 }

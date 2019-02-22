@@ -167,7 +167,8 @@ crossorigin="anonymous"></script>
 						"Extremely Secret": 5,
 						"IT Developer": 6
 					}
-					if ('<%= user.role %>' != 1 && o[data] < '<%= user.role %>' || '<%= user.role %>' >= 5)
+					console.log(row)
+					if ('<%= user.role %>' != 1 && o[row.role] < '<%= user.role %>' || '<%= user.role %>' >= 5)
 						return '<button class="uk-button uk-button-secondary">Change visibility</button>'
 					else
 						return '<button disabled class="uk-button uk-button-secondary">Change visibility</button>'
