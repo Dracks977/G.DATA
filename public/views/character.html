@@ -88,22 +88,6 @@
 									<input id="cid" style=" display: none;" type=" text" name="id">
 								</div>
 							</div>
-							<!-- <legend class="uk-legend">Visibility</legend>
-							<div class="uk-margin">
-								<select id="tagvisi" class="uk-select">
-									<option value="1">Public</option>
-									<% if (2 <= user.role) { -%>
-									<option value="2">Private</option>
-									<% } if (3 <= user.role) { %>
-									<option value="3">Secret</option>
-									<% } if (4 <= user.role) { %>
-									<option value="4">Top Secret</option>
-									<% } if (5 <= user.role) { %>
-									<option value="5">Extremely Secret</option>
-									<% } %>
-								</select>
-							</div> -->
-
 						</fieldset>
 					</form>
 					<a class="uk-button uk-button-default uk-width-1-1" onclick="addLink();">Submit</a>
@@ -144,10 +128,6 @@
 									<% } %>
 								</select>
 							</div>
-							<!-- <legend class="uk-legend">Date</legend>
-							<div class="uk-margin">
-							<input id="dateintel" class="uk-input" type="text" placeholder="Date">
-						</div> -->
 						<legend class="uk-legend">Type</legend>
 						<div class="uk-margin">
 							<select id="inteltype" class="uk-select">
@@ -219,6 +199,9 @@
 						</div>
 					</li>
 					<li><a href="/members" data-uk-icon="icon: cog">Members access<div style="width: 1em"></div></a></li>
+					<% if (5 <= user.role) { %>
+					<li><a href="/logs" data-uk-icon="icon: history">Logs<div style="width: 1em"></div></a></li>
+					<% } %>
 				</ul>
 			</div>
 		</nav>
