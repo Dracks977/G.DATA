@@ -110,6 +110,8 @@ module.exports = (mongoose) => {
 		next();
 	});
 
+	Logs.plugin(dataTables);
+
 
 	//global
 

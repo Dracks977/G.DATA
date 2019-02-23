@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Three Eyed Ravens</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.6/css/uikit.min.css">
+<link rel="stylesheet" type="text/css" href="css/dashboard.css">
+<link rel="stylesheet" type="text/css" href="css/character.css">
+<link rel="stylesheet" type="text/css" href="css/members.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+
+<body>	
+	<header id="top-head" class="uk-position-fixed">
+		<div class="uk-container uk-container-expand uk-background-secondary">
+			<nav class="uk-navbar uk-light" data-uk-navbar="mode:click">
+				<div class="uk-navbar-left">
+					<a class="uk-navbar-item uk-logo" href="/">Three Eyed Ravens</a>
+				</div>
+				<div class="uk-navbar-right">
+					<ul class="uk-navbar-nav">
+						<li>
+							<a href="#" data-uk-icon="icon:user"><%= user.name %><div style="width: 1em"></div></a>
+							<div class="uk-navbar-dropdown uk-navbar-dropdown-bottom-left">
+								<ul class="uk-nav uk-navbar-dropdown-nav">
+									<li><a href="/Logout"><span data-uk-icon="icon: sign-out"></span> Logout</a></li>
+								</ul>
+							</div>
+						</li>
+						<li><a href="/members" data-uk-icon="icon: cog">Members access<div style="width: 1em"></div></a></li>
+						<% if (5 <= user.role) { %>
+						<li><a href="/logs" data-uk-icon="icon: history">Logs<div style="width: 1em"></div></a></li>
+						<% } %>
+					</ul>
+				</div>
+			</nav>
+		</div>
+	</header>
+
+	<aside id="left-col" class="uk-light uk-visible@m">
+		<div class="bar-content uk-position-relative">
+			<ul class="uk-nav-default" data-uk-nav>
+				<li class="uk-nav-header">LOGIN</li>
+				<li class="uk-parent">When someone log in 3er</li>
+				<hr>
+				<li class="uk-nav-header">VIEWCHAR</li>
+				<li class="uk-parent">When someone view a character</li>
+				<hr>
+				<li class="uk-nav-header">VIEWMEMBERS</li>
+				<li class="uk-parent" >When someone view members acces</li>
+				<hr>
+				<li class="uk-nav-header">ADDTAG</li>
+				<li class="uk-parent">When someone add tag</li>
+				<hr>
+				<li class="uk-nav-header">ADDINTEL</li>
+				<li class="uk-parent">When someone add intel</li>
+				<hr>
+				<li class="uk-nav-header">RMINTEL</li>
+				<li class="uk-parent">When someone remove intel</li>
+				<hr>
+				<li class="uk-nav-header">RMTAG</li>
+				<li class="uk-parent">When someone remove tag</li>
+				<hr>
+				<li class="uk-nav-header">ADDLINK</li>
+				<li class="uk-parent">When someone add alt on character</li>
+				<hr>
+				<li class="uk-nav-header">CHANGEROLE</li>
+				<li class="uk-parent">When someone change members role</li>
+			</ul>
+		</div>
+	</aside>
+
+	<!-- /LEFT BAR -->
+	<div id="content" data-uk-height-viewport="expand: true">
+		<div class="uk-container uk-container-expand">
+
+
+			<table id="table_id" class="hover row-border" data-page-length='100'>
+				<thead>
+					<tr>
+						<th>Date</th>
+						<th>Action</th>
+						<th>Description</th>
+						<th>From</th>
+					</tr>
+				</thead>
+			</table>
+
+			<footer class="uk-section uk-section-small uk-text-center">
+				<hr>
+				<a href="https://github.com/Dracks977"  uk-tooltip="Add members on home page<br>server side rendering for members<br>fix security breach">Version 1.0.2</a> | For Dead Coalition</span></a>
+			</footer>
+		</div>
+	</div>
+	<!-- /CONTENT -->
+
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.8/js/uikit.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.8/js/uikit-icons.min.js"></script>
+
+<script
+src="https://code.jquery.com/jquery-3.3.1.min.js"
+integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+crossorigin="anonymous"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		var table = $('#table_id').DataTable({
+			ordering: true,
+			order: [[ 0, 'desc' ]],
+			ajax: {
+				url: '/api/logs',
+				type: 'POST'
+			},
+			serverSide: true,
+			columns: [
+			{'data': 'created'},
+			{'data': 'action'},
+			{'data': 'desc'},
+			{'data': 'from.name'},
+			],
+		});
+	});
+</script>
+
+
+</html>

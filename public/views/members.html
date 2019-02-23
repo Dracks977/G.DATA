@@ -28,6 +28,9 @@
 							</div>
 						</li>
 						<li><a href="/members" data-uk-icon="icon: cog">Members access<div style="width: 1em"></div></a></li>
+						<% if (5 <= user.role) { %>
+						<li><a href="/logs" data-uk-icon="icon: history">Logs<div style="width: 1em"></div></a></li>
+						<% } %>
 					</ul>
 				</div>
 			</nav>
@@ -167,7 +170,6 @@ crossorigin="anonymous"></script>
 						"Extremely Secret": 5,
 						"IT Developer": 6
 					}
-					console.log(row)
 					if ('<%= user.role %>' != 1 && o[row.role] < '<%= user.role %>' || '<%= user.role %>' >= 5)
 						return '<button class="uk-button uk-button-secondary">Change visibility</button>'
 					else
@@ -178,10 +180,8 @@ crossorigin="anonymous"></script>
 		});
 		$('#table_id tbody').on('click', 'button', function() {
 			let data = table.row($(this).parents('tr')).data();
-			console.log(data)
 			$("#mname").text("Change " + data.name + " visibility")
 			$("#msub").click(function() {
-				console.log(data[2])
 				let o = {
 					_id: data._id,
 					role: $("#msel").val()

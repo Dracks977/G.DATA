@@ -40,9 +40,7 @@ module.exports = function(app, path, ejs, fs) {
          })
      })
 
-    // a sécuriser
     app.post('/api/members/role', function(req, res) {
-
         if (req.body._id && req.body.role) {
             if (req.body.role < req.session.db.role || req.session.db.role >= 5) {
                 USER.findOneAndUpdate({
@@ -50,6 +48,7 @@ module.exports = function(app, path, ejs, fs) {
                 }, {
                     role: req.body.role
                 }).exec(function(err, ccc) {
+                    LOGS('CHANGEROLE', req, ccc);
                     res.sendStatus(200);
                 });
             } else {

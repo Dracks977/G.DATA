@@ -16,8 +16,8 @@ module.exports = function(app, path, ejs, fs) {
     				let renderedHtml = ejs.render(content, {
     					'user': req.session.db,
     					'char': result,
-                        'visi' : ["Waiting", "Public", "Private", "Secret", "Top secret", "Extremely Secret", "IT Developer"],
-                        moment: moment
+    					'visi' : ["Waiting", "Public", "Private", "Secret", "Top secret", "Extremely Secret", "IT Developer"],
+    					moment: moment
                     }); //get redered HTML code
     				res.end(renderedHtml);
     			});
@@ -67,6 +67,7 @@ module.exports = function(app, path, ejs, fs) {
                     			result.db.alts = alts;
                     			result.db.save().then(() => {
                     				doc.alts = alts;
+                    				LOGS('ADDLINK', req, {new:result, old:doc});
                     				doc.save().then(() => {
                     					res.status(200).send('No alts for 2 people');
                     				});
@@ -77,6 +78,7 @@ module.exports = function(app, path, ejs, fs) {
                     		doc.alts.save().then(() => {
                     			result.db.alts = doc.alts
                     			result.db.save()
+                    			LOGS('ADDLINK', req, {new:result, old:doc});
                     			res.status(200).send('Add an alts');
                     		})
                     	} else {
@@ -147,11 +149,11 @@ module.exports = function(app, path, ejs, fs) {
     });
 
     app.get('/api/character/search/:name', function(req, res) {
-        db.search(req.params.name, function(err,rep){
-            if (err)
-                res.json(err)
-            else
-                res.json(rep)
-        })
+    	db.search(req.params.name, function(err,rep){
+    		if (err)
+    			res.json(err)
+    		else
+    			res.json(rep)
+    	})
     })
 }
