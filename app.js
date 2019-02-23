@@ -15,6 +15,7 @@ const minify = require('express-minify');
 
 
 
+
 /*======================================================*/
 
 const mongoose = require('mongoose');
@@ -50,6 +51,7 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 	extended: true
 })); 
 
+app.enable('trust proxy');
 // middlewere de secu
 app.use(function (req, res, next) {
 	var _ = require('underscore')
