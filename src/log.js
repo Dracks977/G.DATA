@@ -60,41 +60,50 @@ module.exports = function(app, path, ejs, fs, esso) {
      	res.redirect('/');
      });
 
-     app.get('/logs', function(req, res) {
-     	if (req.session.db.role >= 5) {
-     		fs.readFile(path.resolve(__dirname + '/../public/views/logs.html'), 'utf-8', (err, content) => {
-     			if (err) {
-     				res.end('error occurred' + err);
-     				return;
-     			}
-     			let renderedHtml = ejs.render(content, {
-     				'user': req.session.db
+
+     /*
+	  * Route de log des action sur le serveur
+	  */
+
+	  app.get('/logs', function(req, res) {
+	  	if (req.session.db.role >= 5) {
+	  		fs.readFile(path.resolve(__dirname + '/../public/views/logs.html'), 'utf-8', (err, content) => {
+	  			if (err) {
+	  				res.end('error occurred' + err);
+	  				return;
+	  			}
+	  			let renderedHtml = ejs.render(content, {
+	  				'user': req.session.db
             }); //get redered HTML code
-     			res.end(renderedHtml);
-     		});
-     	} else {
-     		res.redirect('/');
-     	}
-     })
+	  			res.end(renderedHtml);
+	  		});
+	  	} else {
+	  		res.redirect('/');
+	  	}
+	  })
 
-     app.post('/api/logs', function(req, res) {
-     	LOGGER.dataTables({
-     		limit: req.body.length,
-     		skip: req.body.start,
-     		order: req.body.order,
-     		columns: req.body.columns,
-     		populate : {path: 'from'},
-     		search: {
-     			value: req.body.search.value,
-     			fields: ['action', 'desc']
-     		}
-     	}).then(function (table) {
-     		res.json({
-     			data: table.data,
-     			recordsFiltered: table.total,
-     			recordsTotal: table.total
-     		});
-     	})
-     })
+	  app.post('/api/logs', function(req, res) {
+	  	if (req.session.db.role >= 5) {
+	  		LOGGER.dataTables({
+	  			limit: req.body.length,
+	  			skip: req.body.start,
+	  			order: req.body.order,
+	  			columns: req.body.columns,
+	  			populate : {path: 'from'},
+	  			search: {
+	  				value: req.body.search.value,
+	  				fields: ['action', 'desc']
+	  			}
+	  		}).then(function (table) {
+	  			res.json({
+	  				data: table.data,
+	  				recordsFiltered: table.total,
+	  				recordsTotal: table.total
+	  			});
+	  		})
+	  	} else {
+	  		res.sendStatus(401);
+	  	}
+	  })
 
- }
+	}
