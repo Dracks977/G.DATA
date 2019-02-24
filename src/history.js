@@ -28,6 +28,8 @@ module.exports = function(type, req, other) {
 		obj.desc = req.session.db.name +' add new character : ' + other.new.db.name + ' (' + other.new.db.id + ')' + ' on ' + other.old.name + ' (' + other.old.id + ')';
 		break;
 		case 'CHANGEROLE':
+		console.log(other)
+		console.log(req.body.role)
 		obj.desc = req.session.db.name +' change role of ' + other.name + ' for ' + role[req.body.role];
 		break;
 		default:
