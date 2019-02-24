@@ -12,7 +12,7 @@ const session = require('express-session');
 const esso = require('eve-sso-simple');
 const url = 'mongodb://'+ process.env.DB_HOST +':'+ process.env.DB_PORT +'/' + process.env.DB_NAME;
 const minify = require('express-minify');
-
+var RedisStore = require('connect-redis')(session);
 
 
 
@@ -37,13 +37,20 @@ LOGS = require('./src/history.js');
 app.engine('html', require('ejs').renderFile);
 app.use(minify({cache: __dirname + '/cache'}));
 
-app.use(session(
-{
-	secret: process.env.COOKIE,
-	saveUninitialized: false,
-	resave: false
-}
-));
+// app.use(session(
+// {
+// 	secret: process.env.COOKIE,
+// 	saveUninitialized: false,
+// 	resave: false
+// }
+// ));
+
+app.use(session({
+  resave: false, // don't save session if unmodified
+  saveUninitialized: false, // don't create session until something stored
+  secret: process.env.COOKIE,
+  store: new RedisStore
+}));
 
 app.use(bodyParser.json());       // to support JSON-encoded bodies
 
