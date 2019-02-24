@@ -33,6 +33,7 @@ require('./models/model.js')(mongoose);
 
 //logger
 LOGS = require('./src/history.js');
+
 // Middleware session
 app.engine('html', require('ejs').renderFile);
 app.use(minify({cache: __dirname + '/cache'}));
@@ -59,6 +60,7 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 })); 
 
 app.enable('trust proxy');
+
 // middlewere de secu
 app.use(function (req, res, next) {
 	var _ = require('underscore')
