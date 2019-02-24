@@ -9,7 +9,7 @@ module.exports = {
             var options = {
                 method: 'POST',
                 uri: 'https://esi.evetech.net/latest/universe/names/?datasource=tranquility',
-                body: char.slice(0, 10),
+                body: char.slice(0, 15),
                 json: true
             };
             rp(options).then(function(info) {
