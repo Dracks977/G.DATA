@@ -132,7 +132,6 @@ module.exports = function(app, path, ejs, fs) {
     		const intels = new INTELS(intel);
     		intels.save().then(() => {
     			CHAR.findById(req.body.id).exec((err, docc) => {
-    				console.log(intels)
     				docc.intels.push(intels)
     				LOGS('ADDINTEL', req, docc);
     				docc.save((err, result) => {
