@@ -1,5 +1,5 @@
 module.exports = function(type, req, other) {
-	if (req.session.db.role <= 5) {
+	if (req.session.db.role < 5) {
 		var role = ["Waiting", "Public", "Private", "Secret", "Top secret", "Extremely Secret", "IT Developer"]
 		let obj = {from:req.session.db._id}
 		obj.action = type;
