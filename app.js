@@ -38,20 +38,25 @@ LOGS = require('./src/history.js');
 app.engine('html', require('ejs').renderFile);
 app.use(minify({cache: __dirname + '/cache'}));
 
-// app.use(session(
-// {
-// 	secret: process.env.COOKIE,
-// 	saveUninitialized: false,
-// 	resave: false
-// }
-// ));
+if (!process.env.DEV) {
+	app.use(session({
+		resave: false, 
+		saveUninitialized: false,
+		secret: process.env.COOKIE,
+		store: new RedisStore
+	}));
+} else {
+	app.use(session(
+	{
+		secret: process.env.COOKIE,
+		saveUninitialized: false,
+		resave: false
+	}
+	));
+}
 
-app.use(session({
-  resave: false, // don't save session if unmodified
-  saveUninitialized: false, // don't create session until something stored
-  secret: process.env.COOKIE,
-  store: new RedisStore
-}));
+
+
 
 app.use(bodyParser.json());       // to support JSON-encoded bodies
 

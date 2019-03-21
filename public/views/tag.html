@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Three Eyed Ravens</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.6/css/uikit.min.css">
+<link rel="stylesheet" type="text/css" href="css/dashboard.css">
+<link rel="stylesheet" type="text/css" href="css/character.css">
+
+<body>
+	<header id="top-head" class="uk-position-fixed">
+		<div class="uk-container uk-container-expand uk-background-secondary">
+			<nav class="uk-navbar uk-light" data-uk-navbar="mode:click">
+				<div class="uk-navbar-left">
+					<a class="uk-navbar-item uk-logo" href="/">Three Eyed Ravens</a>
+				</div>
+				<div class="uk-navbar-right">
+					<ul class="uk-navbar-nav">
+						<li>
+							<a href="#" data-uk-icon="icon:user"><%= user.name %><div style="width: 1em"></div></a>
+							<div class="uk-navbar-dropdown uk-navbar-dropdown-bottom-left">
+								<ul class="uk-nav uk-navbar-dropdown-nav">
+									<li><a href="/Logout"><span data-uk-icon="icon: sign-out"></span> Logout</a></li>
+								</ul>
+							</div>
+						</li>
+						<li><a href="/members" data-uk-icon="icon: cog">Members access<div style="width: 1em"></div></a></li>
+						<% if (5 <= user.role) { %>
+						<li><a href="/logs" data-uk-icon="icon: history">Logs<div style="width: 1em"></div></a></li>
+						<% } %>
+					</ul>
+				</div>
+			</nav>
+		</div>
+	</header>
+
+	<aside id="left-col" class="uk-light uk-visible@m">
+		<div class="bar-content uk-position-relative">
+			<ul class="uk-nav-default" data-uk-nav>
+				<h4>Common tag search</h4>
+				<hr>
+				<li class="uk-nav-header">BLACKLIST</li>
+				<li class="uk-nav-header">AWOXER</li>
+				<li class="uk-nav-header">DRAMA QUEEN</li>
+				<li class="uk-nav-header">SPY</li>
+				<li class="uk-nav-header">VIP</li>
+				<li class="uk-nav-header">HOTDROPPER</li>
+				<li class="uk-nav-header">SCOUT</li>
+				<li class="uk-nav-header">FRIENDLY</li>
+				<li class="uk-nav-header">LINK TO BE CONFIRMED (LTBC)</li>
+				<li class="uk-nav-header">CORP THIEF</li>
+				<li class="uk-nav-header">KRABBER</li>
+				<li class="uk-nav-header">SOLD ACCOUNT</li>
+			</ul>
+		</div>
+	</aside>
+	<!-- /LEFT BAR -->
+
+
+	<div id="content" data-uk-height-viewport="expand: true">
+		<div class="uk-container uk-container-expand">
+			<div class="uk-grid uk-grid-divider uk-grid-medium uk-child-width-1-1 uk-child-width-1-1@l uk-child-width-1-1@xl" data-uk-grid>
+				<div class="uk-width-1-1@s uk-width-1-1@l uk-width-1-1@xl">
+					<div class="uk-card uk-card-default uk-card-small">
+						<div class="uk-card-body">
+							<h2 class="uk-text-center">Search on characters for tag : <%= tag %></h2>
+						</div>
+					</div>
+				</div>
+			</div>
+			<hr class="uk-divider-icon">
+			<div class="uk-grid uk-grid-medium
+			uk-grid-match"  data-uk-grid>
+			
+
+
+			<!-- /panel -->
+
+
+			
+			<% if (char.length != 0) { %>
+			<% for(var i=0; i<char.length; i++) { %>
+			<!-- /panel -->
+			<div class="uk-width-1-2@s uk-width-1-4@l uk-width-1-4@xl">
+				<div class="uk-card uk-card-default">
+					<div class="uk-card-header">
+						<div class="uk-grid-small uk-flex-middle" uk-grid>
+							<div class="uk-width-auto">
+								<img class="uk-border-circle" width="60" height="60" src="http://imageserver.eveonline.com/Character/<%= char[i].id %>_512.jpg">
+							</div>
+							<div class="uk-width-expand">
+								<h3 class="uk-card-title uk-margin-remove-bottom"><%= char[i].name %></h3>
+								<p class='corpalt' _id='<%= char[i].id %>' style='margin-top: 0px'></p>
+							</div>
+						</div>
+					</div>
+					<div class="uk-card-body">
+						<% if (char[i].tags.length != 0) { %>
+						<% for(var y=0; y<char[i].tags.length; y++) { %>
+						<% if (char[i].tags[y].visibility <= user.role) { -%>
+						<span class="uk-label" uk-tooltip="title: <%=char[i].tags[y].from.name %>#<%= visi[char[i].tags[y].visibility] %>"><%= char[i].tags[y].name %>
+							<% if (char[i].tags[y].visibility < user.role || user.role >= 5) { -%>
+							<a href="#"><span style="color:white" data-uk-icon="icon: close" data-id="<%= char[i].tags[y]._id %>" data-cid="<%= char[i]._id %>" onclick="rmtag(this);"></a>
+								<% }-%>
+							</span>
+							<% } else { %>
+							<span class="uk-label" uk-tooltip="title: <%=char[i].tags[y].from.name %>#<%= visi[char[i].tags[y].visibility]%>">Confidential</span>
+							<% } %>
+							<% } %>
+							<% } else { %>
+							<div class="uk-text-center">
+								<p class="uk-text-muted">No tags for this character</p>
+							</div>
+							<% } %>
+						</div>
+						<div class="uk-card-footer uk-text-center">
+							<a href="/character?id=<%= char[i].id %>" class="uk-button uk-button-default">Show</a>
+						</div>
+					</div>
+				</div>
+				<% } %>
+				<% } else { %>
+				<div class="uk-width-expand uk-text-center">
+					<h3 class="uk-text-muted">No characters for this tag</h3>
+				</div>
+				<% } %>
+			</div>
+
+			<footer class="uk-section uk-section-small uk-text-center">
+				<hr>
+				<a href="https://github.com/Dracks977"  uk-tooltip="Add tag Search">Version 1.1.0</a> | For Dead Coalition</span></a>
+			</footer>
+		</div>
+	</div>
+	<!-- /CONTENT -->
+
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.8/js/uikit.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.8/js/uikit-icons.min.js"></script>
+
+<script
+src="https://code.jquery.com/jquery-3.3.1.min.js"
+integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+crossorigin="anonymous"></script>
+<script
+src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+crossorigin="anonymous"></script>
+<script type="text/javascript">
+	$('document').ready(function() {
+		$('.corpalt').each(function(index) {
+			let self = this
+			$.get("api/char/corpname/" + $(this).attr('_id'), function(data) {
+				$(self).text(data);
+			});
+		})
+	});
+</script>
+</html>

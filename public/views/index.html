@@ -9,62 +9,74 @@
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.6/css/uikit.min.css">
     <link rel="stylesheet" type="text/css" href="css/index.css">
 </head>
-    <header style="width: 100%;" id="top-head" class="uk-position-fixed">
-        <div class="uk-container uk-container-expand uk-background-secondary">
-            <nav style="width: 10%;float: right;" class="uk-navbar uk-light" data-uk-navbar="mode:click">
-                <div class="uk-navbar-left">
-                    <ul class="uk-navbar-nav">
-                        <li><a href="/members" data-uk-icon="icon: cog">Members access<div style="width: 1em"></div></a></li>
-                    </ul>
-                </div>
-            </nav>
-        </div>
-    </header>
+<header style="width: 100%;" id="top-head" class="uk-position-fixed">
+    <div class="uk-container uk-container-expand uk-background-secondary">
+        <nav style="width: 10%;float: right;" class="uk-navbar uk-light" data-uk-navbar="mode:click">
+            <div class="uk-navbar-left">
+                <ul class="uk-navbar-nav">
+                    <li><a href="/members" data-uk-icon="icon: cog">Members access<div style="width: 1em"></div></a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</header>
 <body class="uk-height-1-1">
     <div class="uk-flex uk-flex-center uk-flex-middle uk-background-secondary uk-height-viewport uk-light">
         <div class="uk-width-large uk-padding-medium ">
             <form action="/character" method="get">
                 <fieldset class="uk-fieldset">
                     <legend class="uk-text-center uk-legend">Three Eyed Ravens</legend>
-                   <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid uk-flex-center">
-                    <label><input class="uk-radio" type="radio" name="char" checked> Character Search</label>
-                    <label><input class="uk-radio" type="radio" name="tags" disabled> Tags Search</label>
-                </div>
-                <div class="uk-margin">
-                    <div class="uk-inline uk-width-1-1">
-                        <span class="uk-form-icon uk-form-icon-flip" data-uk-icon="icon: search"></span>
-                        <input id="auto" class="uk-input uk-form-large" autocomplete="off"  placeholder="Characters" type="search">
+                    <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid uk-flex-center">
+                        <label><input onclick='tagsearch(this)' class="uk-radio" type="radio" value='true' name="CHAR" checked> Character Search</label>
+                        <label><input onclick='tagsearch(this)' class="uk-radio" type="radio" value='false' name="CHAR"> Tags Search</label>
                     </div>
-                </div>
-            </fieldset>
-            <input id="cid" style=" display: none;" type=" text" name="id">
-            <input type="submit" style="display:none"/>
-        </form>
+                    <div class="uk-margin">
+                        <div class="uk-inline uk-width-1-1">
+                            <span class="uk-form-icon uk-form-icon-flip" data-uk-icon="icon: search"></span>
+                            <input id="auto" class="uk-input uk-form-large" autocomplete="off"  placeholder="Characters" type="search">
+                            <input style='display: none;' name='tags' id="tag" class="uk-input uk-form-large"  placeholder="Tags" type="search">
+                        </div>
+                    </div>
+                </fieldset>
+                <input id="cid" style=" display: none;" type=" text" name="id">
+                <input type="submit" style="display:none"/>
+            </form>
+        </div>
     </div>
-</div>
-<div>
-    <img style="left: 0;position: absolute;bottom: 0%;width: 35%;" src="img/1.png">
-    <img style="right: 0;position: absolute;bottom: 0%;width: 35%;" src="img/2.png">
-</div>
+    <div>
+        <img style="left: 0;position: absolute;bottom: 0%;width: 35%;" src="img/1.png">
+        <img style="right: 0;position: absolute;bottom: 0%;width: 35%;" src="img/2.png">
+    </div>
 
-<!-- JS FILES -->
-<script
-src="https://code.jquery.com/jquery-3.3.1.js"
-integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
-crossorigin="anonymous"></script>
-<script
-src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
-integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
-crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.6/js/uikit.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.6/js/uikit-icons.min.js"></script>
+    <!-- JS FILES -->
+    <script
+    src="https://code.jquery.com/jquery-3.3.1.js"
+    integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymous"></script>
+    <script
+    src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+    integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+    crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.6/js/uikit.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.6/js/uikit-icons.min.js"></script>
 
 </body>
 </html>
 <script>
-   $( function() {
-    $( "#auto" ).autocomplete({
-       source: function( request, response ) {
+ function tagsearch(o) {
+   if ($(o).val() == 'true') {
+    console.log('hide tag')
+    $('#tag').hide()
+    $('#auto').show()
+   } else {
+        console.log('hide auto')
+    $('#auto').hide()
+    $('#tag').show()
+   }
+}
+$( function() {
+ $( "#auto" ).autocomplete({
+     source: function( request, response ) {
         $.ajax({
             url: "/api/character/search/" + $( "#auto" ).val(),
             dataType: "json",
@@ -86,7 +98,7 @@ crossorigin="anonymous"></script>
         });
     },
     select: function(event, ui) {
-     if(ui.item){
+       if(ui.item){
         $(event.target).val(ui.item.value);
         $('#cid').val(ui.item.id)
         console.log(ui.item.id)
@@ -95,9 +107,9 @@ crossorigin="anonymous"></script>
 minLength: 3,
 
 }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-        return $( "<li>" )
-        .append( '<div class="ui-menu-item-wrapper" cid='+item.id+'>'+item.label+'</div>' )
-        .appendTo( ul );
-    };
+    return $( "<li>" )
+    .append( '<div class="ui-menu-item-wrapper" cid='+item.id+'>'+item.label+'</div>' )
+    .appendTo( ul );
+};
 } );
 </script>

@@ -21,6 +21,11 @@ module.exports = {
             callback(err,null);
         });
     },
+    tagSearch: (tag, callback) => {
+        CHAR.find({tags: {$elemMatch: {name: { $regex : new RegExp(tag, "i") }}}}).lean().exec(function (err, docs) {
+            callback(docs);
+        })
+    },
     //recupere tout les info
     char: (id, callback) => {
         var info = new Object();

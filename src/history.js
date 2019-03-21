@@ -10,6 +10,9 @@ module.exports = function(type, req, other) {
 			case 'VIEWCHAR':
 			obj.desc = req.session.db.name +' view character : ' + other.db.name + '(' + other.db.id + ')';
 			break;
+			case 'VIEWTAG':
+			obj.desc = req.session.db.name +' search tag : ' + other;
+			break;
 			case 'VIEWMEMBERS':
 			obj.desc = req.session.db.name +' view members panel ';
 			break;
