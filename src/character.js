@@ -34,7 +34,7 @@ module.exports = function(app, path, ejs, fs) {
       });
     });
   } else {
-      db.tagSearch(req.query.tags, function(docs) {
+      db.tagSearch(req.query.tags, req, function(docs) {
         LOGS("VIEWTAG", req, req.query.tags);
         fs.readFile(path.resolve(__dirname + "/../public/views/tag.html"),"utf-8",(err, content) => {
           if (err) {

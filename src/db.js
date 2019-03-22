@@ -21,8 +21,8 @@ module.exports = {
             callback(err,null);
         });
     },
-    tagSearch: (tag, callback) => {
-        CHAR.find({tags: {$elemMatch: {name: { $regex : new RegExp(tag, "i") }}}}).lean().exec(function (err, docs) {
+    tagSearch: (tag, req, callback) => {
+        CHAR.find({tags: {$elemMatch: {visibility: {$lte : req.session.db.role}, name: { $regex : new RegExp(tag, "i") }}}}).lean().exec(function (err, docs) {
             callback(docs);
         })
     },
