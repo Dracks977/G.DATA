@@ -22,7 +22,24 @@
 						<fieldset class="uk-fieldset">	
 							<legend class="uk-legend">Tags name</legend>
 							<div class="uk-margin">
+								<% if (4 <= user.role) { %>
 								<input id="tagname" class="uk-input" type="text" placeholder="Name">
+								<% } else { %>
+								<select id="tagname" class="uk-select">
+									<option value="BLACKLIST">BLACKLIST</option>
+									<option value="BLACKLIST">AWOXER</option>
+									<option value="DRAMA QUEEN">DRAMA QUEEN</option>
+									<option value="SPY">SPY</option>
+									<option value="VIP">VIP</option>
+									<option value="SCOUT">SCOUT</option>
+									<option value="FRIENDLY">FRIENDLY</option>
+									<option value="LINK TO BE CONFIRMED">LINK TO BE CONFIRMED</option>
+									<option value="CORP THIEF">CORP THIEF</option>
+									<option value="KRABBER">KRABBER</option>
+									<option value="SOLD ACCOUNT">SOLD ACCOUNT</option>
+									<option value="BLACKLIST">BLACKLIST</option>
+								</select>
+								<% } %>		
 							</div>
 							<legend class="uk-legend">Characters</legend>
 							<div class="uk-margin">
@@ -446,7 +463,7 @@
 			</div>
 			<footer class="uk-section uk-section-small uk-text-center">
 				<hr>
-				<a href="https://github.com/Dracks977"  uk-tooltip="Add tag Search">Version 1.1.0</a> | For Dead Coalition</span></a>
+				<a href="https://github.com/Dracks977"  uk-tooltip="Add Standardised Tag">Version 1.1.1</a> | For Dead Coalition</span></a>
 			</footer>
 		</div>
 	</div>
