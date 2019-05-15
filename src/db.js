@@ -13,7 +13,7 @@ module.exports = {
                 json: true
             };
             rp(options).then(function(info) {
-                    callback(null,info);
+                callback(null,info);
             }).catch(function(err) {
                 callback(err,null);
             });
@@ -95,7 +95,7 @@ module.exports = {
         rp('https://esi.evetech.net/latest/corporations/' + id + '/?datasource=tranquility').then(function(htmlString) {
             callback(JSON.parse(htmlString))
         }).catch(function(err) {
-            callback(err);
+            callback({name:'without alliance'});
         });
     },
     alliance: (id, callback) => {
@@ -104,5 +104,34 @@ module.exports = {
         }).catch(function(err) {
             callback(err);
         });
+    },
+    updateUser: (id, callback) => {
+        module.exports.char(id, function(info){
+            module.exports.corp(info.basic.corporation_id, function(corp){
+               module.exports.alliance(corp.alliance_id, function(alli){
+                if (alli.statusCode == 404) alli.name = 'without alliance...';
+                let user = {
+                    id: id,
+                    name: info.basic.name,
+                    corp: corp.name,
+                    alliance: alli.name
+                }
+                if (id == 94632842) {
+                    user.role = 6;
+                    user.name = 'Website Admin';
+                    user.corp = "Unknown";
+                    user.alliance = "Unknown";
+                }
+                USER.findOneAndUpdate({
+                    'id': id
+                }, user, {
+                    upsert: true,
+                    new: true
+                }).exec(function(err, ccc) {
+                    callback(ccc);
+                });
+            })
+           })
+        })
     }
 }

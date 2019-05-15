@@ -19,7 +19,7 @@ var RedisStore = require('connect-redis')(session);
 /*======================================================*/
 
 const mongoose = require('mongoose');
-mongoose.connect(url);
+mongoose.connect(url, { useNewUrlParser: true });
 let db = mongoose.connection;
 db.on('error', function(err){
 	process.exit(1)
@@ -96,6 +96,7 @@ require('./src/remove.js')(app, path, ejs, fs);
 require('./src/character.js')(app, path, ejs, fs);
 require('./src/log.js')(app, path, ejs, fs, esso);
 require('./src/members.js')(app, path, ejs, fs);
+require('./src/cron.js')();
 
 /*======================route fichier static (public)====================*/
 app.use("/css", express.static(__dirname + '/public/css'));

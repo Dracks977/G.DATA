@@ -3,7 +3,7 @@
 <head>
 	<title>Under review</title>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta charset="UTF-8">
 	
 	
@@ -13,10 +13,11 @@
 	
 	
 	<link href="css/ionicons.css" rel="stylesheet">
-		
+
 	<link href="css/styles.css" rel="stylesheet">
 	
 	<link href="css/responsive.css" rel="stylesheet">
+	<link href='https://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
 	
 </head>
 <body style="background-image:url(https://jolstatic.fr/www/captures/108/1/108091.jpg); background-size: auto; background-repeat: no-repeat;">
@@ -28,9 +29,107 @@
 				<h1 class="title font-white" style="font-size: 3em"><b>Your account is under review.</b></h1>
 				<p class="desc font-white" style="font-size: 1.5em">You're a Corp director ? Contact your CEO to get your account activated.</p>
 				<p class="desc font-white" style="font-size: 1.5em">You're a CEO ? contact Meyiah on discord to get your account activated</p>
+				<div class="button">
+					<a href="/logout">
+						Reload ur account status
+						<span class="shift">›</span>
+					</a>
+					<div class="mask"></div>
+				</div>
 			</div><!-- display-table -->
 		</div><!-- display-table-cell -->
 	</div><!-- main-area -->
 	
 </body>
+<style>
+
+.button {
+	border: 2px solid #2e2e2e;
+	cursor: pointer;
+	letter-spacing: 0.2125rem;
+	overflow: hidden;
+	padding: 20px 30px;
+	position: relative;
+	text-align: center;
+	text-transform: uppercase;
+	transition: 
+		background 5s cubic-bezier(0.19, 1, 0.22, 1),
+		border 1s cubic-bezier(0.19, 1, 0.22, 1),
+		color 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+	user-select: none;
+}
+
+.button a {
+	color: #969696;
+	font-family: "Varela Round";
+	text-decoration: none;
+}
+
+.button .mask {
+	background-color: #fff;
+	background-color: rgba(255, 255, 255, 0.5);
+	height: 100px;
+	position: absolute;
+	transform: translate3d(-120%, -50px, 0) rotate3d(0, 0, 1, 45deg);
+	transition: all 1.1s cubic-bezier(0.19, 1, 0.22, 1);
+	width: 370px;
+}
+
+.button .shift {
+	display: inline-block;
+	transition: all 1.1s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.button:hover {
+	background-color: rgba(255, 255, 255, 0.05);
+	border-color: #fff;
+	box-shadow: 0 0 5px rgba(255, 245, 245, 0.8);
+	transition: background 0s;
+}
+
+.button:hover a {
+	color: #fff;
+}
+
+.button:hover .mask {
+	background-color: #fff;
+	transform: translate3d(120%, -100px, 0) rotate3d(0, 0, 1, 90deg);
+}
+
+.button:hover .shift {
+	transform: translateX(5px);
+}
+
+.button:active {
+	background-color: #fff;
+}
+
+.button:active a {
+	color: #202020;
+}
+
+body.show {
+	background-color: #282828;
+}
+/*
+.button:hover {
+	background-image: url('http://.com/img/codepen/savvy.jpg');
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+*/
+</style>
+<script>
+	const body = document.body;
+const btn = document.querySelectorAll('.button')[0];
+
+btn.addEventListener('mouseenter', () => {
+	body.classList.add('show');
+});
+
+btn.addEventListener('mouseleave', () => {
+	body.classList.remove('show');
+});
+</script>
 </html>

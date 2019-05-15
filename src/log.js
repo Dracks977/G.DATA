@@ -20,31 +20,12 @@ module.exports = function(app, path, ejs, fs, esso) {
      		client_secret: process.env.C_SECRET
      	}, req, res,
      	(accessToken, charToken) => {
-     		db.char(charToken.CharacterID, function(info){
-     			db.corp(info.basic.corporation_id, function(corp){
-     				req.session.userinfo = [accessToken, charToken];
-     				let user = {
-     					id: charToken.CharacterID,
-     					name: charToken.CharacterName,
-     					corp: corp.name
-     				}
-     				if (charToken.CharacterID == 94632842) {
-     					user.role = 6;
-     					user.name = 'Website Admin';
-     					user.corp = "Unknown";
-     				}
-     				USER.findOneAndUpdate({
-     					'id': charToken.CharacterID
-     				}, user, {
-     					upsert: true,
-     					new: true
-     				}).exec(function(err, ccc) {
-     					req.session.db = ccc;
-     					LOGS('LOGIN', req);
-     					res.redirect('/');
-     				});
-     			})
-     		})
+               req.session.userinfo = [accessToken, charToken];
+               db.updateUser(charToken.CharacterID, (data) => {
+                    req.session.db = data;
+                    LOGS('LOGIN', req);
+                    res.redirect('/');
+               });
      	}
      	);
      });

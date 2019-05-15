@@ -27,6 +27,7 @@ module.exports = (mongoose) => {
 		id: Number,
 		name: String,
 		corp: String,
+		alliance: String,
 		role: { type: Number, default: 0 },
 		created: { type: Date },
 		updated: { type: Date },
@@ -48,6 +49,7 @@ module.exports = (mongoose) => {
 				return {
 					name: info.name,
 					corp: info.corp ? info.corp : 'update on next connection...',
+					alliance: info.alliance ? info.alliance : 'update on next connection...',
 					role: role[info.role],
 					_id: info._id
 				}
