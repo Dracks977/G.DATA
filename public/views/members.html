@@ -76,6 +76,9 @@
 
 					<div class="uk-margin">
 						<select id="msel" class="uk-select">
+							<% if (2 < user.role) { -%>
+							<option value="-1">rejected</option>
+							<% } %>
 							<% if (1 < user.role) { -%>
 							<option value="0">Waiting</option>
 							<option value="1">Public</option>
@@ -163,6 +166,7 @@ crossorigin="anonymous"></script>
 				data: 1,
 				render: function(data, type, row, meta) {
 					let o = {
+						"Rejected": -1,
 						"Waiting": 0,
 						"Public": 1,
 						"Private": 2,

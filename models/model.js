@@ -50,7 +50,7 @@ module.exports = (mongoose) => {
 					name: info.name,
 					corp: info.corp ? info.corp : 'update on next connection...',
 					alliance: info.alliance ? info.alliance : 'update on next connection...',
-					role: role[info.role],
+					role: role[info.role] ? role[info.role] : 'rejected',
 					_id: info._id
 				}
 			}

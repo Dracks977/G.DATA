@@ -80,11 +80,13 @@ app.use(function (req, res, next) {
 			client_secret: process.env.C_SECRET,
 			redirect_uri:  process.env.CALLBACK
 		}, res);
-	} else if (req.session.db.role <= 0){
+	} else if (req.session.db.role == 0){
 		res.sendFile(path.resolve(__dirname + '/public/views/under.html'))
 		return null
-	}
-	else{
+	} else if (req.session.db.role <= 0){
+		res.redirect('https://www.google.fr/search?biw=1920&tbm=isch&source=hp&biw=&bih=969&q=trash&oq=trash');
+		return null
+	} else {
 		return next()
 	}
 });
