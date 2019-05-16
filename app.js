@@ -69,7 +69,7 @@ app.enable('trust proxy');
 // middlewere de secu
 app.use(function (req, res, next) {
 	var _ = require('underscore')
-	, nonSecurePaths = ['/callback/', '/logout'];
+	, nonSecurePaths = ['/callback/', '/logout', '/test'];
 
 	if ( _.contains(nonSecurePaths, req.path) ) 
 		return next();

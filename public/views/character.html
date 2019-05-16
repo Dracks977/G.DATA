@@ -425,6 +425,9 @@
 							</div>
 							<div class="uk-width-expand">
 								<h3 class="uk-card-title uk-margin-remove-bottom"><%= char.db.alts.alts[i].name %></h3>
+								<% if (5 <= user.role) { %>
+								<a><span class="uk-card-badge" uk-icon="trash" data-cid="<%= char.db.alts.alts[i]._id %>" onclick="unlink(this);"></span></a>
+								<% } %>
 								<p class='corpalt' _id='<%= char.db.alts.alts[i].id %>' style='margin-top: 0px'></p>
 							</div>
 						</div>
@@ -566,6 +569,22 @@ crossorigin="anonymous"></script>
 		UIkit.modal($('#modal-center')).show();
 	}
 
+	function unlink(_this) {
+		if (window.confirm("Do you realy want to do this ?")) { 
+			let a = [].filter.call(_this.attributes, function(at) {
+				return /^data-/.test(at.name);
+			});
+			let link = {
+				id: a[0].value,
+			}
+			$.post("/api/alts/unlink", link).done(function(data) {
+				$(_this).parent().parent().parent().parent().parent().remove()
+			}).fail(function(e) {
+				console.log(e);
+			});
+		}
+	}
+
 	function rmtag(_this) {
 		let a = [].filter.call(_this.attributes, function(at) {
 			return /^data-/.test(at.name);
@@ -581,21 +600,20 @@ crossorigin="anonymous"></script>
 		});
 	}
 
-// ajouter les attribut comme l'autre
-function rmintel(_this) {
-	let a = [].filter.call(_this.attributes, function(at) {
-		return /^data-/.test(at.name);
-	});
-	let intel = {
-		_id: a[1].value,
-		cid: a[2].value
+	function rmintel(_this) {
+		let a = [].filter.call(_this.attributes, function(at) {
+			return /^data-/.test(at.name);
+		});
+		let intel = {
+			_id: a[1].value,
+			cid: a[2].value
+		}
+		$.post("/api/intel/rm", intel).done(function(data) {
+			$(_this).parent().parent().remove()
+		}).fail(function(e) {
+			console.log(e);
+		});
 	}
-	$.post("/api/intel/rm", intel).done(function(data) {
-		$(_this).parent().parent().remove()
-	}).fail(function(e) {
-		console.log(e);
-	});
-}
 </script>
 <script type="text/javascript" src='js/character.js'></script>
 
