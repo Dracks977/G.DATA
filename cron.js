@@ -6,7 +6,13 @@ const limiter = new RateLimiter(40, "second");
 const schedule = require('node-schedule');
 const mongoose = require('mongoose');
 const url = 'mongodb://'+ process.env.DB_HOST +':'+ process.env.DB_PORT +'/' + process.env.DB_NAME;
+const io = require('@pm2/io');
 
+
+const jobsec = io.meter({
+  name: 'job/sec',
+  id: 'app/job/volume'
+})
 
 mongoose.connect(url, { useNewUrlParser: true });
 let mong = mongoose.connection;
@@ -31,6 +37,7 @@ function updateUser() {
 			let id = res[i].id;
 			limiter.removeTokens(1, (err, remainingRequests) => {
 				db.updateUser(id, (data) => {
+					jobsec.mark()
 				})
 			})
 		}
