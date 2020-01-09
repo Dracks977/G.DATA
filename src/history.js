@@ -38,7 +38,6 @@ module.exports = function(type, req, other) {
 			obj.desc = 'uknow log'
 
 		}
-		console.log(obj)
 		let log = new LOGGER(obj)
 		log.save();
 	}
