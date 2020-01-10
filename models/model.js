@@ -1,6 +1,6 @@
 module.exports = (mongoose) => {
 	let Schema = mongoose.Schema;
-	let dataTables = require('mongoose-datatables')
+	let dataTables = require('mongoose-datatables-fix')
 	//character eve a afficher
 	let Char = new Schema({
 		id: Number,
