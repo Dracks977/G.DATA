@@ -189,7 +189,6 @@ crossorigin="anonymous"></script>
                             .draw();
                     } );
 				let a = await $.post("/api/members/columns", {columns: [column.dataSrc()]})
-				console.log(a[column.dataSrc()])
  				for (var i in a[column.dataSrc()]) {
  					let o = {
 						"-1": "rejected",
@@ -202,25 +201,9 @@ crossorigin="anonymous"></script>
 						6: "IT Developer",
 					}
 					let c = a[column.dataSrc()][i]
-					console.log(c)
                 	if (o[c] != undefined) c = o[c]
  					select.append( '<option value="'+a[column.dataSrc()][i]+'">'+c+'</option>' )
  				}
-     //            column.data().unique().sort().each( function ( d, j ) {
-     // //            	let o = {
-					// // 	"rejected": -1,
-					// // 	"Waiting": 0,
-					// // 	"Public": 1,
-					// // 	"Private": 2,
-					// // 	"Secret": 3,
-					// // 	"Top secret": 4,
-					// // 	"Extremely Secret": 5,
-					// // 	"IT Developer": 6
-					// // }
-					// let c = d
-     //            	if (o[d] != undefined) c = o[d]
-     //                select.append( '<option value="'+c+'">'+d+'</option>' )
-     //            } );
             } );
         },
 			columnDefs: [{
