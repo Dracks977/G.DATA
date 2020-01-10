@@ -40,6 +40,14 @@ module.exports = function(app, path, ejs, fs) {
        })
      })
 
+     app.post('/api/members/columns', async function(req, res) {
+      let resp = {};
+      for (var i in req.body.columns) {
+        resp[req.body.columns[i]] = await USER.distinct(req.body.columns[i]);
+      }
+      res.send(resp)
+     })
+
      app.post('/api/members/role', function(req, res) {
       if (req.body._id && req.body.role) {
         if (req.body.role < req.session.db.role || req.session.db.role >= 5) {
