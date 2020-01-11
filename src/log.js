@@ -8,7 +8,7 @@ module.exports = function(app, path, ejs, fs, esso) {
      * redirige les diferent role vers leurs pages
      */
      app.get('/', function(req, res) {
-     	res.sendFile(path.resolve(__dirname + '/../public/views/index.html'))
+     	res.render('index')
      })
 
     /*
@@ -20,12 +20,12 @@ module.exports = function(app, path, ejs, fs, esso) {
      		client_secret: process.env.C_SECRET
      	}, req, res,
      	(accessToken, charToken) => {
-               req.session.userinfo = [accessToken, charToken];
-               db.updateUser(charToken.CharacterID, (data) => {
-                    req.session.db = data;
-                    LOGS('LOGIN', req);
-                    res.redirect('/');
-               });
+     		req.session.userinfo = [accessToken, charToken];
+     		db.updateUser(charToken.CharacterID, (data) => {
+     			req.session.db = data;
+     			LOGS('LOGIN', req);
+     			res.redirect('/');
+     		});
      	}
      	);
      });
@@ -48,16 +48,8 @@ module.exports = function(app, path, ejs, fs, esso) {
 
 	  app.get('/logs', function(req, res) {
 	  	if (req.session.db.role >= 5) {
-	  		fs.readFile(path.resolve(__dirname + '/../public/views/logs.html'), 'utf-8', (err, content) => {
-	  			if (err) {
-	  				res.end('error occurred' + err);
-	  				return;
-	  			}
-	  			let renderedHtml = ejs.render(content, {
-	  				'user': req.session.db
-            }); //get redered HTML code
-	  			res.end(renderedHtml);
-	  		});
+	  		res.render('logs', {'user': req.session.db})
+
 	  	} else {
 	  		res.redirect('/');
 	  	}

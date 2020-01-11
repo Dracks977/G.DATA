@@ -35,7 +35,8 @@ require('./models/model.js')(mongoose);
 LOGS = require('./src/history.js');
 
 // Middleware session
-app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'public/views'));
 app.use(minify({cache: __dirname + '/cache'}));
 
 if (!process.env.DEV) {
@@ -81,7 +82,7 @@ app.use(function (req, res, next) {
 			redirect_uri:  process.env.CALLBACK
 		}, res);
 	} else if (req.session.db.role == 0){
-		res.sendFile(path.resolve(__dirname + '/public/views/under.html'))
+		res.render('under')
 		return null
 	} else if (req.session.db.role <= 0){
 		res.redirect('https://www.google.fr/search?biw=1920&tbm=isch&source=hp&biw=&bih=969&q=trash&oq=trash');

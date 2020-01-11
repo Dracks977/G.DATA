@@ -5,45 +5,10 @@ module.exports = function(app, path, ejs, fs) {
       db.char(req.query.id, info => {
         db.charput(info, result => {
           LOGS("VIEWCHAR", req, result);
-          fs.readFile(
-            path.resolve(__dirname + "/../public/views/character.html"),
-            "utf-8",
-            (err, content) => {
-              if (err) {
-                res.end("error occurred" + err);
-                return;
-              }
-              var moment = require("moment");
-              let renderedHtml = ejs.render(content, {
-                user: req.session.db,
-                char: result,
-                visi: [
-                "Waiting",
-                "Public",
-                "Private",
-                "Secret",
-                "Top secret",
-                "Extremely Secret",
-                "IT Developer"
-                ],
-                moment: moment
-              }); //get redered HTML code
-              res.end(renderedHtml);
-            }
-            );
-        });
-      });
-    } else {
-      db.tagSearch(req.query.tags, req, function(docs) {
-        LOGS("VIEWTAG", req, req.query.tags);
-        fs.readFile(path.resolve(__dirname + "/../public/views/tag.html"),"utf-8",(err, content) => {
-          if (err) {
-            res.end("error occurred" + err);
-            return;
-          }
-          let renderedHtml = ejs.render(content, {
+          var moment = require("moment");
+          res.render('character', {
             user: req.session.db,
-            char: docs,
+            char: result,
             visi: [
             "Waiting",
             "Public",
@@ -53,9 +18,27 @@ module.exports = function(app, path, ejs, fs) {
             "Extremely Secret",
             "IT Developer"
             ],
-            tag: req.query.tags
-              }); //get redered HTML code
-          res.end(renderedHtml)
+            moment: moment
+          })
+        }
+        );
+      });
+    } else {
+      db.tagSearch(req.query.tags, req, function(docs) {
+        LOGS("VIEWTAG", req, req.query.tags);
+        res.render('tag', {
+          user: req.session.db,
+          char: docs,
+          visi: [
+          "Waiting",
+          "Public",
+          "Private",
+          "Secret",
+          "Top secret",
+          "Extremely Secret",
+          "IT Developer"
+          ],
+          tag: req.query.tags
         })
       });
     }

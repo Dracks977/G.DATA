@@ -5,16 +5,7 @@ module.exports = function(app, path, ejs, fs) {
      */
      app.get('/members', function(req, res) {
        LOGS('VIEWMEMBERS', req);
-       fs.readFile(path.resolve(__dirname + '/../public/views/members.html'), 'utf-8', (err, content) => {
-         if (err) {
-           res.end('error occurred' + err);
-           return;
-         }
-         let renderedHtml = ejs.render(content, {
-           'user': req.session.db
-            }); //get redered HTML code
-         res.end(renderedHtml);
-       });
+       res.render('members', {'user': req.session.db})
      })
 
      app.post('/api/members/get', function(req, res) {
@@ -46,7 +37,7 @@ module.exports = function(app, path, ejs, fs) {
         resp[req.body.columns[i]] = await USER.distinct(req.body.columns[i]);
       }
       res.send(resp)
-     })
+    })
 
      app.post('/api/members/role', function(req, res) {
       if (req.body._id && req.body.role) {
