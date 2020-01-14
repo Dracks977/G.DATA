@@ -88,29 +88,63 @@
 	<div id="content" data-uk-height-viewport="expand: true">
 		<div class="uk-container uk-container-expand">
 
+			<ul uk-tab>
+				<li><a href="#">Basics</a></li>
+				<li id="test2"><a href="#">Rejected</a></li>
+			</ul>
 
-			<table id="table_id" class="hover row-border">
-				<thead>
-					<tr>
-						<th>Name</th>
-						<th class="editable">Role</th>
-						<th>vide xD</th>
-						<th class="editable">Corp</th>
-						<th class="editable">alliance</th>
-						<th>Action</th>
-					</tr>
-				</thead>
-				<tfoot>
-					<tr>
-						<th>Name</th>
-						<th>Role</th>
-						<th>vide xD</th>
-						<th>Corp</th>
-						<th>alliance</th>
-						<th>Action</th>
-					</tr>
-				</tfoot>
-			</table>
+			<ul class="uk-switcher uk-margin">
+				<li>
+					<table id="table_id" class="hover row-border">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th class="editable">Role</th>
+								<th>vide xD</th>
+								<th class="editable">Corp</th>
+								<th class="editable">alliance</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tfoot>
+							<tr>
+								<th>Name</th>
+								<th>Role</th>
+								<th>vide xD</th>
+								<th>Corp</th>
+								<th>alliance</th>
+								<th>Action</th>
+							</tr>
+						</tfoot>
+					</table>
+				</li>
+				<li>
+					<table id="table_id2" class="hover row-border">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th class="editable">Role</th>
+								<th>vide xD</th>
+								<th class="editable">Corp</th>
+								<th class="editable">alliance</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tfoot>
+							<tr>
+								<th>Name</th>
+								<th>Role</th>
+								<th>vide xD</th>
+								<th>Corp</th>
+								<th>alliance</th>
+								<th>Action</th>
+							</tr>
+						</tfoot>
+					</table>
+				</li>
+			</ul>
+
+			
 
 			<% include footer %>
 			
@@ -128,6 +162,7 @@ integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
 crossorigin="anonymous"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
 <script type="text/javascript">
+	let loaded = false;
 	$(document).ready(function() {
 		var table = $('#table_id').DataTable({
 			ordering: true,
@@ -217,7 +252,105 @@ crossorigin="anonymous"></script>
 			UIkit.modal($('#modal-center')).show();
 		});
 	});
+
+	$('.uk-switcher').on('show',  (data) => {
+		if (!loaded){
+			load2();
+			loaded = true;
+		}
+	});
+
+	function load2() {
+		var table = $('#table_id2').DataTable({
+			ordering: true,
+			ajax: {
+				url: '/api/members/get',
+				type: 'POST'
+			},
+			serverSide: true,
+			columns: [
+			{'data': 'name'},
+			{'data': 'role'},
+			{'data': '_id'},
+			{'data': 'corp'},
+			{'data': 'alliance'},
+			{'data': 'action'},
+			],
+			initComplete: function () {
+            this.api().columns(".editable").every(async function () {
+                var column = this;
+                var select = $('<select><option value=""></option></select>')
+                    .appendTo( $(column.footer()).empty() )
+                    .on( 'change', function () {
+                        var val = $(this).val()
+                        column
+                            .search( val )
+                            .draw();
+                    } );
+				let a = await $.post("/api/members/columns", {columns: [column.dataSrc()]})
+ 				for (var i in a[column.dataSrc()]) {
+ 					let o = {
+						"-1": "rejected",
+						0: "Waiting",
+						1: "Public",
+						2: "Private",
+						3: "Secret",
+						4: "Top secret",
+						5: "Extremely Secret",
+						6: "IT Developer",
+					}
+					let c = a[column.dataSrc()][i]
+                	if (o[c] != undefined) c = o[c]
+ 					select.append( '<option value="'+a[column.dataSrc()][i]+'">'+c+'</option>' )
+ 				}
+            } );
+        },
+			columnDefs: [{
+				targets: 2,
+				visible: false
+			},
+			{
+				targets: -1,
+				data: 1,
+				render: function(data, type, row, meta) {
+					let o = {
+						"rejected": -1,
+						"Waiting": 0,
+						"Public": 1,
+						"Private": 2,
+						"Secret": 3,
+						"Top secret": 4,
+						"Extremely Secret": 5,
+						"IT Developer": 6
+					}
+					if ('<%= user.role %>' != 1 && o[row.role] < '<%= user.role %>' || '<%= user.role %>' >= 5)
+						return '<button class="uk-button uk-button-secondary">Change visibility</button>'
+					else
+						return '<button disabled class="uk-button uk-button-secondary">Change visibility</button>'
+				}
+			}
+			],
+		});
+		$('#table_id2 tbody').on('click', 'button', function() {
+			let data = table.row($(this).parents('tr')).data();
+			$("#mname").text("Change " + data.name + " visibility")
+			$("#msub").click(function() {
+				let o = {
+					_id: data._id,
+					role: $("#msel").val()
+				}
+				$.post("/api/members/role", o).done(function(data) {
+					UIkit.modal($('#modal-center')).hide();
+					location.reload();
+				}).fail(function(e) {
+					$("#errorrole").removeAttr("style");
+				});
+			})
+			UIkit.modal($('#modal-center')).show();
+		});
+	};
 </script>
 
-
+<style type="text/css">
+</style>
 </html>
