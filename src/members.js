@@ -10,6 +10,9 @@ module.exports = function(app, path, ejs, fs) {
 
      app.post('/api/members/get', function(req, res) {
        USER.dataTables({
+        find: {
+            'role': {'$nin': [-1, 0]}
+          },
          limit: req.body.length,
          skip: req.body.start,
          order: req.body.order,
