@@ -31,6 +31,6 @@
     "mongoose-datatables-fix": "^3.2.1",
     "node-schedule": "^1.3.2",
     "request-promise": "^4.2.2",
-    "underscore": "^1.9.2"
+    "underscore": "^1.12.1"
   }
 }
